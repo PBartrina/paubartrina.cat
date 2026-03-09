@@ -13,15 +13,12 @@ export default function Footer() {
         <div className="flex flex-col justify-between gap-8 md:flex-row">
           <div>
             <h3 className="mb-2 font-mono text-lg font-bold">Contacta&apos;m</h3>
-            <p className="font-mono text-sm">
-              Correu:{" "}
-              <a
-                href="mailto:hola@paubartrina.cat"
-                className="font-bold text-text-accent hover:underline"
-              >
-                hola@paubartrina.cat
-              </a>
-            </p>
+            <Link
+              href="/contacte"
+              className="inline-block rounded-md border border-text-on-dark px-4 py-2 font-mono text-sm transition-colors hover:border-text-accent hover:text-text-accent"
+            >
+              Envia&apos;m un missatge &rarr;
+            </Link>
           </div>
 
           <div>

@@ -9,7 +9,7 @@ const navLinks = [
   { href: "/#experience", label: "Trajectòria" },
   { href: "/ara", label: "Ara" },
   { href: "/blog", label: "Blog" },
-  { href: "/#contact", label: "Contacte" },
+  { href: "/contacte", label: "Contacte" },
 ];
 
 export default function Navbar() {
