@@ -1,48 +1,59 @@
 @import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/* ─── Brand Color Palette ────────────────────────────────────────── */
+/* Extracted from paubartrina.cat logo:
+   Purple (#4A1870) — from "PAU" text & circle border
+   Rose   (#C4698A) — from "BARTRINA" text & circle icon
+   Blush  (#FFF0F4) — background of the logo
+*/
 
 :root {
-  --bg-primary: #edf2f7;
-  --bg-secondary: #ffffff;
-  --bg-dark: #1a202c;
-  --bg-dark-secondary: #2d3748;
-  --text-primary: #1a202c;
-  --text-secondary: #4a5568;
-  --text-accent: #63b3ed;
-  --text-on-dark: #edf2f7;
-  --border-color: #cbd5e0;
-  --card-bg: #f7fafc;
-  --card-border: #e2e8f0;
+  /* Light theme */
+  --bg-primary:        #fff0f4;   /* logo background blush */
+  --bg-secondary:      #ffffff;
+  --bg-dark:           #4a1870;   /* deep purple — nav / footer */
+  --bg-dark-secondary: #6b2a9a;
+  --text-primary:      #2a0c42;   /* very dark purple — body text */
+  --text-secondary:    #7a4a8a;   /* medium purple-rose */
+  --text-accent:       #c4698a;   /* rose — links, highlights */
+  --text-on-dark:      #fff0f4;   /* blush — text on purple bg */
+  --border-color:      #e4c0d5;
+  --card-bg:           #ffffff;
+  --card-border:       #f0d0e0;
 }
 
 [data-theme="dark"] {
-  --bg-primary: #1a202c;
-  --bg-secondary: #2d3748;
-  --bg-dark: #0d1117;
-  --bg-dark-secondary: #1a202c;
-  --text-primary: #edf2f7;
-  --text-secondary: #a0aec0;
-  --text-accent: #63b3ed;
-  --text-on-dark: #edf2f7;
-  --border-color: #4a5568;
-  --card-bg: #2d3748;
-  --card-border: #4a5568;
+  --bg-primary:        #1e0832;   /* very dark purple */
+  --bg-secondary:      #2a0c42;
+  --bg-dark:           #140524;   /* darkest — nav / footer */
+  --bg-dark-secondary: #1e0832;
+  --text-primary:      #fff0f4;   /* light blush */
+  --text-secondary:    #d4a0c0;   /* medium rose-purple */
+  --text-accent:       #e090ac;   /* brighter rose for contrast */
+  --text-on-dark:      #fff0f4;
+  --border-color:      #6b2a9a;
+  --card-bg:           #2a0c42;
+  --card-border:       #4a1870;
 }
 
 @theme inline {
-  --color-bg-primary: var(--bg-primary);
-  --color-bg-secondary: var(--bg-secondary);
-  --color-bg-dark: var(--bg-dark);
+  --color-bg-primary:        var(--bg-primary);
+  --color-bg-secondary:      var(--bg-secondary);
+  --color-bg-dark:           var(--bg-dark);
   --color-bg-dark-secondary: var(--bg-dark-secondary);
-  --color-text-primary: var(--text-primary);
-  --color-text-secondary: var(--text-secondary);
-  --color-text-accent: var(--text-accent);
-  --color-text-on-dark: var(--text-on-dark);
-  --color-border-color: var(--border-color);
-  --color-card-bg: var(--card-bg);
-  --color-card-border: var(--card-border);
-  --font-mono: "JetBrains Mono", "Geist Mono", ui-monospace, monospace;
+  --color-text-primary:      var(--text-primary);
+  --color-text-secondary:    var(--text-secondary);
+  --color-text-accent:       var(--text-accent);
+  --color-text-on-dark:      var(--text-on-dark);
+  --color-border-color:      var(--border-color);
+  --color-card-bg:           var(--card-bg);
+  --color-card-border:       var(--card-border);
+  --font-mono:    "JetBrains Mono", ui-monospace, monospace;
+  --font-display: var(--font-raleway), "Raleway", sans-serif;
 }
 
+/* ─── Base ───────────────────────────────────────────────────────── */
 body {
   background: var(--bg-primary);
   color: var(--text-primary);
@@ -50,27 +61,29 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
 }
 
-@keyframes typing {
-  from { width: 0; }
-  to { width: 100%; }
+/* ─── Typing cursor animation ────────────────────────────────────── */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
 }
 
 .typing-cursor::after {
   content: "_";
   animation: blink 1s step-end infinite;
+  font-family: var(--font-mono);
 }
 
-/* Prose styling for blog posts */
+/* ─── Prose (blog posts) ─────────────────────────────────────────── */
 .prose {
-  --tw-prose-body: var(--text-primary);
+  --tw-prose-body:     var(--text-primary);
   --tw-prose-headings: var(--text-primary);
-  --tw-prose-links: var(--text-accent);
-  --tw-prose-code: var(--text-accent);
+  --tw-prose-links:    var(--text-accent);
+  --tw-prose-code:     var(--text-accent);
+  --tw-prose-bold:     var(--text-primary);
 }
 
 .prose pre {

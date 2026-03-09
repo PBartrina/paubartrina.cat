@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono } from "next/font/google";
+import { JetBrains_Mono, Raleway } from "next/font/google";
 import { ThemeProvider } from "@/lib/theme";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -9,6 +9,12 @@ import "./globals.css";
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-mono",
   subsets: ["latin"],
+});
+
+const raleway = Raleway({
+  variable: "--font-raleway",
+  subsets: ["latin"],
+  weight: ["400", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -37,7 +43,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ca" suppressHydrationWarning>
-      <body className={`${jetbrainsMono.variable} flex min-h-screen flex-col antialiased`}>
+      <body className={`${jetbrainsMono.variable} ${raleway.variable} flex min-h-screen flex-col antialiased`}>
         <ThemeProvider>
           <Navbar />
           <main className="flex-1">{children}</main>

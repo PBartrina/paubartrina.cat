@@ -14,7 +14,7 @@ export default function Hero() {
       </div>
 
       <div className="relative z-10 text-center">
-        <h1 className="typing-cursor font-mono text-5xl font-bold text-text-primary md:text-7xl">
+        <h1 className="typing-cursor font-display text-5xl font-bold text-text-primary md:text-7xl">
           Benvinguts
         </h1>
         <p className="mt-6 font-mono text-lg text-text-secondary md:text-xl">
