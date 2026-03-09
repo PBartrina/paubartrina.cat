@@ -18,9 +18,9 @@ export default function Hero() {
           Benvinguts
         </h1>
         <p className="mt-6 font-mono text-lg text-text-secondary md:text-xl">
-          Desenvolupador web especialitzat en crear solucions
+          Senior Frontend Engineer amb +15 anys d&apos;experiència
           <br />
-          digitals innovadores
+          en l&apos;ecosistema Angular, arquitectura modular i lideratge tècnic
         </p>
       </div>
     </section>

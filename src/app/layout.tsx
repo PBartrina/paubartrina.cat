@@ -20,16 +20,16 @@ const raleway = Raleway({
 
 export const metadata: Metadata = {
   title: {
-    default: "Pau Bartrina | Desenvolupador Web",
+    default: "Pau Bartrina | Senior Frontend Engineer",
     template: "%s | Pau Bartrina",
   },
   description:
-    "Desenvolupador web especialitzat en crear solucions digitals innovadores",
+    "Senior Frontend Engineer amb +15 anys d'experiència en Angular, TypeScript, NgRx i Nx. Especialitzat en arquitectura modular, testing i lideratge tècnic.",
   metadataBase: new URL("https://paubartrina.cat"),
   openGraph: {
-    title: "Pau Bartrina | Desenvolupador Web",
+    title: "Pau Bartrina | Senior Frontend Engineer",
     description:
-      "Desenvolupador web especialitzat en crear solucions digitals innovadores",
+      "Senior Frontend Engineer amb +15 anys d'experiència en Angular, TypeScript, NgRx i Nx. Especialitzat en arquitectura modular, testing i lideratge tècnic.",
     url: "https://paubartrina.cat",
     siteName: "Pau Bartrina",
     locale: "ca_ES",

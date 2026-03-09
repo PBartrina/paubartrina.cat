@@ -53,6 +53,11 @@
   --font-display: var(--font-raleway), "Raleway", sans-serif;
 }
 
+/* ─── Smooth scroll ──────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+}
+
 /* ─── Base ───────────────────────────────────────────────────────── */
 body {
   background: var(--bg-primary);
