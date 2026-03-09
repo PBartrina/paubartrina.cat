@@ -37,10 +37,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ca" suppressHydrationWarning>
-      <body className={`${jetbrainsMono.variable} antialiased`}>
+      <body className={`${jetbrainsMono.variable} flex min-h-screen flex-col antialiased`}>
         <ThemeProvider>
           <Navbar />
-          <main>{children}</main>
+          <main className="flex-1">{children}</main>
           <Footer />
           <ThemeToggle />
         </ThemeProvider>
