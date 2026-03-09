@@ -1,0 +1,342 @@
+#!/usr/bin/env node
+/**
+ * fix-bugs.mjs
+ * Reads open automated bug issues from GitHub, asks Claude to produce
+ * a fix for each one, applies the changes, verifies they build, then
+ * opens a PR linked to the issue.
+ *
+ * Required env vars:
+ *   ANTHROPIC_API_KEY  - Anthropic API key
+ *   GITHUB_TOKEN       - GitHub token with issues:write, contents:write, pull-requests:write
+ *   GITHUB_REPOSITORY  - e.g. "PBartrina/paubartrina.cat"
+ */
+
+import { execSync } from "child_process";
+import { readFileSync, writeFileSync, readdirSync, statSync } from "fs";
+import { join, relative, dirname } from "path";
+import { mkdirSync } from "fs";
+import Anthropic from "@anthropic-ai/sdk";
+
+const REPO = process.env.GITHUB_REPOSITORY ?? "PBartrina/paubartrina.cat";
+const [OWNER, REPO_NAME] = REPO.split("/");
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+const PROJECT_ROOT = process.cwd();
+const MAX_ISSUES_PER_RUN = 3; // avoid runaway fixes
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+function run(cmd, { throwOnError = false } = {}) {
+  try {
+    return {
+      ok: true,
+      output: execSync(cmd, {
+        cwd: PROJECT_ROOT,
+        encoding: "utf8",
+        stdio: ["pipe", "pipe", "pipe"],
+      }),
+    };
+  } catch (err) {
+    if (throwOnError) throw err;
+    return {
+      ok: false,
+      output: (err.stdout ?? "") + (err.stderr ?? ""),
+    };
+  }
+}
+
+function collectSourceFiles(dir, extensions = [".ts", ".tsx", ".mdx", ".css", ".json"]) {
+  const files = [];
+  const skip = ["node_modules", ".next", ".git", "dist", "out", "coverage"];
+  const skipFiles = ["package-lock.json", "pnpm-lock.yaml"];
+  for (const entry of readdirSync(dir)) {
+    if (skip.includes(entry)) continue;
+    const full = join(dir, entry);
+    const stat = statSync(full);
+    if (stat.isDirectory()) {
+      files.push(...collectSourceFiles(full, extensions));
+    } else if (extensions.some((ext) => entry.endsWith(ext)) && !skipFiles.includes(entry)) {
+      files.push(full);
+    }
+  }
+  return files;
+}
+
+function readSourceSnapshot() {
+  const files = collectSourceFiles(PROJECT_ROOT);
+  const snapshot = {};
+  for (const f of files) {
+    const rel = relative(PROJECT_ROOT, f).replace(/\\/g, "/");
+    try {
+      snapshot[rel] = readFileSync(f, "utf8");
+    } catch {
+      // skip
+    }
+  }
+  return snapshot;
+}
+
+async function githubRequest(path, options = {}) {
+  const resp = await fetch(`https://api.github.com${path}`, {
+    ...options,
+    headers: {
+      Authorization: `Bearer ${GITHUB_TOKEN}`,
+      Accept: "application/vnd.github+json",
+      "Content-Type": "application/json",
+      ...(options.headers ?? {}),
+    },
+  });
+  if (!resp.ok) {
+    const text = await resp.text();
+    throw new Error(`GitHub API error ${resp.status} for ${path}: ${text}`);
+  }
+  return resp.json();
+}
+
+async function getOpenBugIssues() {
+  return githubRequest(
+    `/repos/${OWNER}/${REPO_NAME}/issues?labels=bug,automated&state=open&per_page=50`
+  );
+}
+
+async function closeIssue(number) {
+  return githubRequest(`/repos/${OWNER}/${REPO_NAME}/issues/${number}`, {
+    method: "PATCH",
+    body: JSON.stringify({ state: "closed" }),
+  });
+}
+
+async function createPR(title, body, head, base = "main") {
+  return githubRequest(`/repos/${OWNER}/${REPO_NAME}/pulls`, {
+    method: "POST",
+    body: JSON.stringify({ title, body, head, base }),
+  });
+}
+
+function slugify(text) {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .slice(0, 40);
+}
+
+function gitConfigureUser() {
+  run('git config user.email "github-actions[bot]@users.noreply.github.com"');
+  run('git config user.name "github-actions[bot]"');
+}
+
+function ensureOnMain() {
+  run("git checkout main");
+  run("git pull origin main");
+}
+
+function createBranch(name) {
+  run(`git checkout -b ${name}`);
+}
+
+function applyFileChanges(changes) {
+  // changes: Array<{ path: string, content: string }>
+  for (const { path: filePath, content } of changes) {
+    const abs = join(PROJECT_ROOT, filePath);
+    mkdirSync(dirname(abs), { recursive: true });
+    writeFileSync(abs, content, "utf8");
+    console.log(`    📝 Updated: ${filePath}`);
+  }
+}
+
+function commitAndPush(branchName, message) {
+  run("git add -A");
+  const commitResult = run(`git commit -m "${message}"`);
+  if (!commitResult.ok) {
+    console.warn("    Nothing to commit.");
+    return false;
+  }
+  const pushResult = run(
+    `git push origin ${branchName} --force-with-lease`
+  );
+  if (!pushResult.ok) {
+    // Try without force if first push on this branch
+    run(`git push -u origin ${branchName}`);
+  }
+  return true;
+}
+
+function verifyBuild() {
+  console.log("    🔨 Verifying build...");
+  const ts = run("npx tsc --noEmit 2>&1");
+  if (!ts.ok) {
+    console.warn("    ⚠️  TypeScript errors after fix:\n", ts.output.slice(0, 2000));
+    return false;
+  }
+  const build = run("npx next build 2>&1");
+  if (!build.ok) {
+    console.warn("    ⚠️  Build failed after fix:\n", build.output.slice(0, 2000));
+    return false;
+  }
+  return true;
+}
+
+// ─── Main ─────────────────────────────────────────────────────────────────────
+
+async function main() {
+  console.log("🔧 paubartrina.cat — Bug Fixer\n");
+
+  const issues = await getOpenBugIssues();
+  if (issues.length === 0) {
+    console.log("✅ No open automated bugs found.");
+    return;
+  }
+
+  console.log(`Found ${issues.length} open issue(s). Will process up to ${MAX_ISSUES_PER_RUN}.\n`);
+
+  gitConfigureUser();
+
+  const client = new Anthropic();
+  let fixed = 0;
+
+  for (const issue of issues.slice(0, MAX_ISSUES_PER_RUN)) {
+    console.log(`\n🐛 Issue #${issue.number}: ${issue.title}`);
+
+    // Read current source
+    ensureOnMain();
+    const sourceSnapshot = readSourceSnapshot();
+    const sourceContext = Object.entries(sourceSnapshot)
+      .map(([path, content]) => {
+        const capped =
+          content.length > 3000
+            ? content.slice(0, 3000) + "\n...[truncated]"
+            : content;
+        return `### ${path}\n\`\`\`\n${capped}\n\`\`\``;
+      })
+      .join("\n\n");
+
+    // Ask Claude for a fix
+    console.log("    🤖 Asking Claude for a fix...");
+    let fixPlan;
+    try {
+      const response = await client.messages.create({
+        model: "claude-opus-4-5",
+        max_tokens: 4096,
+        messages: [
+          {
+            role: "user",
+            content: `You are a senior software engineer fixing a bug in a Next.js 16 / TypeScript / Tailwind CSS v4 personal website.
+
+## Issue to fix
+
+**Title**: ${issue.title}
+
+**Description**:
+${issue.body ?? "(no body)"}
+
+## Current source files
+
+${sourceContext}
+
+## Your task
+
+Provide a fix for this issue. Return ONLY valid JSON (no markdown, no explanation) with this shape:
+{
+  "summary": "One-sentence description of what you changed",
+  "changes": [
+    {
+      "path": "relative/path/to/file.tsx",
+      "content": "complete new file content (not a diff, the full file)"
+    }
+  ]
+}
+
+Rules:
+- Only change files that are necessary to fix the issue.
+- Do not change unrelated code.
+- Preserve all existing functionality.
+- Keep the same coding style.
+- If the issue is not fixable (e.g. requires secret env vars or manual action), return { "summary": "NOT_FIXABLE", "changes": [] }`,
+          },
+        ],
+      });
+
+      const text = response.content[0].text.trim();
+      fixPlan = JSON.parse(text);
+    } catch (err) {
+      console.error("    ❌ Claude failed to return a valid fix:", err.message);
+      continue;
+    }
+
+    if (
+      fixPlan.summary === "NOT_FIXABLE" ||
+      !Array.isArray(fixPlan.changes) ||
+      fixPlan.changes.length === 0
+    ) {
+      console.log("    ⏭️  Issue not automatically fixable. Skipping.");
+      continue;
+    }
+
+    // Create branch
+    const branchName = `fix/${issue.number}-${slugify(issue.title)}`;
+    try {
+      createBranch(branchName);
+    } catch {
+      console.warn(`    ⚠️  Branch ${branchName} may already exist. Continuing...`);
+      run(`git checkout ${branchName}`);
+    }
+
+    // Apply changes
+    console.log(`    Applying ${fixPlan.changes.length} file change(s)...`);
+    applyFileChanges(fixPlan.changes);
+
+    // Verify
+    const buildOk = verifyBuild();
+    if (!buildOk) {
+      console.log("    ❌ Fix did not pass verification. Rolling back branch.");
+      ensureOnMain();
+      run(`git branch -D ${branchName} 2>/dev/null || true`);
+      continue;
+    }
+
+    // Commit and push
+    const commitMsg = `fix: ${fixPlan.summary} (closes #${issue.number})`;
+    const pushed = commitAndPush(branchName, commitMsg);
+    if (!pushed) {
+      ensureOnMain();
+      continue;
+    }
+
+    // Create PR
+    const prBody = `## Summary
+
+${fixPlan.summary}
+
+## Changes
+
+${fixPlan.changes.map((c) => `- \`${c.path}\``).join("\n")}
+
+## Closes
+
+Closes #${issue.number}
+
+---
+🤖 *Automated fix generated by [Claude](https://claude.ai)*`;
+
+    try {
+      const pr = await createPR(
+        `fix: ${issue.title}`,
+        prBody,
+        branchName
+      );
+      console.log(`    ✅ PR #${pr.number} created: ${pr.html_url}`);
+      fixed++;
+    } catch (err) {
+      console.error("    ❌ Failed to create PR:", err.message);
+    }
+
+    ensureOnMain();
+  }
+
+  console.log(`\n🏁 Done — ${fixed} issue(s) fixed and PR(s) opened.`);
+}
+
+main().catch((err) => {
+  console.error("Fatal error:", err);
+  process.exit(1);
+});

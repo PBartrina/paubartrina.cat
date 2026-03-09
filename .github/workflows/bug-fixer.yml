@@ -1,0 +1,44 @@
+name: Bug Fixer
+
+on:
+  schedule:
+    # Runs every day at 09:00 UTC (1 hour after bug detector)
+    - cron: "0 9 * * *"
+  workflow_dispatch: # allow manual trigger from GitHub UI
+
+jobs:
+  fix:
+    name: Fix Bugs
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write       # push branches
+      issues: write         # close issues
+      pull-requests: write  # create PRs
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Fetch full history so we can create and push branches
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run bug fixer
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        run: node scripts/fix-bugs.mjs
