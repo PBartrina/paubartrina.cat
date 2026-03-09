@@ -18,9 +18,12 @@ export default function Navbar() {
   return (
     <nav className="sticky top-0 z-50 bg-bg-dark text-text-on-dark">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
-        <Link href="/" className="font-display text-xl font-bold text-text-accent">
-          <span className="text-text-on-dark">Pau</span>
-          <span className="text-text-accent">Bartrina</span>
+        <Link href="/" className="flex items-center gap-1.5 font-display text-xl font-bold">
+          <span className="font-mono text-lg text-text-on-dark">&lt;/&gt;</span>
+          <div>
+            <span className="text-text-on-dark">Pau</span>
+            <span className="text-text-accent">Bartrina</span>
+          </div>
         </Link>
 
         {/* Desktop nav */}
