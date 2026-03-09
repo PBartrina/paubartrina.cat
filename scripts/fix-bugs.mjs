@@ -98,13 +98,6 @@ async function getOpenBugIssues() {
   );
 }
 
-async function closeIssue(number) {
-  return githubRequest(`/repos/${OWNER}/${REPO_NAME}/issues/${number}`, {
-    method: "PATCH",
-    body: JSON.stringify({ state: "closed" }),
-  });
-}
-
 async function createPR(title, body, head, base = "main") {
   return githubRequest(`/repos/${OWNER}/${REPO_NAME}/pulls`, {
     method: "POST",

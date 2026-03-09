@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Local dev helpers (gitignored, not part of the project)
+    "dev-server.js",
   ]),
 ]);
 
