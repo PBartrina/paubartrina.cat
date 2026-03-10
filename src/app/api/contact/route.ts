@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import nodemailer from "nodemailer";
+import { Resend } from "resend";
 
 // In-memory rate limiter: max 5 requests per IP per 15 minutes
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
@@ -68,37 +68,25 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "El missatge \u00e9s obligatori (m\u00e0x. 2000 car\u00e0cters)." }, { status: 400 });
   }
 
-  const smtpHost = process.env.SMTP_HOST;
-  const smtpPort = parseInt(process.env.SMTP_PORT ?? "587", 10);
-  const smtpUser = process.env.SMTP_USER;
-  const smtpPass = process.env.SMTP_PASS;
+  const apiKey = process.env.RESEND_API_KEY;
   const contactEmail = process.env.CONTACT_EMAIL;
 
-  if (!smtpHost || !smtpUser || !smtpPass || !contactEmail) {
-    console.error("Missing SMTP environment variables");
+  if (!apiKey || !contactEmail) {
+    console.error("Missing RESEND_API_KEY or CONTACT_EMAIL env vars");
     return NextResponse.json(
       { error: "Error de configuraci\u00f3 del servidor. Torna-ho a intentar m\u00e9s tard." },
       { status: 500 },
     );
   }
 
-  const transporter = nodemailer.createTransport({
-    host: smtpHost,
-    port: smtpPort,
-    secure: smtpPort === 465,
-    auth: {
-      user: smtpUser,
-      pass: smtpPass,
-    },
-  });
+  const resend = new Resend(apiKey);
 
   try {
-    await transporter.sendMail({
-      from: `"Web de Pau Bartrina" <${smtpUser}>`,
+    await resend.emails.send({
+      from: "Web de Pau Bartrina <noreply@paubartrina.cat>",
       to: contactEmail,
-      replyTo: `"${name.trim()}" <${email.trim()}>`,
+      replyTo: `${name.trim()} <${email.trim()}>`,
       subject: `Nou missatge de contacte de ${name.trim()}`,
-      text: `Nom: ${name.trim()}\nCorreu: ${email.trim()}\n\n${message.trim()}`,
       html: `
         <p><strong>Nom:</strong> ${name.trim()}</p>
         <p><strong>Correu:</strong> ${email.trim()}</p>
@@ -109,10 +97,9 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true });
   } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
     console.error("Error sending email:", err);
     return NextResponse.json(
-      { error: `[DEBUG] ${message}` },
+      { error: "No s\u2019ha pogut enviar el missatge. Torna-ho a intentar." },
       { status: 500 },
     );
   }

@@ -15,7 +15,7 @@ Personal website of Pau Bartrina — developer, built with Next.js.
 | Styling | Tailwind CSS v4 |
 | Package manager | pnpm |
 | Hosting | Vercel |
-| Email | Nodemailer + SMTP |
+| Email | Resend API |
 
 ---
 
@@ -74,21 +74,24 @@ content/
 
 ## Contact form
 
-The `/contacte` page sends email via Nodemailer without exposing any address to visitors. It includes honeypot anti-spam and rate limiting (5 requests / IP / 15 min).
+The `/contacte` page sends email via [Resend](https://resend.com) without exposing any address to visitors. It includes honeypot anti-spam and rate limiting (5 requests / IP / 15 min).
+
+Resend is used instead of SMTP because Vercel's free tier blocks all outbound SMTP connections (ports 25, 465, 587).
+
+### Setup
+
+1. Create a free account at [resend.com](https://resend.com) (3,000 emails/month free)
+2. Add and verify the domain `paubartrina.cat` under **Domains**
+3. Create an API key under **API Keys**
 
 ### Environment variables
 
 Create a `.env.local` file at the project root:
 
 ```env
-SMTP_HOST=smtp.yourdomain.com
-SMTP_PORT=587
-SMTP_USER=you@yourdomain.com
-SMTP_PASS=your-email-password
-CONTACT_EMAIL=you@yourdomain.com
+RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxx
+CONTACT_EMAIL=hola@paubartrina.cat
 ```
-
-For **cdmon** hosting, the SMTP host is `smtp.yourdomain.com` (e.g. `smtp.paubartrina.cat`), port `587`.
 
 Add the same variables as **Vercel Environment Variables** at:
 `https://vercel.com/dashboard → Project → Settings → Environment Variables`
