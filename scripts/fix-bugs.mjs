@@ -46,7 +46,9 @@ function run(cmd, { throwOnError = false } = {}) {
 
 function collectSourceFiles(dir, extensions = [".ts", ".tsx", ".mdx", ".css", ".json"]) {
   const files = [];
-  const skip = ["node_modules", ".next", ".git", "dist", "out", "coverage"];
+  // .github excluded: the GitHub token lacks `workflows` permission, so any
+  // fix touching CI files would fail to push. Keep it out of Claude's context.
+  const skip = ["node_modules", ".next", ".git", ".github", "dist", "out", "coverage"];
   const skipFiles = ["package-lock.json", "pnpm-lock.yaml"];
   for (const entry of readdirSync(dir)) {
     if (skip.includes(entry)) continue;
@@ -272,6 +274,18 @@ Rules:
       fixPlan.changes.length === 0
     ) {
       console.log("    ⏭️  Issue not automatically fixable. Skipping.");
+      continue;
+    }
+
+    // Reject fixes that touch protected paths (e.g. workflow files require
+    // a GitHub token with the `workflows` scope, which we don't have).
+    const protectedPaths = [".github/"];
+    const touchesProtected = fixPlan.changes.some((c) =>
+      protectedPaths.some((p) => c.path.startsWith(p))
+    );
+    if (touchesProtected) {
+      const blocked = fixPlan.changes.map((c) => c.path).join(", ");
+      console.log(`    ⏭️  Fix touches protected path(s) [${blocked}] — skipping (needs manual intervention).`);
       continue;
     }
 
