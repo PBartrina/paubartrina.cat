@@ -216,7 +216,10 @@ If there are no actionable issues, return an empty array: []`,
 
   let issues = [];
   try {
-    const text = response.content[0].text.trim();
+    let text = response.content[0].text.trim();
+    // Strip markdown code fences if present (e.g. ```json ... ```)
+    const fenceMatch = text.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/);
+    if (fenceMatch) text = fenceMatch[1].trim();
     issues = JSON.parse(text);
   } catch (err) {
     console.error("Claude returned unexpected output:", response.content[0].text);
