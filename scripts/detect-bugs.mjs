@@ -120,10 +120,13 @@ async function main() {
   console.log("Running ESLint...");
   const lintResult = run("npx next lint 2>&1");
 
+  console.log("Running tests...");
+  const testResult = run("pnpm test 2>&1");
+
   console.log("Running next build...");
   const buildResult = run("npx next build 2>&1");
 
-  const allPassed = tsResult.ok && lintResult.ok && buildResult.ok;
+  const allPassed = tsResult.ok && lintResult.ok && testResult.ok && buildResult.ok;
 
   if (allPassed) {
     console.log("✅ All checks passed — no issues to report.");
@@ -149,6 +152,11 @@ ${cap(tsResult.output.trim() || "(no output)")}
 ## ESLint (${lintResult.ok ? "✅ PASS" : "❌ FAIL"})
 \`\`\`
 ${cap(lintResult.output.trim() || "(no output)")}
+\`\`\`
+
+## Tests (${testResult.ok ? "✅ PASS" : "❌ FAIL"})
+\`\`\`
+${cap(testResult.output.trim() || "(no output)")}
 \`\`\`
 
 ## Build (${buildResult.ok ? "✅ PASS" : "❌ FAIL"})
