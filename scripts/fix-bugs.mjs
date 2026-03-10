@@ -139,17 +139,24 @@ function applyFileChanges(changes) {
 
 function commitAndPush(branchName, message) {
   run("git add -A");
-  const commitResult = run(`git commit -m "${message}"`);
+  // Write the commit message to a file to avoid shell-quoting issues with
+  // special characters (quotes, newlines, etc.) in Claude's summary text.
+  const msgPath = join(PROJECT_ROOT, ".git", "AUTOMATED_COMMIT_MSG");
+  writeFileSync(msgPath, message, "utf8");
+  const commitResult = run(`git commit -F ".git/AUTOMATED_COMMIT_MSG"`);
   if (!commitResult.ok) {
     console.warn("    Nothing to commit.");
     return false;
   }
-  const pushResult = run(
-    `git push origin ${branchName} --force-with-lease`
-  );
+  // Try force-push first (handles re-runs on the same branch),
+  // then fall back to a regular push for a brand-new branch.
+  const pushResult = run(`git push origin ${branchName} --force-with-lease`);
   if (!pushResult.ok) {
-    // Try without force if first push on this branch
-    run(`git push -u origin ${branchName}`);
+    const pushResult2 = run(`git push -u origin ${branchName}`);
+    if (!pushResult2.ok) {
+      console.warn("    ⚠️  Push failed:\n", pushResult2.output.slice(0, 500));
+      return false;
+    }
   }
   return true;
 }
@@ -249,7 +256,10 @@ Rules:
         ],
       });
 
-      const text = response.content[0].text.trim();
+      let text = response.content[0].text.trim();
+      // Strip markdown code fences if present (e.g. ```json ... ```)
+      const fenceMatch = text.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/);
+      if (fenceMatch) text = fenceMatch[1].trim();
       fixPlan = JSON.parse(text);
     } catch (err) {
       console.error("    ❌ Claude failed to return a valid fix:", err.message);
