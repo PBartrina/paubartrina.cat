@@ -118,7 +118,7 @@ async function main() {
   const tsResult = run("npx tsc --noEmit 2>&1");
 
   console.log("Running ESLint...");
-  const lintResult = run("npx next lint 2>&1");
+  const lintResult = run("pnpm lint 2>&1");
 
   console.log("Running tests...");
   const testResult = run("pnpm test 2>&1");
