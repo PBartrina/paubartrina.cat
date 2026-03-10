@@ -109,9 +109,10 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true });
   } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
     console.error("Error sending email:", err);
     return NextResponse.json(
-      { error: "No s\u2019ha pogut enviar el missatge. Torna-ho a intentar." },
+      { error: `[DEBUG] ${message}` },
       { status: 500 },
     );
   }
