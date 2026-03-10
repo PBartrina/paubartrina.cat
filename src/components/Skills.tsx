@@ -1,45 +1,21 @@
-const skills = [
-  {
-    title: "Core Stack",
-    items: ["Angular (v2-18+)", "TypeScript", "NgRx", "Nx (Monorepos)"],
-    bracket: "{ }",
-  },
-  {
-    title: "Arquitectura",
-    items: ["Disseny Modular", "DDD", "Arq. Hexagonal", "Design Systems"],
-    bracket: "[ ]",
-  },
-  {
-    title: "Testing",
-    items: ["Vitest", "Jest", "Playwright", "Cypress", "Pact"],
-    bracket: "( )",
-  },
-  {
-    title: "Mobile",
-    items: ["NativeScript", "React Native", "Ionic"],
-    bracket: "< >",
-  },
-  {
-    title: "Rendiment i Eines",
-    items: ["CI/CD", "Storybook", "Webpack / Vite", "Web Vitals"],
-    bracket: "=>",
-  },
-  {
-    title: "Lideratge",
-    items: ["Agile / Scrum", "Mentoring", "Equips Multidisciplinars"],
-    bracket: "::",
-  },
-];
+import { useTranslations } from "next-intl";
 
 export default function Skills() {
+  const t = useTranslations("skills");
+  const categories = t.raw("categories") as Array<{
+    title: string;
+    items: string[];
+    bracket: string;
+  }>;
+
   return (
     <section id="skills" className="bg-bg-primary py-20">
       <div className="mx-auto max-w-6xl px-6">
         <h2 className="mb-12 text-center font-display text-3xl font-bold text-text-primary">
-          Habilitats Tècniques
+          {t("heading")}
         </h2>
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-          {skills.map((skill) => (
+          {categories.map((skill) => (
             <div
               key={skill.title}
               className="relative rounded-lg border border-card-border bg-card-bg p-8 transition-shadow hover:shadow-lg"

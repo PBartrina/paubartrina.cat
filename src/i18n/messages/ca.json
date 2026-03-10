@@ -1,0 +1,193 @@
+{
+  "metadata": {
+    "title": "</> Pau Bartrina | Senior Frontend Engineer",
+    "titleTemplate": "%s | </> Pau Bartrina",
+    "description": "Senior Frontend Engineer amb +15 anys d'experiència en Angular, TypeScript, NgRx i Nx. Especialitzat en arquitectura modular, testing i lideratge tècnic.",
+    "ogLocale": "ca_ES"
+  },
+  "nav": {
+    "home": "Home",
+    "about": "Sobre Mi",
+    "experience": "Trajectòria",
+    "now": "Ara",
+    "blog": "Blog",
+    "contact": "Contacte",
+    "toggleMenu": "Obrir menú"
+  },
+  "hero": {
+    "greeting": "Benvinguts",
+    "title": "Senior Frontend Engineer amb +15 anys d'experiència",
+    "subtitle": "en l'ecosistema Angular, arquitectura modular i lideratge tècnic"
+  },
+  "about": {
+    "heading": "Sobre Mi",
+    "bio": "Enginyer Frontend Sènior i Líder Tècnic amb més de 15 anys d'experiència, especialitzat en l'ecosistema Angular (NgRx, Nx, TypeScript). Expert en modernització de codis base i en la implementació de cultures de testing amb Vitest i Playwright. Líder col·laboratiu dedicat a connectar disseny, producte i enginyeria per oferir experiències d'usuari impecables.",
+    "languagesLabel": "Idiomes",
+    "languages": [
+      { "label": "Català i Castellà", "level": "Natiu" },
+      { "label": "Anglès", "level": "C2 (FCE)" },
+      { "label": "Francès", "level": "B1" },
+      { "label": "Àrab Estàndard", "level": "A1" }
+    ]
+  },
+  "skills": {
+    "heading": "Habilitats Tècniques",
+    "categories": [
+      {
+        "title": "Core Stack",
+        "items": ["Angular (v2-18+)", "TypeScript", "NgRx", "Nx (Monorepos)"],
+        "bracket": "{ }"
+      },
+      {
+        "title": "Arquitectura",
+        "items": ["Disseny Modular", "DDD", "Arq. Hexagonal", "Design Systems"],
+        "bracket": "[ ]"
+      },
+      {
+        "title": "Testing",
+        "items": ["Vitest", "Jest", "Playwright", "Cypress", "Pact"],
+        "bracket": "( )"
+      },
+      {
+        "title": "Mobile",
+        "items": ["NativeScript", "React Native", "Ionic"],
+        "bracket": "< >"
+      },
+      {
+        "title": "Rendiment i Eines",
+        "items": ["CI/CD", "Storybook", "Webpack / Vite", "Web Vitals"],
+        "bracket": "=>"
+      },
+      {
+        "title": "Lideratge",
+        "items": ["Agile / Scrum", "Mentoring", "Equips Multidisciplinars"],
+        "bracket": "::"
+      }
+    ]
+  },
+  "experience": {
+    "heading": "Experiència",
+    "jobs": [
+      {
+        "period": "2025 – 2026",
+        "role": "Senior R&D Engineer",
+        "company": "Ansys Iberia",
+        "location": "Madrid",
+        "description": "Lideratge del frontend per al llançament d'un nou producte estratègic. SME d'Angular, millorant les mètriques de rendiment en un 15%. Testing amb Vitest i Playwright."
+      },
+      {
+        "period": "2017 – 2025",
+        "role": "Senior Front-end Architect & Developer",
+        "company": "Byte Default",
+        "location": "Barcelona",
+        "description": "Arquitectura web escalable amb Angular, Nx i NgRx. Codisseny d'un sistema de formularis dinàmics d'alt rendiment. Testing amb Jest i Cypress."
+      },
+      {
+        "period": "2015 – 2017",
+        "role": "Fullstack Developer Analyst",
+        "company": "GFT Group",
+        "location": "Sant Cugat del Vallès",
+        "description": "Prototipatge i avaluació de frameworks frontend (Angular 2, NativeScript, React Native, Ionic 2) per a aplicacions empresarials. PoCs presentades en conferències FinTech."
+      },
+      {
+        "period": "2013 – 2015",
+        "role": "Front-End Developer",
+        "company": "Salemware / 12co",
+        "location": "Barcelona",
+        "description": "Desenvolupament de frontends segurs i eficients amb JavaScript, HTML5 i CSS3, amb focus en aplicacions sensibles a l'encriptació."
+      },
+      {
+        "period": "2008",
+        "role": "Cofundador i Front-End Developer",
+        "company": "Birium",
+        "location": "Barcelona",
+        "description": "Cofundació d'una startup de plataforma digital. Desenvolupament del frontend i col·laboració en el disseny UI/UX i la planificació estratègica."
+      }
+    ]
+  },
+  "education": {
+    "heading": "Formació",
+    "entries": [
+      {
+        "year": "2008",
+        "title": "Enginyeria Multimèdia",
+        "institution": "Universitat Ramon Llull"
+      },
+      {
+        "year": "2005",
+        "title": "Enginyeria Superior Informàtica",
+        "institution": "Universitat Politècnica de Catalunya"
+      },
+      {
+        "year": "2003 – 2005",
+        "title": "Batxillerat Científic-Tècnic",
+        "institution": "Escola Pia de Sarrià-Calassanç"
+      }
+    ]
+  },
+  "blog": {
+    "heading": "Blog",
+    "description": "Articles sobre desenvolupament web i tecnologia",
+    "emptyState": "Encara no hi ha articles. Torna aviat!",
+    "backToList": "← Tornar al blog",
+    "translationWarning": "Aquest article va ser escrit originalment en català. Estàs llegint una traducció.",
+    "readOriginal": "Llegir l'original en català"
+  },
+  "contact": {
+    "heading": "Contacte",
+    "subtitle": "Tens alguna pregunta o proposta? Envia'm un missatge!",
+    "description": "Tens alguna pregunta o proposta? Envia'm un missatge directament des d'aquí.",
+    "nameLabel": "Nom",
+    "namePlaceholder": "El teu nom",
+    "emailLabel": "Correu electrònic",
+    "emailPlaceholder": "tu@exemple.com",
+    "messageLabel": "Missatge",
+    "messagePlaceholder": "En qué et puc ajudar?",
+    "submitText": "Envia el missatge →",
+    "sendingText": "Enviant...",
+    "successHeading": "Missatge enviat correctament!",
+    "successMessage": "Et respondré tan aviat com pugui.",
+    "sendAnother": "Envia un altre missatge",
+    "honeypotLabel": "No ompliu aquest camp",
+    "errorUnknown": "Error desconegut.",
+    "errorNetwork": "No s'ha pogut connectar amb el servidor."
+  },
+  "footer": {
+    "contactHeading": "Contacta'm",
+    "sendMessage": "Envia'm un missatge →",
+    "followHeading": "Segueix-me",
+    "copyright": "Tots els drets reservats."
+  },
+  "ara": {
+    "title": "Ara",
+    "description": "Què faig ara - la meva pàgina ara",
+    "heading": "Què faig ara",
+    "lastUpdated": "Última actualització: Abril 2025",
+    "location": "Visc a <strong>Sant Pere de Vilamajor</strong>, a la part baixa del <strong>Montseny</strong>.",
+    "occupation": "Sóc <code>programador web front-end</code> i actualment cerco feina.",
+    "prioritiesHeading": "Les meves prioritats i el estat de projectes",
+    "priorities": [
+      "Per capricis personals i decisions \"estratègiques\" l'empresa on treballava s'ha dissolt i em quedo a l'atur, això sí, només tinc agraïments cap a l'empresa on he estat aquests gairebé 8 anys.",
+      "Tocarà arrencar amb força la web amb <strong>Nuxt</strong> que tenia en stand-by.",
+      "A l'<strong>Sven</strong> li hem fet una neteja dental i li han tret un queixal (seny no n'ha tingut mai).",
+      "Hem tingut una mica de drama amb unes filtracions aquest mes de pluges, però ja està tot controlat."
+    ],
+    "excitementHeading": "Què m'engresca",
+    "excitement": [
+      "Ja estic a la recta final del llibre que vaig començar! M'està agradant i segurament continuaré amb la saga del <strong>Arxiu de les Tempestes</strong>.",
+      "Els bonsais estàn començant a brotar amb força, ara ve una època bonica de <strong>poda, transplantaments i formació</strong>."
+    ],
+    "footer": "Aquesta és la meva pàgina \"ara\" inspirada en el moviment <link>now page</link>."
+  },
+  "theme": {
+    "toggleLabel": "Canviar tema",
+    "light": "light",
+    "dark": "dark"
+  },
+  "languageSwitcher": {
+    "label": "Idioma",
+    "ca": "CA",
+    "es": "ES",
+    "en": "EN"
+  }
+}

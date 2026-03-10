@@ -52,15 +52,23 @@ describe("getAllPosts", () => {
     // fs.existsSync: BLOG_DIR exists
     mockedFs.existsSync = vi.fn().mockReturnValue(true);
     // fs.readdirSync: three MDX files
-    mockedFs.readdirSync = vi.fn().mockReturnValue(["post-a.mdx", "post-b.mdx", "post-c.mdx"] as unknown as fs.Dirent[]);
+    mockedFs.readdirSync = vi
+      .fn()
+      .mockReturnValue([
+        "post-a.mdx",
+        "post-b.mdx",
+        "post-c.mdx",
+      ] as unknown as fs.Dirent[]);
     // fs.readFileSync: return appropriate content per file
-    mockedFs.readFileSync = vi.fn().mockImplementation((filePath: fs.PathOrFileDescriptor) => {
-      const p = filePath.toString();
-      if (p.includes("post-a")) return POST_A;
-      if (p.includes("post-b")) return POST_B;
-      if (p.includes("post-c")) return POST_C;
-      return "";
-    });
+    mockedFs.readFileSync = vi
+      .fn()
+      .mockImplementation((filePath: fs.PathOrFileDescriptor) => {
+        const p = filePath.toString();
+        if (p.includes("post-a")) return POST_A;
+        if (p.includes("post-b")) return POST_B;
+        if (p.includes("post-c")) return POST_C;
+        return "";
+      });
   });
 
   afterEach(() => {
@@ -70,7 +78,7 @@ describe("getAllPosts", () => {
   it("returns all posts sorted by date descending (dev mode includes unpublished)", async () => {
     // In test env NODE_ENV is not "production", so unpublished posts are included
     const { getAllPosts } = await importBlog();
-    const posts = getAllPosts();
+    const posts = getAllPosts("ca");
 
     expect(posts).toHaveLength(3);
     // Sorted newest first: post-c (2025-01-10), post-a (2024-06-01), post-b (2024-03-15)
@@ -81,7 +89,7 @@ describe("getAllPosts", () => {
 
   it("returns correct metadata for a post", async () => {
     const { getAllPosts } = await importBlog();
-    const posts = getAllPosts();
+    const posts = getAllPosts("ca");
     const postA = posts.find((p) => p.slug === "post-a")!;
 
     expect(postA.title).toBe("Post A");
@@ -94,7 +102,7 @@ describe("getAllPosts", () => {
   it("excludes unpublished posts in production", async () => {
     vi.stubEnv("NODE_ENV", "production");
     const { getAllPosts } = await importBlog();
-    const posts = getAllPosts();
+    const posts = getAllPosts("ca");
 
     const slugs = posts.map((p) => p.slug);
     expect(slugs).not.toContain("post-b"); // published: false
@@ -106,23 +114,31 @@ describe("getAllPosts", () => {
   it("returns empty array when BLOG_DIR does not exist", async () => {
     mockedFs.existsSync = vi.fn().mockReturnValue(false);
     const { getAllPosts } = await importBlog();
-    expect(getAllPosts()).toEqual([]);
+    expect(getAllPosts("ca")).toEqual([]);
   });
 
   it("filters out non-mdx files", async () => {
-    mockedFs.readdirSync = vi.fn().mockReturnValue(["post-a.mdx", "readme.txt", ".DS_Store"] as unknown as fs.Dirent[]);
+    mockedFs.readdirSync = vi
+      .fn()
+      .mockReturnValue([
+        "post-a.mdx",
+        "readme.txt",
+        ".DS_Store",
+      ] as unknown as fs.Dirent[]);
     const { getAllPosts } = await importBlog();
-    const posts = getAllPosts();
+    const posts = getAllPosts("ca");
     expect(posts).toHaveLength(1);
     expect(posts[0].slug).toBe("post-a");
   });
 
   it("uses slug as title fallback when frontmatter title is missing", async () => {
     const noTitle = `---\ndate: "2024-01-01"\n---\nBody`;
-    mockedFs.readdirSync = vi.fn().mockReturnValue(["no-title.mdx"] as unknown as fs.Dirent[]);
+    mockedFs.readdirSync = vi
+      .fn()
+      .mockReturnValue(["no-title.mdx"] as unknown as fs.Dirent[]);
     mockedFs.readFileSync = vi.fn().mockReturnValue(noTitle);
     const { getAllPosts } = await importBlog();
-    const posts = getAllPosts();
+    const posts = getAllPosts("ca");
     expect(posts[0].title).toBe("no-title");
   });
 });
@@ -140,7 +156,7 @@ describe("getPostBySlug", () => {
 
   it("returns post with content for an existing slug", async () => {
     const { getPostBySlug } = await importBlog();
-    const post = getPostBySlug("post-a");
+    const post = getPostBySlug("ca", "post-a");
 
     expect(post).not.toBeNull();
     expect(post!.slug).toBe("post-a");
@@ -152,21 +168,21 @@ describe("getPostBySlug", () => {
   it("returns null for a missing slug", async () => {
     mockedFs.existsSync = vi.fn().mockReturnValue(false);
     const { getPostBySlug } = await importBlog();
-    expect(getPostBySlug("does-not-exist")).toBeNull();
+    expect(getPostBySlug("ca", "does-not-exist")).toBeNull();
   });
 
   it("marks post as published when published field is absent", async () => {
     const noPublished = `---\ntitle: "No Flag"\ndate: "2024-01-01"\n---\nBody`;
     mockedFs.readFileSync = vi.fn().mockReturnValue(noPublished);
     const { getPostBySlug } = await importBlog();
-    const post = getPostBySlug("no-flag");
+    const post = getPostBySlug("ca", "no-flag");
     expect(post!.published).toBe(true);
   });
 
   it("marks post as not published when published is false", async () => {
     mockedFs.readFileSync = vi.fn().mockReturnValue(POST_B);
     const { getPostBySlug } = await importBlog();
-    const post = getPostBySlug("post-b");
+    const post = getPostBySlug("ca", "post-b");
     expect(post!.published).toBe(false);
   });
 });
@@ -182,21 +198,63 @@ describe("getAllSlugs", () => {
 
   it("returns slugs derived from MDX filenames", async () => {
     mockedFs.existsSync = vi.fn().mockReturnValue(true);
-    mockedFs.readdirSync = vi.fn().mockReturnValue(["foo.mdx", "bar.mdx"] as unknown as fs.Dirent[]);
+    mockedFs.readdirSync = vi
+      .fn()
+      .mockReturnValue(["foo.mdx", "bar.mdx"] as unknown as fs.Dirent[]);
     const { getAllSlugs } = await importBlog();
-    expect(getAllSlugs()).toEqual(["foo", "bar"]);
+    expect(getAllSlugs("ca")).toEqual(["foo", "bar"]);
   });
 
   it("returns empty array when BLOG_DIR does not exist", async () => {
     mockedFs.existsSync = vi.fn().mockReturnValue(false);
     const { getAllSlugs } = await importBlog();
-    expect(getAllSlugs()).toEqual([]);
+    expect(getAllSlugs("ca")).toEqual([]);
   });
 
   it("ignores non-mdx files", async () => {
     mockedFs.existsSync = vi.fn().mockReturnValue(true);
-    mockedFs.readdirSync = vi.fn().mockReturnValue(["post.mdx", "image.png", "notes.md"] as unknown as fs.Dirent[]);
+    mockedFs.readdirSync = vi
+      .fn()
+      .mockReturnValue([
+        "post.mdx",
+        "image.png",
+        "notes.md",
+      ] as unknown as fs.Dirent[]);
     const { getAllSlugs } = await importBlog();
-    expect(getAllSlugs()).toEqual(["post"]);
+    expect(getAllSlugs("ca")).toEqual(["post"]);
+  });
+});
+
+describe("getAvailableLocales", () => {
+  beforeEach(() => {
+    vi.resetModules();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it("returns locales where the slug exists", async () => {
+    mockedFs.existsSync = vi
+      .fn()
+      .mockImplementation((filePath: fs.PathLike) => {
+        const p = filePath.toString().replace(/\\/g, "/");
+        // Slug exists in ca and en but not es
+        return p.includes("/ca/") || p.includes("/en/");
+      });
+    const { getAvailableLocales } = await importBlog();
+    expect(getAvailableLocales("my-post")).toEqual(["ca", "en"]);
+  });
+
+  it("returns empty array when slug exists in no locale", async () => {
+    mockedFs.existsSync = vi.fn().mockReturnValue(false);
+    const { getAvailableLocales } = await importBlog();
+    expect(getAvailableLocales("missing")).toEqual([]);
+  });
+
+  it("returns all locales when slug exists everywhere", async () => {
+    mockedFs.existsSync = vi.fn().mockReturnValue(true);
+    const { getAvailableLocales } = await importBlog();
+    expect(getAvailableLocales("common-post")).toEqual(["ca", "es", "en"]);
   });
 });

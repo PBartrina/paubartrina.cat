@@ -1,16 +1,17 @@
-const languages = [
-  { label: "Català i Castellà", level: "Natiu" },
-  { label: "Anglès", level: "C2 (FCE)" },
-  { label: "Francès", level: "B1" },
-  { label: "Àrab Estàndard", level: "A1" },
-];
+import { useTranslations } from "next-intl";
 
 export default function About() {
+  const t = useTranslations("about");
+  const languages = t.raw("languages") as Array<{
+    label: string;
+    level: string;
+  }>;
+
   return (
     <section id="about" className="bg-bg-secondary py-20">
       <div className="mx-auto max-w-4xl px-6">
         <h2 className="mb-12 text-center font-display text-3xl font-bold text-text-primary">
-          Sobre Mi
+          {t("heading")}
         </h2>
 
         <div className="relative rounded-lg border border-card-border bg-card-bg p-8 md:p-12">
@@ -19,17 +20,12 @@ export default function About() {
           </span>
 
           <p className="font-mono text-base leading-relaxed text-text-secondary md:text-lg">
-            Enginyer Frontend Sènior i Líder Tècnic amb més de 15 anys
-            d&apos;experiència, especialitzat en l&apos;ecosistema Angular (NgRx,
-            Nx, TypeScript). Expert en modernització de codis base i en la
-            implementació de cultures de testing amb Vitest i Playwright. Líder
-            col·laboratiu dedicat a connectar disseny, producte i enginyeria per
-            oferir experiències d&apos;usuari impecables.
+            {t("bio")}
           </p>
 
           <div className="mt-8 border-t border-card-border pt-8">
             <p className="mb-4 font-mono text-xs uppercase tracking-widest text-text-accent">
-              Idiomes
+              {t("languagesLabel")}
             </p>
             <div className="flex flex-wrap gap-3">
               {languages.map((lang) => (

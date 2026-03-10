@@ -1,13 +1,29 @@
 import type { Metadata } from "next";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import ContactForm from "./ContactForm";
 
-export const metadata: Metadata = {
-  title: "Contacte",
-  description:
-    "Tens alguna pregunta o proposta? Envia'm un missatge directament des d'aquí.",
-};
+interface PageProps {
+  params: Promise<{ locale: string }>;
+}
 
-export default function ContactePage() {
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "contact" });
+
+  return {
+    title: t("heading"),
+    description: t("description"),
+  };
+}
+
+export default async function ContactePage({ params }: PageProps) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
+  const t = await getTranslations({ locale, namespace: "contact" });
+
   return (
     <section className="bg-bg-secondary py-20">
       <div className="mx-auto max-w-2xl px-6">
@@ -18,10 +34,10 @@ export default function ContactePage() {
           </span>
 
           <h1 className="mb-2 font-display text-3xl font-bold text-text-primary">
-            Contacte
+            {t("heading")}
           </h1>
           <p className="mb-8 font-mono text-sm text-text-secondary">
-            Tens alguna pregunta o proposta? Envia&apos;m un missatge!
+            {t("subtitle")}
           </p>
 
           <ContactForm />

@@ -1,4 +1,8 @@
+import { useTranslations } from "next-intl";
+
 export default function Hero() {
+  const t = useTranslations("hero");
+
   return (
     <section className="relative flex min-h-[80vh] items-center justify-center overflow-hidden bg-bg-primary">
       {/* Decorative code brackets */}
@@ -15,12 +19,12 @@ export default function Hero() {
 
       <div className="relative z-10 text-center">
         <h1 className="typing-cursor font-display text-5xl font-bold text-text-primary md:text-7xl">
-          Benvinguts
+          {t("greeting")}
         </h1>
         <p className="mt-6 font-mono text-lg text-text-secondary md:text-xl">
-          Senior Frontend Engineer amb +15 anys d&apos;experiència
+          {t("title")}
           <br />
-          en l&apos;ecosistema Angular, arquitectura modular i lideratge tècnic
+          {t("subtitle")}
         </p>
       </div>
     </section>

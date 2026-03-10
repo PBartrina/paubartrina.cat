@@ -1,30 +1,21 @@
-const education = [
-  {
-    year: "2008",
-    title: "Enginyeria Multimèdia",
-    institution: "Universitat Ramon Llull",
-  },
-  {
-    year: "2005",
-    title: "Enginyeria Superior Informàtica",
-    institution: "Universitat Politècnica de Catalunya",
-  },
-  {
-    year: "2003 – 2005",
-    title: "Batxillerat Científic-Tècnic",
-    institution: "Escola Pia de Sarrià-Calassanç",
-  },
-];
+import { useTranslations } from "next-intl";
 
 export default function Education() {
+  const t = useTranslations("education");
+  const entries = t.raw("entries") as Array<{
+    year: string;
+    title: string;
+    institution: string;
+  }>;
+
   return (
     <section id="education" className="bg-bg-primary py-20">
       <div className="mx-auto max-w-6xl px-6">
         <h2 className="mb-12 text-center font-display text-3xl font-bold text-text-primary">
-          Formació
+          {t("heading")}
         </h2>
         <div className="grid gap-8 md:grid-cols-3">
-          {education.map((edu) => (
+          {entries.map((edu) => (
             <div
               key={edu.year}
               className="relative rounded-lg border border-card-border bg-card-bg p-8 transition-shadow hover:shadow-lg"

@@ -13,6 +13,7 @@ Personal website of Pau Bartrina — developer, built with Next.js.
 | Framework | Next.js 16 (App Router) |
 | Language | TypeScript |
 | Styling | Tailwind CSS v4 |
+| i18n | next-intl |
 | Package manager | pnpm |
 | Hosting | Vercel |
 | Email | Resend API |
@@ -57,28 +58,71 @@ Open [http://localhost:3000](http://localhost:3000).
 ```
 src/
 ├── app/
-│   ├── page.tsx               # Homepage (about, experience, skills)
-│   ├── ara/                   # /ara — what I'm doing now
-│   ├── blog/                  # /blog + /blog/[slug] — MDX posts
-│   ├── contacte/              # /contacte — contact form
-│   │   ├── page.tsx
-│   │   ├── ContactForm.tsx
-│   │   └── __tests__/         # ContactForm component tests
+│   ├── layout.tsx              # Minimal root layout (returns children)
+│   ├── [locale]/
+│   │   ├── layout.tsx          # Locale layout (html lang, fonts, providers)
+│   │   ├── page.tsx            # Homepage (hero, about, skills, experience)
+│   │   ├── ara/page.tsx        # /[locale]/ara — now page
+│   │   ├── blog/
+│   │   │   ├── page.tsx        # /[locale]/blog — blog listing
+│   │   │   └── [slug]/page.tsx # /[locale]/blog/[slug] — blog post
+│   │   └── contacte/
+│   │       ├── page.tsx        # /[locale]/contacte — contact form
+│   │       ├── ContactForm.tsx
+│   │       └── __tests__/      # ContactForm component tests
 │   └── api/
-│       └── contact/           # POST /api/contact — email handler
-│           └── __tests__/     # API route tests
+│       └── contact/            # POST /api/contact — email handler
+│           └── __tests__/      # API route tests
 ├── components/
 │   ├── Navbar.tsx
 │   ├── Footer.tsx
-│   └── ThemeToggle.tsx
+│   ├── ThemeToggle.tsx
+│   ├── LanguageSwitcher.tsx    # CA / ES / EN locale switcher
+│   └── BlogCard.tsx
+├── i18n/
+│   ├── config.ts              # Locale constants (ca, es, en)
+│   ├── routing.ts             # next-intl routing config
+│   ├── navigation.ts          # Locale-aware Link, useRouter, etc.
+│   ├── request.ts             # Server request config
+│   ├── messages/
+│   │   ├── ca.json            # Catalan translations (primary)
+│   │   ├── es.json            # Spanish translations
+│   │   └── en.json            # English translations
+│   └── __tests__/             # i18n config + translation key parity tests
 └── lib/
-    ├── blog.ts                # MDX post loading helpers
+    ├── blog.ts                # MDX post loading (locale-aware)
     ├── theme.tsx              # ThemeProvider + useTheme hook
     ├── utils.ts               # Shared utilities (slugify, etc.)
     └── __tests__/             # Unit tests for lib modules
 content/
-└── blog/                      # MDX blog posts (.mdx)
+└── blog/
+    ├── ca/                    # Catalan blog posts (originals)
+    ├── es/                    # Spanish translations
+    └── en/                    # English translations
 ```
+
+---
+
+## Internationalization (i18n)
+
+The site supports three languages with prefix-based routing:
+
+| Language | URL prefix | Example |
+|----------|-----------|---------|
+| Catalan (primary) | `/ca/` | `/ca/blog` |
+| Spanish | `/es/` | `/es/blog` |
+| English | `/en/` | `/en/blog` |
+
+- Root `/` redirects to `/ca/` (default locale)
+- Route segments are kept in Catalan across all languages (e.g. `/en/contacte`, `/en/ara`)
+- All UI strings are stored in JSON files under `src/i18n/messages/`
+- Blog posts live in locale subdirectories: `content/blog/ca/`, `content/blog/es/`, `content/blog/en/`
+- Posts in non-Catalan locales show a translation warning banner with a link to the original
+
+### Adding translations
+
+1. Edit the corresponding JSON file in `src/i18n/messages/`
+2. Ensure all three files have the same keys (the `config.test.ts` will catch mismatches)
 
 ---
 
@@ -116,7 +160,7 @@ Then redeploy for the changes to take effect.
 pnpm new-post
 ```
 
-This creates a new `.mdx` file in `content/blog/` with pre-filled frontmatter. Edit the file and the post will appear at `/blog/[slug]` automatically.
+The script asks for a locale (defaults to `ca`) and creates a new `.mdx` file in `content/blog/{locale}/` with pre-filled frontmatter. Use the same slug across locales to link translations together.
 
 ---
 
@@ -132,9 +176,10 @@ pnpm test --watch  # watch mode during development
 | Test file | What it covers |
 |-----------|---------------|
 | `src/lib/__tests__/utils.test.ts` | `slugify()` — lowercasing, diacritics, edge cases |
-| `src/lib/__tests__/blog.test.ts` | `getAllPosts`, `getPostBySlug`, `getAllSlugs` (mocked `fs`) |
+| `src/lib/__tests__/blog.test.ts` | `getAllPosts`, `getPostBySlug`, `getAllSlugs`, `getAvailableLocales` (mocked `fs`) |
 | `src/lib/__tests__/theme.test.tsx` | `ThemeProvider` mount, localStorage, toggle, `useTheme` |
-| `src/app/contacte/__tests__/ContactForm.test.tsx` | Form render, submission, all error paths, sending state |
+| `src/i18n/__tests__/config.test.ts` | Locale config, translation key parity across all languages |
+| `src/app/[locale]/contacte/__tests__/ContactForm.test.tsx` | Form render, submission, all error paths, sending state |
 | `src/app/api/contact/__tests__/route.test.ts` | API validation, honeypot, rate limiting, Resend integration |
 
 Component tests run in a `happy-dom` environment (declared via `@vitest-environment happy-dom` docblock). Utility and API tests run in Node.

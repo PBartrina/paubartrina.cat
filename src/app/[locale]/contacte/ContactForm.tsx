@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 type FormState = "idle" | "sending" | "success" | "error";
 
@@ -14,6 +15,7 @@ export default function ContactForm() {
   const [honeypot, setHoneypot] = useState("");
   const [state, setState] = useState<FormState>("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  const t = useTranslations("contact");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -32,11 +34,11 @@ export default function ContactForm() {
       if (res.ok && data.success) {
         setState("success");
       } else {
-        setErrorMsg(data.error ?? "Error desconegut.");
+        setErrorMsg(data.error ?? t("errorUnknown"));
         setState("error");
       }
     } catch {
-      setErrorMsg("No s\u2019ha pogut connectar amb el servidor.");
+      setErrorMsg(t("errorNetwork"));
       setState("error");
     }
   }
@@ -46,10 +48,10 @@ export default function ContactForm() {
       <div className="flex flex-col items-center gap-4 py-8 text-center">
         <span className="text-4xl text-green-500">&#10003;</span>
         <p className="font-mono text-lg font-bold text-green-500">
-          Missatge enviat correctament!
+          {t("successHeading")}
         </p>
         <p className="font-mono text-sm text-text-secondary">
-          Et respondré tan aviat com pugui.
+          {t("successMessage")}
         </p>
         <button
           onClick={() => {
@@ -60,7 +62,7 @@ export default function ContactForm() {
           }}
           className="mt-2 font-mono text-sm text-text-accent hover:underline"
         >
-          Envia un altre missatge
+          {t("sendAnother")}
         </button>
       </div>
     );
@@ -69,8 +71,11 @@ export default function ContactForm() {
   return (
     <form onSubmit={handleSubmit} noValidate className="space-y-5">
       {/* Honeypot — hidden from humans, bots auto-fill it */}
-      <div aria-hidden="true" className="absolute -top-96 opacity-0 pointer-events-none">
-        <label htmlFor="website">No ompliu aquest camp</label>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -top-96 opacity-0"
+      >
+        <label htmlFor="website">{t("honeypotLabel")}</label>
         <input
           id="website"
           name="website"
@@ -87,14 +92,14 @@ export default function ContactForm() {
           htmlFor="name"
           className="mb-1.5 block font-mono text-sm text-text-secondary"
         >
-          Nom <span className="text-text-accent">*</span>
+          {t("nameLabel")} <span className="text-text-accent">*</span>
         </label>
         <input
           id="name"
           type="text"
           required
           maxLength={100}
-          placeholder="El teu nom"
+          placeholder={t("namePlaceholder")}
           value={name}
           onChange={(e) => setName(e.target.value)}
           className={inputClass}
@@ -107,13 +112,13 @@ export default function ContactForm() {
           htmlFor="email"
           className="mb-1.5 block font-mono text-sm text-text-secondary"
         >
-          Correu electr&ograve;nic <span className="text-text-accent">*</span>
+          {t("emailLabel")} <span className="text-text-accent">*</span>
         </label>
         <input
           id="email"
           type="email"
           required
-          placeholder="tu@exemple.com"
+          placeholder={t("emailPlaceholder")}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className={inputClass}
@@ -126,14 +131,14 @@ export default function ContactForm() {
           htmlFor="message"
           className="mb-1.5 block font-mono text-sm text-text-secondary"
         >
-          Missatge <span className="text-text-accent">*</span>
+          {t("messageLabel")} <span className="text-text-accent">*</span>
         </label>
         <textarea
           id="message"
           required
           maxLength={2000}
           rows={6}
-          placeholder="En qué et puc ajudar?"
+          placeholder={t("messagePlaceholder")}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           className={`${inputClass} resize-y`}
@@ -153,7 +158,7 @@ export default function ContactForm() {
         disabled={state === "sending"}
         className="w-full rounded-md bg-bg-dark px-6 py-3 font-mono text-sm font-bold text-text-on-dark transition-opacity hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        {state === "sending" ? "Enviant..." : "Envia el missatge \u2192"}
+        {state === "sending" ? t("sendingText") : t("submitText")}
       </button>
     </form>
   );
