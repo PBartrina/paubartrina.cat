@@ -45,6 +45,7 @@ Open [http://localhost:3000](http://localhost:3000).
 | `pnpm build` | Production build |
 | `pnpm start` | Start production server |
 | `pnpm lint` | Run ESLint on `src/` |
+| `pnpm test` | Run all Vitest unit tests |
 | `pnpm new-post` | Create a new blog post |
 
 > **Note:** Always use `pnpm lint`, not `pnpm dlx eslint`. The project uses ESLint 9; `pnpm dlx` downloads the latest version which may be incompatible.
@@ -56,18 +57,27 @@ Open [http://localhost:3000](http://localhost:3000).
 ```
 src/
 ├── app/
-│   ├── page.tsx          # Homepage (about, experience, skills)
-│   ├── ara/              # /ara — what I'm doing now
-│   ├── blog/             # /blog + /blog/[slug] — MDX posts
-│   ├── contacte/         # /contacte — contact form
+│   ├── page.tsx               # Homepage (about, experience, skills)
+│   ├── ara/                   # /ara — what I'm doing now
+│   ├── blog/                  # /blog + /blog/[slug] — MDX posts
+│   ├── contacte/              # /contacte — contact form
+│   │   ├── page.tsx
+│   │   ├── ContactForm.tsx
+│   │   └── __tests__/         # ContactForm component tests
 │   └── api/
-│       └── contact/      # POST /api/contact — email handler
+│       └── contact/           # POST /api/contact — email handler
+│           └── __tests__/     # API route tests
 ├── components/
 │   ├── Navbar.tsx
 │   ├── Footer.tsx
 │   └── ThemeToggle.tsx
+└── lib/
+    ├── blog.ts                # MDX post loading helpers
+    ├── theme.tsx              # ThemeProvider + useTheme hook
+    ├── utils.ts               # Shared utilities (slugify, etc.)
+    └── __tests__/             # Unit tests for lib modules
 content/
-└── blog/                 # MDX blog posts (.mdx)
+└── blog/                      # MDX blog posts (.mdx)
 ```
 
 ---
@@ -110,9 +120,30 @@ This creates a new `.mdx` file in `content/blog/` with pre-filled frontmatter. E
 
 ---
 
+## Testing
+
+The project uses [Vitest](https://vitest.dev/) with React Testing Library.
+
+```bash
+pnpm test        # run all tests once
+pnpm test --watch  # watch mode during development
+```
+
+| Test file | What it covers |
+|-----------|---------------|
+| `src/lib/__tests__/utils.test.ts` | `slugify()` — lowercasing, diacritics, edge cases |
+| `src/lib/__tests__/blog.test.ts` | `getAllPosts`, `getPostBySlug`, `getAllSlugs` (mocked `fs`) |
+| `src/lib/__tests__/theme.test.tsx` | `ThemeProvider` mount, localStorage, toggle, `useTheme` |
+| `src/app/contacte/__tests__/ContactForm.test.tsx` | Form render, submission, all error paths, sending state |
+| `src/app/api/contact/__tests__/route.test.ts` | API validation, honeypot, rate limiting, Resend integration |
+
+Component tests run in a `happy-dom` environment (declared via `@vitest-environment happy-dom` docblock). Utility and API tests run in Node.
+
+---
+
 ## Deployment
 
-Pushes to `main` are automatically deployed via Vercel. The CI pipeline (GitHub Actions) runs lint, type check, and build before merge.
+Pushes to `main` are automatically deployed via Vercel. The CI pipeline (GitHub Actions) runs type check, lint, tests, and build before merging.
 
 ```bash
 git push origin main   # triggers Vercel deploy + CI
