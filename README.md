@@ -1,36 +1,122 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# paubartrina.cat
 
-## Getting Started
+Personal website of Pau Bartrina — developer, built with Next.js.
 
-First, run the development server:
+**Live:** [paubartrina.cat](https://paubartrina.cat)
+
+---
+
+## Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Framework | Next.js 16 (App Router) |
+| Language | TypeScript |
+| Styling | Tailwind CSS v4 |
+| Package manager | pnpm |
+| Hosting | Vercel |
+| Email | Nodemailer + SMTP |
+
+---
+
+## Getting started
+
+### Prerequisites
+
+- Node.js ≥ 22
+- pnpm ≥ 10
+
+### Install & run
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Scripts
 
-## Learn More
+| Command | Description |
+|---------|-------------|
+| `pnpm dev` | Start dev server with hot reload |
+| `pnpm build` | Production build |
+| `pnpm start` | Start production server |
+| `pnpm lint` | Run ESLint on `src/` |
+| `pnpm new-post` | Create a new blog post |
 
-To learn more about Next.js, take a look at the following resources:
+> **Note:** Always use `pnpm lint`, not `pnpm dlx eslint`. The project uses ESLint 9; `pnpm dlx` downloads the latest version which may be incompatible.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project structure
 
-## Deploy on Vercel
+```
+src/
+├── app/
+│   ├── page.tsx          # Homepage (about, experience, skills)
+│   ├── ara/              # /ara — what I'm doing now
+│   ├── blog/             # /blog + /blog/[slug] — MDX posts
+│   ├── contacte/         # /contacte — contact form
+│   └── api/
+│       └── contact/      # POST /api/contact — email handler
+├── components/
+│   ├── Navbar.tsx
+│   ├── Footer.tsx
+│   └── ThemeToggle.tsx
+content/
+└── blog/                 # MDX blog posts (.mdx)
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Contact form
+
+The `/contacte` page sends email via Nodemailer without exposing any address to visitors. It includes honeypot anti-spam and rate limiting (5 requests / IP / 15 min).
+
+### Environment variables
+
+Create a `.env.local` file at the project root:
+
+```env
+SMTP_HOST=smtp.yourdomain.com
+SMTP_PORT=587
+SMTP_USER=you@yourdomain.com
+SMTP_PASS=your-email-password
+CONTACT_EMAIL=you@yourdomain.com
+```
+
+For **cdmon** hosting, the SMTP host is `smtp.yourdomain.com` (e.g. `smtp.paubartrina.cat`), port `587`.
+
+Add the same variables as **Vercel Environment Variables** at:
+`https://vercel.com/dashboard → Project → Settings → Environment Variables`
+
+Then redeploy for the changes to take effect.
+
+---
+
+## Writing a blog post
+
+```bash
+pnpm new-post
+```
+
+This creates a new `.mdx` file in `content/blog/` with pre-filled frontmatter. Edit the file and the post will appear at `/blog/[slug]` automatically.
+
+---
+
+## Deployment
+
+Pushes to `main` are automatically deployed via Vercel. The CI pipeline (GitHub Actions) runs lint, type check, and build before merge.
+
+```bash
+git push origin main   # triggers Vercel deploy + CI
+```
+
+---
+
+## License
+
+Private — all rights reserved.
