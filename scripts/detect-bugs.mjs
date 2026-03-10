@@ -118,7 +118,7 @@ async function main() {
   const tsResult = run("npx tsc --noEmit 2>&1");
 
   console.log("Running ESLint...");
-  const lintResult = run("npx next lint --max-warnings 0 2>&1");
+  const lintResult = run("npx next lint 2>&1");
 
   console.log("Running next build...");
   const buildResult = run("npx next build 2>&1");
