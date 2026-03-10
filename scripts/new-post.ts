@@ -1,17 +1,9 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as readline from "readline";
+import { slugify } from "../src/lib/utils";
 
 const BLOG_DIR = path.join(process.cwd(), "content", "blog");
-
-function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
-}
 
 function ask(rl: readline.Interface, question: string): Promise<string> {
   return new Promise((resolve) => {
