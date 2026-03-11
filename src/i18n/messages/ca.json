@@ -131,7 +131,10 @@
     "emptyState": "Encara no hi ha articles. Torna aviat!",
     "backToList": "← Tornar al blog",
     "translationWarning": "Aquest article va ser escrit originalment en català. Estàs llegint una traducció automàtica.",
-    "readOriginal": "Llegir l'original en català"
+    "readOriginal": "Llegir l'original en català",
+    "notFoundTitle": "Article no trobat",
+    "notFoundMessage": "L'article que cerques no existeix o ha estat eliminat.",
+    "notFoundBack": "← Tornar al blog"
   },
   "contact": {
     "heading": "Contacte",
