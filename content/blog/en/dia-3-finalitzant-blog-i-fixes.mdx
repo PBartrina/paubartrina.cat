@@ -1,0 +1,13 @@
+---
+title: "Day 3: Finalizing multilingual blog and last fixes"
+description: "Complete the multilingual blog system, add hreflang alternates, and solve favicon and title issues."
+published: "2026-03-11"
+---
+
+Today I completed the internationalization with the **restructuring of the blog system**. Posts that were in a single directory (`content/blog/hola-mon.mdx`) are now organized by locale: `content/blog/ca/`, `content/blog/es/`, and `content/blog/en/`. I updated `src/lib/blog.ts` to be fully locale-aware and added a new `getAvailableLocales(slug)` function that detects which locales have a given blog entry.
+
+One of the most important details was adding an **automatic translation banner** to Spanish and English posts, informing readers that the translation is automatic and offering a link to the original Catalan post. I implemented hreflang alternates for SEO, which helps search engines understand the multilingual versions.
+
+During the day, I faced two final problems: the **favicon not appearing in production** (due to an unintended middleware redirection) and **page titles showing literal ICU quotes**. I solved them by excluding the `/icon` route from the middleware and removing the `</>` decoration from titles, leaving them clean and readable.
+
+Finally, I passed all tests, lint, and build. The site is now fully internationalized and deployed on Vercel, ready to reach users speaking Catalan, Spanish, and English!

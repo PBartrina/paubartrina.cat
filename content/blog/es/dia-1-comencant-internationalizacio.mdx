@@ -1,0 +1,11 @@
+---
+title: "Día 1: Comenzando la internacionalización"
+description: "El viaje hacia un sitio web multilingüe. Hoy establecí la base de la internacionalización con next-intl."
+published: "2026-03-09"
+---
+
+Hoy inicié uno de los proyectos más ambiciosos para mi sitio web: la **internacionalización completa** para Catalán, Español e Inglés. El web estaba 100% en Catalán con cadenas de texto hardcodeadas, así que necesitaba una solución robusta y escalable.
+
+Configuré **next-intl v4** con **Next.js 16 App Router**, estableciendo un sistema de **enrutamiento basado en prefijos** (`/ca/`, `/es/`, `/en/`) donde el Catalán es la locale primaria. La característica clave fue mantener todas las rutas con nombres en Catalán incluso para idiomas secundarios (por ejemplo, `/en/contacte` en lugar de `/en/contact`), lo cual simplificó enormemente la gestión de rutas.
+
+Creé la **configuración de middleware** para la detección automática de locale y redirecciones inteligentes, y preparé los archivos de configuración necesarios: `routing.ts`, `navigation.ts`, `request.ts` y `middleware.ts`. Aunque fue un poco complejo al principio, el sistema ya estaba funcionando y listo para el siguiente paso: traducir los componentes.

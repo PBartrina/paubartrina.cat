@@ -1,0 +1,13 @@
+---
+title: "Day 2: Translating all components"
+description: "Massive component refactoring and creation of the translation system. ~120 text strings per locale."
+published: "2026-03-10"
+---
+
+Today was the most intense day: I refactored **all components** on the site to use the translation system. Every component that had hardcoded text had to be migrated to `useTranslations()` hooks, transforming the Navbar, Hero, About, Skills, Experience, Education, Footer, and many more.
+
+I created **translation JSON files** for Catalan, Spanish, and English (~120 strings each), organized by namespaces (`nav`, `hero`, `about`, `metadata`, etc.). For structured data like skills and jobs lists, I discovered I needed to use `t.raw()` to prevent next-intl from trying to process the content as substitution variables.
+
+The highlight was creating the **LanguageSwitcher**, a client component that lets users switch between languages while maintaining the current route. I incorporated it into both the desktop navigation and mobile menu. Tests started failing because the `@/` alias wasn't resolving correctly in Vitest, but an update to the Vitest configuration fixed everything.
+
+By the end of the day, all 70 tests were passing, lint was green, and the site rendered correctly in all three locales.
