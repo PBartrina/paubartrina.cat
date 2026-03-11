@@ -4,6 +4,15 @@ import * as readline from "readline";
 import { slugify } from "../src/lib/utils";
 import Anthropic from "@anthropic-ai/sdk";
 
+// Load .env.local so ANTHROPIC_API_KEY is available when running the script directly
+const envPath = path.join(process.cwd(), ".env.local");
+if (fs.existsSync(envPath)) {
+  for (const line of fs.readFileSync(envPath, "utf-8").split("\n")) {
+    const match = line.match(/^([^#=]+)=(.*)$/);
+    if (match) process.env[match[1].trim()] = match[2].trim();
+  }
+}
+
 const VALID_LOCALES = ["ca", "es", "en"];
 
 function blogDir(locale: string) {
@@ -74,8 +83,10 @@ async function main() {
 
   const frontmatter = `---
 title: "${title}"
+date: "${date}"
 description: "${description}"
-published: "${date}"
+tags: [${tags.map((t) => `"${t}"`).join(", ")}]
+published: true
 ---
 
 Escriu el teu contingut aquí...
@@ -114,6 +125,13 @@ Escriu el teu contingut aquí...
   }
 
   rl.close();
+
+  if (!process.env.ANTHROPIC_API_KEY) {
+    console.error(
+      "\nError: ANTHROPIC_API_KEY no trobat.\nAfegeix-lo a .env.local:\n\n  ANTHROPIC_API_KEY=sk-ant-...\n"
+    );
+    process.exit(1);
+  }
 
   console.log("\n\u{1F916} Traduint a Spanish i English (això pot trigar)...\n");
 
