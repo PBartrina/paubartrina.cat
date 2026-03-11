@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint . --quiet",
     "test": "vitest run",
-    "new-post": "npx tsx scripts/new-post.ts"
+    "new-post": "npx tsx scripts/new-post.ts",
+    "translate-post": "npx tsx scripts/translate-post.ts"
   },
   "dependencies": {
     "@vercel/analytics": "^1.6.1",
