@@ -17,7 +17,8 @@
   "hero": {
     "greeting": "Benvinguts",
     "title": "Senior Frontend Engineer amb +15 anys d'experiència",
-    "subtitle": "en l'ecosistema Angular, arquitectura modular i lideratge tècnic"
+    "subtitle": "en l'ecosistema Angular, arquitectura modular i lideratge tècnic",
+    "techBadges": ["Angular", "TypeScript", "NgRx", "Nx", "Vitest", "Playwright"]
   },
   "about": {
     "heading": "Sobre Mi",
@@ -186,6 +187,24 @@
     "toggleLabel": "Canviar tema",
     "light": "light",
     "dark": "dark"
+  },
+  "atAGlance": {
+    "heading": "D'un cop d'ull",
+    "coreStackTitle": "Stack Principal",
+    "coreTech": [
+      { "name": "Angular", "detail": "v2-18+" },
+      { "name": "TypeScript" },
+      { "name": "NgRx" },
+      { "name": "Nx", "detail": "Monorepos" },
+      { "name": "Vitest" },
+      { "name": "Playwright" }
+    ],
+    "yearsCount": "15+",
+    "yearsLabel": "anys d'experiència",
+    "latestPostTitle": "Darrer article",
+    "noPostsYet": "Properament...",
+    "ctaText": "Tens algun projecte en ment?",
+    "ctaButton": "Parlem →"
   },
   "languageSwitcher": {
     "label": "Idioma",

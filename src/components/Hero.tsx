@@ -2,18 +2,23 @@ import { useTranslations } from "next-intl";
 
 export default function Hero() {
   const t = useTranslations("hero");
+  const techBadges = t.raw("techBadges") as string[];
 
   return (
-    <section className="relative flex min-h-[80vh] items-center justify-center overflow-hidden bg-bg-primary">
+    <section className="relative flex min-h-[40vh] items-center justify-center overflow-hidden bg-bg-primary py-16 md:py-24">
       {/* Decorative code brackets */}
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-10">
         <svg
           viewBox="0 0 400 400"
-          className="h-[500px] w-[500px] text-text-secondary"
+          className="h-[300px] w-[300px] text-text-secondary"
           fill="currentColor"
         >
-          <text x="80" y="180" fontSize="200" fontFamily="monospace">&lt;</text>
-          <text x="200" y="350" fontSize="200" fontFamily="monospace">/&gt;</text>
+          <text x="80" y="180" fontSize="200" fontFamily="monospace">
+            &lt;
+          </text>
+          <text x="200" y="350" fontSize="200" fontFamily="monospace">
+            /&gt;
+          </text>
         </svg>
       </div>
 
@@ -26,6 +31,18 @@ export default function Hero() {
           <br />
           {t("subtitle")}
         </p>
+
+        {/* Tech badges */}
+        <div className="mt-8 flex flex-wrap justify-center gap-2">
+          {techBadges.map((badge) => (
+            <span
+              key={badge}
+              className="rounded-md border border-card-border bg-card-bg px-3 py-1.5 font-mono text-xs text-text-secondary md:text-sm"
+            >
+              {badge}
+            </span>
+          ))}
+        </div>
       </div>
     </section>
   );

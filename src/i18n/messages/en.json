@@ -17,7 +17,8 @@
   "hero": {
     "greeting": "Welcome",
     "title": "Senior Frontend Engineer with 15+ years of experience",
-    "subtitle": "in the Angular ecosystem, modular architecture, and technical leadership"
+    "subtitle": "in the Angular ecosystem, modular architecture, and technical leadership",
+    "techBadges": ["Angular", "TypeScript", "NgRx", "Nx", "Vitest", "Playwright"]
   },
   "about": {
     "heading": "About Me",
@@ -186,6 +187,24 @@
     "toggleLabel": "Toggle theme",
     "light": "light",
     "dark": "dark"
+  },
+  "atAGlance": {
+    "heading": "At a Glance",
+    "coreStackTitle": "Core Stack",
+    "coreTech": [
+      { "name": "Angular", "detail": "v2-18+" },
+      { "name": "TypeScript" },
+      { "name": "NgRx" },
+      { "name": "Nx", "detail": "Monorepos" },
+      { "name": "Vitest" },
+      { "name": "Playwright" }
+    ],
+    "yearsCount": "15+",
+    "yearsLabel": "years of experience",
+    "latestPostTitle": "Latest Post",
+    "noPostsYet": "Coming soon...",
+    "ctaText": "Have a project in mind?",
+    "ctaButton": "Let's talk →"
   },
   "languageSwitcher": {
     "label": "Language",
