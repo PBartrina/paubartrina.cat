@@ -1,7 +1,7 @@
 {
   "metadata": {
-    "title": "</> Pau Bartrina | Senior Frontend Engineer",
-    "titleTemplate": "%s | </> Pau Bartrina",
+    "title": "'</>' Pau Bartrina | Senior Frontend Engineer",
+    "titleTemplate": "%s | '</>' Pau Bartrina",
     "description": "Senior Frontend Engineer amb +15 anys d'experiència en Angular, TypeScript, NgRx i Nx. Especialitzat en arquitectura modular, testing i lideratge tècnic.",
     "ogLocale": "ca_ES"
   },
@@ -130,7 +130,7 @@
     "description": "Articles sobre desenvolupament web i tecnologia",
     "emptyState": "Encara no hi ha articles. Torna aviat!",
     "backToList": "← Tornar al blog",
-    "translationWarning": "Aquest article va ser escrit originalment en català. Estàs llegint una traducció.",
+    "translationWarning": "Aquest article va ser escrit originalment en català. Estàs llegint una traducció automàtica.",
     "readOriginal": "Llegir l'original en català"
   },
   "contact": {
