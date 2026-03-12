@@ -175,22 +175,22 @@ function verifyBuild(runTests = false) {
   const ts = run("npx tsc --noEmit 2>&1");
   if (!ts.ok) {
     console.warn("    ⚠️  TypeScript errors after fix:\n", ts.output.slice(0, 2000));
-    return false;
+    return { ok: false, error: `TypeScript errors:\n${ts.output.slice(0, 3000)}` };
   }
   const build = run("npx next build 2>&1");
   if (!build.ok) {
     console.warn("    ⚠️  Build failed after fix:\n", build.output.slice(0, 2000));
-    return false;
+    return { ok: false, error: `Build failed:\n${build.output.slice(0, 3000)}` };
   }
   if (runTests) {
     console.log("    🧪 Running tests...");
     const test = run("pnpm test 2>&1");
     if (!test.ok) {
       console.warn("    ⚠️  Tests failed after fix:\n", test.output.slice(0, 2000));
-      return false;
+      return { ok: false, error: `Tests failed:\n${test.output.slice(0, 3000)}` };
     }
   }
-  return true;
+  return { ok: true, error: null };
 }
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
@@ -334,9 +334,101 @@ Rules:
     applyFileChanges(fixPlan.changes);
 
     // Verify — run tests for enhancements, not just build
-    const buildOk = verifyBuild(!isBug);
-    if (!buildOk) {
-      console.log("    ❌ Changes did not pass verification. Rolling back branch.");
+    let verification = verifyBuild(!isBug);
+
+    // Retry once: if verification failed, ask Claude to fix the errors
+    if (!verification.ok) {
+      console.log("    🔄 Verification failed. Asking Claude to fix the errors (retry 1/1)...");
+
+      // Read the current (broken) source state so Claude sees its own changes
+      const retrySnapshot = readSourceSnapshot();
+      const retryContext = Object.entries(retrySnapshot)
+        .map(([path, content]) => {
+          const capped = content.length > 3000
+            ? content.slice(0, 3000) + "\n...[truncated]"
+            : content;
+          return `### ${path}\n\`\`\`\n${capped}\n\`\`\``;
+        })
+        .join("\n\n");
+
+      try {
+        const retryResponse = await client.messages.create({
+          model: "claude-opus-4-5",
+          max_tokens: 16384,
+          messages: [
+            {
+              role: "user",
+              content: `You are a senior software engineer. You just applied changes to a Next.js 16 / TypeScript / Tailwind CSS v4 project but verification failed.
+
+## Original issue
+
+**Title**: ${issue.title}
+
+**Description**:
+${issue.body ?? "(no body)"}
+
+## Verification errors
+
+\`\`\`
+${verification.error}
+\`\`\`
+
+## Current source files (after your previous changes)
+
+${retryContext}
+
+## Your task
+
+Fix the verification errors. Return ONLY valid JSON (no markdown, no explanation) with this shape:
+{
+  "summary": "One-sentence description of what you fixed",
+  "changes": [
+    {
+      "path": "relative/path/to/file.tsx",
+      "content": "complete new file content (not a diff, the full file)"
+    }
+  ]
+}
+
+Rules:
+- Only change files necessary to fix the verification errors.
+- Preserve all existing functionality.
+- Keep the same coding style.
+- If the errors are not fixable, return { "summary": "NOT_FIXABLE", "changes": [] }`,
+            },
+          ],
+        });
+
+        if (retryResponse.stop_reason === "max_tokens") {
+          throw new Error("Retry response truncated (max_tokens reached).");
+        }
+        let retryText = retryResponse.content[0].text.trim();
+        const retryFence = retryText.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/);
+        if (retryFence) retryText = retryFence[1].trim();
+        const retryPlan = JSON.parse(retryText);
+
+        if (
+          retryPlan.summary === "NOT_FIXABLE" ||
+          !Array.isArray(retryPlan.changes) ||
+          retryPlan.changes.length === 0
+        ) {
+          console.log("    ❌ Claude could not fix the verification errors.");
+        } else {
+          console.log(`    Applying ${retryPlan.changes.length} retry fix(es)...`);
+          applyFileChanges(retryPlan.changes);
+          fixPlan.summary += ` — also: ${retryPlan.summary}`;
+          fixPlan.changes = [...fixPlan.changes, ...retryPlan.changes.filter(
+            (rc) => !fixPlan.changes.some((fc) => fc.path === rc.path)
+          )];
+          verification = verifyBuild(!isBug);
+        }
+      } catch (retryErr) {
+        console.error("    ❌ Retry failed:", retryErr.message);
+      }
+    }
+
+    if (!verification.ok) {
+      console.log("    ❌ Changes did not pass verification after retry. Rolling back branch.");
       ensureOnMain();
       run(`git branch -D ${branchName} 2>/dev/null || true`);
       continue;
