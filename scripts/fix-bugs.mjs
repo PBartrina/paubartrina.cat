@@ -136,10 +136,45 @@ function createBranch(name) {
   run(`git checkout -b ${name}`);
 }
 
+/**
+ * Recursively extract all nested keys from an object.
+ * E.g. { a: { b: 1, c: 2 }, d: 3 } → ["a.b", "a.c", "d"]
+ */
+function extractKeys(obj, prefix = "") {
+  const keys = [];
+  for (const key of Object.keys(obj)) {
+    const full = prefix ? `${prefix}.${key}` : key;
+    if (typeof obj[key] === "object" && obj[key] !== null && !Array.isArray(obj[key])) {
+      keys.push(...extractKeys(obj[key], full));
+    } else {
+      keys.push(full);
+    }
+  }
+  return keys;
+}
+
 function applyFileChanges(changes) {
   // changes: Array<{ path: string, content: string }>
   for (const { path: filePath, content } of changes) {
     const abs = join(PROJECT_ROOT, filePath);
+
+    // Guard: for i18n JSON files, ensure no existing keys are dropped
+    if (filePath.startsWith("src/i18n/messages/") && filePath.endsWith(".json")) {
+      try {
+        const original = JSON.parse(readFileSync(abs, "utf8"));
+        const updated = JSON.parse(content);
+        const originalKeys = extractKeys(original);
+        const updatedKeys = new Set(extractKeys(updated));
+        const droppedKeys = originalKeys.filter((k) => !updatedKeys.has(k));
+        if (droppedKeys.length > 0) {
+          console.warn(`    ⚠️  Rejecting ${filePath}: would drop ${droppedKeys.length} key(s): ${droppedKeys.slice(0, 5).join(", ")}${droppedKeys.length > 5 ? "..." : ""}`);
+          continue; // skip this file change
+        }
+      } catch {
+        // If original doesn't exist or isn't valid JSON, allow the write
+      }
+    }
+
     mkdirSync(dirname(abs), { recursive: true });
     writeFileSync(abs, content, "utf8");
     console.log(`    📝 Updated: ${filePath}`);
@@ -281,6 +316,7 @@ Rules:
 - Do not change unrelated code.
 - Preserve all existing functionality.
 - Keep the same coding style.${extraRules}
+- CRITICAL: If you modify any JSON translation file (src/i18n/messages/*.json), you MUST preserve ALL existing keys. Never drop, rename, or restructure existing keys. Only add new keys or modify values.
 - If the issue is not ${isBug ? "fixable" : "implementable"} (e.g. requires secret env vars or manual action), return { "summary": "NOT_FIXABLE", "changes": [] }`,
           },
         ],
@@ -394,6 +430,7 @@ Rules:
 - Only change files necessary to fix the verification errors.
 - Preserve all existing functionality.
 - Keep the same coding style.
+- CRITICAL: If you modify any JSON translation file (src/i18n/messages/*.json), you MUST preserve ALL existing keys. Never drop, rename, or restructure existing keys.
 - If the errors are not fixable, return { "summary": "NOT_FIXABLE", "changes": [] }`,
             },
           ],
