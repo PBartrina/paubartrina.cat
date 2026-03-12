@@ -246,7 +246,7 @@ async function main() {
     try {
       const response = await client.messages.create({
         model: "claude-opus-4-5",
-        max_tokens: 4096,
+        max_tokens: 16384,
         messages: [
           {
             role: "user",
@@ -286,6 +286,9 @@ Rules:
         ],
       });
 
+      if (response.stop_reason === "max_tokens") {
+        throw new Error("Response truncated (max_tokens reached). The fix may be too large.");
+      }
       let text = response.content[0].text.trim();
       // Strip markdown code fences if present (e.g. ```json ... ```)
       const fenceMatch = text.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/);
