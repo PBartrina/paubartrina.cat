@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 /**
  * fix-bugs.mjs
- * Reads open automated bug issues from GitHub, asks Claude to produce
- * a fix for each one, applies the changes, verifies they build, then
- * opens a PR linked to the issue.
+ * Reads open automated bug issues AND approved enhancement issues from
+ * GitHub, asks Claude to produce a fix/implementation for each one,
+ * applies the changes, verifies they build, then opens a PR linked to
+ * the issue.
  *
  * Required env vars:
  *   ANTHROPIC_API_KEY  - Anthropic API key
@@ -100,6 +101,12 @@ async function getOpenBugIssues() {
   );
 }
 
+async function getApprovedEnhancementIssues() {
+  return githubRequest(
+    `/repos/${OWNER}/${REPO_NAME}/issues?labels=enhancement,automated,approved&state=open&per_page=50`
+  );
+}
+
 async function createPR(title, body, head, base = "main") {
   return githubRequest(`/repos/${OWNER}/${REPO_NAME}/pulls`, {
     method: "POST",
@@ -163,7 +170,7 @@ function commitAndPush(branchName, message) {
   return true;
 }
 
-function verifyBuild() {
+function verifyBuild(runTests = false) {
   console.log("    🔨 Verifying build...");
   const ts = run("npx tsc --noEmit 2>&1");
   if (!ts.ok) {
@@ -175,29 +182,44 @@ function verifyBuild() {
     console.warn("    ⚠️  Build failed after fix:\n", build.output.slice(0, 2000));
     return false;
   }
+  if (runTests) {
+    console.log("    🧪 Running tests...");
+    const test = run("pnpm test 2>&1");
+    if (!test.ok) {
+      console.warn("    ⚠️  Tests failed after fix:\n", test.output.slice(0, 2000));
+      return false;
+    }
+  }
   return true;
 }
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 async function main() {
-  console.log("🔧 paubartrina.cat — Bug Fixer\n");
+  console.log("🔧 paubartrina.cat — Auto Fixer\n");
 
-  const issues = await getOpenBugIssues();
-  if (issues.length === 0) {
-    console.log("✅ No open automated bugs found.");
+  // Fetch both bug issues and approved enhancement issues
+  const bugIssues = (await getOpenBugIssues()).map((i) => ({ ...i, _type: "bug" }));
+  const enhIssues = (await getApprovedEnhancementIssues()).map((i) => ({ ...i, _type: "enhancement" }));
+  const allIssues = [...bugIssues, ...enhIssues]; // bugs first
+
+  if (allIssues.length === 0) {
+    console.log("✅ No open automated bugs or approved enhancements found.");
     return;
   }
 
-  console.log(`Found ${issues.length} open issue(s). Will process up to ${MAX_ISSUES_PER_RUN}.\n`);
+  console.log(`Found ${bugIssues.length} bug(s) and ${enhIssues.length} approved enhancement(s). Will process up to ${MAX_ISSUES_PER_RUN}.\n`);
 
   gitConfigureUser();
 
   const client = new Anthropic();
   let fixed = 0;
 
-  for (const issue of issues.slice(0, MAX_ISSUES_PER_RUN)) {
-    console.log(`\n🐛 Issue #${issue.number}: ${issue.title}`);
+  for (const issue of allIssues.slice(0, MAX_ISSUES_PER_RUN)) {
+    const isBug = issue._type === "bug";
+    const prefix = isBug ? "fix" : "feat";
+    const emoji = isBug ? "🐛" : "✨";
+    console.log(`\n${emoji} Issue #${issue.number}: ${issue.title} [${issue._type}]`);
 
     // Read current source
     ensureOnMain();
@@ -212,8 +234,14 @@ async function main() {
       })
       .join("\n\n");
 
+    // Build type-aware prompt
+    const task = isBug ? "fixing a bug" : "implementing an improvement";
+    const extraRules = isBug
+      ? ""
+      : `\n- Include new test file(s) following the project's vitest patterns to verify the new behavior.\n- Be thorough: the improvement should be production-ready.`;
+
     // Ask Claude for a fix
-    console.log("    🤖 Asking Claude for a fix...");
+    console.log(`    🤖 Asking Claude for a ${isBug ? "fix" : "implementation"}...`);
     let fixPlan;
     try {
       const response = await client.messages.create({
@@ -222,9 +250,9 @@ async function main() {
         messages: [
           {
             role: "user",
-            content: `You are a senior software engineer fixing a bug in a Next.js 16 / TypeScript / Tailwind CSS v4 personal website.
+            content: `You are a senior software engineer ${task} in a Next.js 16 / TypeScript / Tailwind CSS v4 personal website.
 
-## Issue to fix
+## Issue to ${isBug ? "fix" : "implement"}
 
 **Title**: ${issue.title}
 
@@ -237,7 +265,7 @@ ${sourceContext}
 
 ## Your task
 
-Provide a fix for this issue. Return ONLY valid JSON (no markdown, no explanation) with this shape:
+Provide a ${isBug ? "fix" : "complete implementation"} for this issue. Return ONLY valid JSON (no markdown, no explanation) with this shape:
 {
   "summary": "One-sentence description of what you changed",
   "changes": [
@@ -249,11 +277,11 @@ Provide a fix for this issue. Return ONLY valid JSON (no markdown, no explanatio
 }
 
 Rules:
-- Only change files that are necessary to fix the issue.
+- Only change files that are necessary to ${isBug ? "fix the issue" : "implement the improvement"}.
 - Do not change unrelated code.
 - Preserve all existing functionality.
-- Keep the same coding style.
-- If the issue is not fixable (e.g. requires secret env vars or manual action), return { "summary": "NOT_FIXABLE", "changes": [] }`,
+- Keep the same coding style.${extraRules}
+- If the issue is not ${isBug ? "fixable" : "implementable"} (e.g. requires secret env vars or manual action), return { "summary": "NOT_FIXABLE", "changes": [] }`,
           },
         ],
       });
@@ -264,7 +292,7 @@ Rules:
       if (fenceMatch) text = fenceMatch[1].trim();
       fixPlan = JSON.parse(text);
     } catch (err) {
-      console.error("    ❌ Claude failed to return a valid fix:", err.message);
+      console.error("    ❌ Claude failed to return a valid response:", err.message);
       continue;
     }
 
@@ -273,7 +301,7 @@ Rules:
       !Array.isArray(fixPlan.changes) ||
       fixPlan.changes.length === 0
     ) {
-      console.log("    ⏭️  Issue not automatically fixable. Skipping.");
+      console.log(`    ⏭️  Issue not automatically ${isBug ? "fixable" : "implementable"}. Skipping.`);
       continue;
     }
 
@@ -285,12 +313,12 @@ Rules:
     );
     if (touchesProtected) {
       const blocked = fixPlan.changes.map((c) => c.path).join(", ");
-      console.log(`    ⏭️  Fix touches protected path(s) [${blocked}] — skipping (needs manual intervention).`);
+      console.log(`    ⏭️  Changes touch protected path(s) [${blocked}] — skipping (needs manual intervention).`);
       continue;
     }
 
     // Create branch
-    const branchName = `fix/${issue.number}-${slugify(issue.title)}`;
+    const branchName = `${prefix}/${issue.number}-${slugify(issue.title)}`;
     try {
       createBranch(branchName);
     } catch {
@@ -302,17 +330,17 @@ Rules:
     console.log(`    Applying ${fixPlan.changes.length} file change(s)...`);
     applyFileChanges(fixPlan.changes);
 
-    // Verify
-    const buildOk = verifyBuild();
+    // Verify — run tests for enhancements, not just build
+    const buildOk = verifyBuild(!isBug);
     if (!buildOk) {
-      console.log("    ❌ Fix did not pass verification. Rolling back branch.");
+      console.log("    ❌ Changes did not pass verification. Rolling back branch.");
       ensureOnMain();
       run(`git branch -D ${branchName} 2>/dev/null || true`);
       continue;
     }
 
     // Commit and push
-    const commitMsg = `fix: ${fixPlan.summary} (closes #${issue.number})`;
+    const commitMsg = `${prefix}: ${fixPlan.summary} (closes #${issue.number})`;
     const pushed = commitAndPush(branchName, commitMsg);
     if (!pushed) {
       ensureOnMain();
@@ -333,11 +361,11 @@ ${fixPlan.changes.map((c) => `- \`${c.path}\``).join("\n")}
 Closes #${issue.number}
 
 ---
-🤖 *Automated fix generated by [Claude](https://claude.ai)*`;
+🤖 *Automated ${isBug ? "fix" : "improvement"} generated by [Claude](https://claude.ai)*`;
 
     try {
       const pr = await createPR(
-        `fix: ${issue.title}`,
+        `${prefix}: ${issue.title}`,
         prBody,
         branchName
       );
@@ -350,7 +378,7 @@ Closes #${issue.number}
     ensureOnMain();
   }
 
-  console.log(`\n🏁 Done — ${fixed} issue(s) fixed and PR(s) opened.`);
+  console.log(`\n🏁 Done — ${fixed} issue(s) processed and PR(s) opened.`);
 }
 
 main().catch((err) => {
