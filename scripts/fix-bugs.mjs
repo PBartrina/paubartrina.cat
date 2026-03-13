@@ -137,20 +137,27 @@ function createBranch(name) {
 }
 
 /**
- * Recursively extract all nested keys from an object.
- * E.g. { a: { b: 1, c: 2 }, d: 3 } → ["a.b", "a.c", "d"]
+ * Deep-merge two plain objects. `overlay` values win for shared keys;
+ * keys that exist only in `base` are preserved (never dropped).
+ * Arrays are replaced wholesale (not merged element-by-element).
  */
-function extractKeys(obj, prefix = "") {
-  const keys = [];
-  for (const key of Object.keys(obj)) {
-    const full = prefix ? `${prefix}.${key}` : key;
-    if (typeof obj[key] === "object" && obj[key] !== null && !Array.isArray(obj[key])) {
-      keys.push(...extractKeys(obj[key], full));
+function deepMerge(base, overlay) {
+  const result = { ...base };
+  for (const key of Object.keys(overlay)) {
+    if (
+      typeof overlay[key] === "object" &&
+      overlay[key] !== null &&
+      !Array.isArray(overlay[key]) &&
+      typeof base[key] === "object" &&
+      base[key] !== null &&
+      !Array.isArray(base[key])
+    ) {
+      result[key] = deepMerge(base[key], overlay[key]);
     } else {
-      keys.push(full);
+      result[key] = overlay[key];
     }
   }
-  return keys;
+  return result;
 }
 
 function applyFileChanges(changes) {
@@ -158,20 +165,19 @@ function applyFileChanges(changes) {
   for (const { path: filePath, content } of changes) {
     const abs = join(PROJECT_ROOT, filePath);
 
-    // Guard: for i18n JSON files, ensure no existing keys are dropped
+    // Guard: for i18n JSON files, deep-merge to ensure no existing keys are dropped.
+    // Claude's new/updated values win; original keys that Claude omitted are kept.
     if (filePath.startsWith("src/i18n/messages/") && filePath.endsWith(".json")) {
       try {
         const original = JSON.parse(readFileSync(abs, "utf8"));
-        const updated = JSON.parse(content);
-        const originalKeys = extractKeys(original);
-        const updatedKeys = new Set(extractKeys(updated));
-        const droppedKeys = originalKeys.filter((k) => !updatedKeys.has(k));
-        if (droppedKeys.length > 0) {
-          console.warn(`    ⚠️  Rejecting ${filePath}: would drop ${droppedKeys.length} key(s): ${droppedKeys.slice(0, 5).join(", ")}${droppedKeys.length > 5 ? "..." : ""}`);
-          continue; // skip this file change
-        }
+        const proposed = JSON.parse(content);
+        const merged = deepMerge(original, proposed);
+        mkdirSync(dirname(abs), { recursive: true });
+        writeFileSync(abs, JSON.stringify(merged, null, 2) + "\n", "utf8");
+        console.log(`    📝 Updated (merged): ${filePath}`);
+        continue;
       } catch {
-        // If original doesn't exist or isn't valid JSON, allow the write
+        // If original doesn't exist or isn't valid JSON, fall through to plain write
       }
     }
 
@@ -316,7 +322,7 @@ Rules:
 - Do not change unrelated code.
 - Preserve all existing functionality.
 - Keep the same coding style.${extraRules}
-- CRITICAL: If you modify any JSON translation file (src/i18n/messages/*.json), you MUST preserve ALL existing keys. Never drop, rename, or restructure existing keys. Only add new keys or modify values.
+- If you modify any JSON translation file (src/i18n/messages/*.json), include the complete file with all existing keys plus any new ones you add.
 - If the issue is not ${isBug ? "fixable" : "implementable"} (e.g. requires secret env vars or manual action), return { "summary": "NOT_FIXABLE", "changes": [] }`,
           },
         ],
@@ -430,7 +436,7 @@ Rules:
 - Only change files necessary to fix the verification errors.
 - Preserve all existing functionality.
 - Keep the same coding style.
-- CRITICAL: If you modify any JSON translation file (src/i18n/messages/*.json), you MUST preserve ALL existing keys. Never drop, rename, or restructure existing keys.
+- If you modify any JSON translation file (src/i18n/messages/*.json), include the complete file with all existing keys plus any new ones you add.
 - If the errors are not fixable, return { "summary": "NOT_FIXABLE", "changes": [] }`,
             },
           ],
