@@ -64,6 +64,18 @@ export async function generateMetadata({
   };
 }
 
+// Inline script to set theme before first paint, preventing FOUT
+const themeInitScript = `
+  try {
+    var t = localStorage.getItem('theme');
+    if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    } else {
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  } catch(e) {}
+`;
+
 export default async function LocaleLayout({ children, params }: LayoutProps) {
   const { locale } = await params;
 
@@ -80,6 +92,13 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
 
   return (
     <html lang={locale} suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: themeInitScript,
+          }}
+        />
+      </head>
       <body
         className={`${jetbrainsMono.variable} ${raleway.variable} flex min-h-screen flex-col antialiased`}
       >

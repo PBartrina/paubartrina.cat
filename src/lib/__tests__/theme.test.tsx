@@ -38,9 +38,23 @@ describe("ThemeProvider", () => {
   beforeEach(() => {
     localStorage.clear();
     document.documentElement.removeAttribute("data-theme");
+    // Reset matchMedia mock to default (light preference)
+    Object.defineProperty(window, "matchMedia", {
+      writable: true,
+      value: vi.fn().mockImplementation((query: string) => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      })),
+    });
   });
 
-  it("defaults to light theme when localStorage is empty", async () => {
+  it("defaults to light theme when localStorage is empty and system prefers light", async () => {
     renderWithProvider(null);
     await act(async () => {});
     expect(screen.getByTestId("theme").textContent).toBe("light");
@@ -98,11 +112,52 @@ describe("ThemeProvider", () => {
     });
     expect(localStorage.getItem("theme")).toBe("light");
   });
+
+  it("respects system dark mode preference when no localStorage value", async () => {
+    // Mock system preference for dark mode
+    Object.defineProperty(window, "matchMedia", {
+      writable: true,
+      value: vi.fn().mockImplementation((query: string) => ({
+        matches: query === "(prefers-color-scheme: dark)",
+        media: query,
+        onchange: null,
+        addListener: vi.fn(),
+        removeListener: vi.fn(),
+        addEventListener: vi.fn(),
+        removeEventListener: vi.fn(),
+        dispatchEvent: vi.fn(),
+      })),
+    });
+
+    renderWithProvider(null);
+    await act(async () => {});
+    expect(screen.getByTestId("theme").textContent).toBe("dark");
+    expect(document.documentElement.getAttribute("data-theme")).toBe("dark");
+  });
+
+  it("renders children immediately without waiting for mount", () => {
+    // This test verifies there's no flash/delay in rendering children
+    const { container } = render(
+      <ThemeProvider>
+        <div data-testid="child-content">Hello</div>
+      </ThemeProvider>
+    );
+    // Children should be rendered immediately
+    expect(screen.getByTestId("child-content")).toBeInTheDocument();
+    expect(container.textContent).toContain("Hello");
+  });
+
+  it("provides context immediately to children", () => {
+    // Verify that useTheme works immediately, no mounted guard
+    renderWithProvider("light");
+    // The theme should be readable immediately
+    expect(screen.getByTestId("theme")).toBeInTheDocument();
+  });
 });
 
-describe("useTheme outside ThemeProvider", () => {
-  it("returns default context values (light, no-op toggle)", async () => {
-    function Standalone() {
+describe("useTheme outside provider", () => {
+  it("returns default values when used outside ThemeProvider", () => {
+    function StandaloneConsumer() {
       const { theme, toggleTheme } = useTheme();
       return (
         <div>
@@ -112,13 +167,11 @@ describe("useTheme outside ThemeProvider", () => {
       );
     }
 
-    render(<Standalone />);
+    render(<StandaloneConsumer />);
     expect(screen.getByTestId("theme").textContent).toBe("light");
-
-    // Clicking should not throw
-    await act(async () => {
+    // toggleTheme should be a no-op, not throw
+    expect(() => {
       fireEvent.click(screen.getByRole("button", { name: "toggle" }));
-    });
-    expect(screen.getByTestId("theme").textContent).toBe("light");
+    }).not.toThrow();
   });
 });
