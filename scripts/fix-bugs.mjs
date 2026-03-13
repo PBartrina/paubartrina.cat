@@ -128,6 +128,10 @@ function gitConfigureUser() {
 }
 
 function ensureOnMain() {
+  // Discard any uncommitted changes and untracked files left by a failed fix,
+  // so the next issue starts from a clean working tree.
+  run("git checkout -- .");
+  run("git clean -fd");
   run("git checkout main");
   run("git pull origin main");
 }
@@ -165,17 +169,26 @@ function applyFileChanges(changes) {
   for (const { path: filePath, content } of changes) {
     const abs = join(PROJECT_ROOT, filePath);
 
-    // Guard: for i18n JSON files, deep-merge to ensure no existing keys are dropped.
-    // Claude's new/updated values win; original keys that Claude omitted are kept.
+    // For i18n JSON files: if Claude included ALL existing keys, write as-is
+    // (trusting Claude's intended value changes). If Claude dropped keys,
+    // deep-merge to restore the missing ones while keeping Claude's changes.
     if (filePath.startsWith("src/i18n/messages/") && filePath.endsWith(".json")) {
       try {
         const original = JSON.parse(readFileSync(abs, "utf8"));
         const proposed = JSON.parse(content);
-        const merged = deepMerge(original, proposed);
-        mkdirSync(dirname(abs), { recursive: true });
-        writeFileSync(abs, JSON.stringify(merged, null, 2) + "\n", "utf8");
-        console.log(`    📝 Updated (merged): ${filePath}`);
-        continue;
+        const originalKeys = extractKeys(original);
+        const proposedKeys = new Set(extractKeys(proposed));
+        const droppedKeys = originalKeys.filter((k) => !proposedKeys.has(k));
+
+        if (droppedKeys.length > 0) {
+          // Claude dropped keys — merge to restore them
+          const merged = deepMerge(original, proposed);
+          mkdirSync(dirname(abs), { recursive: true });
+          writeFileSync(abs, JSON.stringify(merged, null, 2) + "\n", "utf8");
+          console.log(`    📝 Updated (merged, restored ${droppedKeys.length} dropped key(s)): ${filePath}`);
+          continue;
+        }
+        // Claude included all keys — write as-is (trust Claude's values)
       } catch {
         // If original doesn't exist or isn't valid JSON, fall through to plain write
       }
