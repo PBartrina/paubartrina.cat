@@ -15,31 +15,30 @@ const ThemeContext = createContext<ThemeContextType>({
 });
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  // Read persisted theme from localStorage immediately (lazy initializer)
-  // so we never need to call setTheme() inside an effect.
+  // Read persisted theme from localStorage immediately (lazy initializer).
+  // The blocking script in <head> has already set data-theme on the document,
+  // so we read localStorage to sync React state with that.
   const [theme, setTheme] = useState<Theme>(() => {
     if (typeof window === "undefined") return "light";
-    return (localStorage.getItem("theme") as Theme) ?? "light";
+    const stored = localStorage.getItem("theme") as Theme | null;
+    if (stored === "dark" || stored === "light") return stored;
+    // If no stored preference, check system preference (matching the blocking script logic)
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      return "dark";
+    }
+    return "light";
   });
-  const [mounted, setMounted] = useState(false);
 
+  // Sync document attribute when theme changes (for toggles after mount)
   useEffect(() => {
-    // Apply the initial theme attribute to the document and mark as mounted.
     document.documentElement.setAttribute("data-theme", theme);
-    setMounted(true);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [theme]);
 
   const toggleTheme = () => {
     const next = theme === "light" ? "dark" : "light";
     setTheme(next);
     localStorage.setItem("theme", next);
-    document.documentElement.setAttribute("data-theme", next);
   };
-
-  if (!mounted) {
-    return <>{children}</>;
-  }
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
