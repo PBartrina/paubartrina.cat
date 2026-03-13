@@ -215,20 +215,21 @@ function verifyBuild(runTests = false) {
   console.log("    🔨 Verifying build...");
   const ts = run("npx tsc --noEmit 2>&1");
   if (!ts.ok) {
-    console.warn("    ⚠️  TypeScript errors after fix:\n", ts.output.slice(0, 2000));
-    return { ok: false, error: `TypeScript errors:\n${ts.output.slice(0, 3000)}` };
+    console.warn("    ⚠️  TypeScript errors after fix:\n", ts.output.slice(0, 4000));
+    return { ok: false, error: `TypeScript errors:\n${ts.output.slice(0, 6000)}` };
   }
   const build = run("npx next build 2>&1");
   if (!build.ok) {
-    console.warn("    ⚠️  Build failed after fix:\n", build.output.slice(0, 2000));
-    return { ok: false, error: `Build failed:\n${build.output.slice(0, 3000)}` };
+    console.warn("    ⚠️  Build failed after fix:\n", build.output.slice(0, 4000));
+    return { ok: false, error: `Build failed:\n${build.output.slice(0, 6000)}` };
   }
   if (runTests) {
     console.log("    🧪 Running tests...");
-    const test = run("pnpm test 2>&1");
+    // Run with --reporter=verbose so every test result is shown in the output
+    const test = run("pnpm test -- --reporter=verbose 2>&1");
     if (!test.ok) {
-      console.warn("    ⚠️  Tests failed after fix:\n", test.output.slice(0, 2000));
-      return { ok: false, error: `Tests failed:\n${test.output.slice(0, 3000)}` };
+      console.warn("    ⚠️  Tests failed after fix:\n", test.output.slice(0, 8000));
+      return { ok: false, error: `Tests failed:\n${test.output.slice(0, 10000)}` };
     }
   }
   return { ok: true, error: null };
