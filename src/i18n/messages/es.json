@@ -12,23 +12,43 @@
     "now": "Ahora",
     "blog": "Blog",
     "contact": "Contacto",
-    "toggleMenu": "Abrir menú"
+    "toggleMenu": "Abrir menú",
+    "skipToContent": "Saltar al contenido"
   },
   "hero": {
     "greeting": "Bienvenidos",
     "title": "Senior Frontend Engineer con +15 años de experiencia",
     "subtitle": "en el ecosistema Angular, arquitectura modular y liderazgo técnico",
-    "techBadges": ["Angular", "TypeScript", "NgRx", "Nx", "Vitest", "Playwright"]
+    "techBadges": [
+      "Angular",
+      "TypeScript",
+      "NgRx",
+      "Nx",
+      "Vitest",
+      "Playwright"
+    ]
   },
   "about": {
     "heading": "Sobre Mí",
     "bio": "Ingeniero Frontend Sénior y Líder Técnico con más de 15 años de experiencia, especializado en el ecosistema Angular (NgRx, Nx, TypeScript). Experto en modernización de bases de código y en la implementación de culturas de testing con Vitest y Playwright. Líder colaborativo dedicado a conectar diseño, producto e ingeniería para ofrecer experiencias de usuario impecables.",
     "languagesLabel": "Idiomas",
     "languages": [
-      { "label": "Catalán y Castellano", "level": "Nativo" },
-      { "label": "Inglés", "level": "C2 (FCE)" },
-      { "label": "Francés", "level": "B1" },
-      { "label": "Árabe Estándar", "level": "A1" }
+      {
+        "label": "Catalán y Castellano",
+        "level": "Nativo"
+      },
+      {
+        "label": "Inglés",
+        "level": "C2 (FCE)"
+      },
+      {
+        "label": "Francés",
+        "level": "B1"
+      },
+      {
+        "label": "Árabe Estándar",
+        "level": "A1"
+      }
     ]
   },
   "skills": {
@@ -36,32 +56,61 @@
     "categories": [
       {
         "title": "Core Stack",
-        "items": ["Angular (v2-18+)", "TypeScript", "NgRx", "Nx (Monorepos)"],
+        "items": [
+          "Angular (v2-18+)",
+          "TypeScript",
+          "NgRx",
+          "Nx (Monorepos)"
+        ],
         "bracket": "{ }"
       },
       {
         "title": "Arquitectura",
-        "items": ["Diseño Modular", "DDD", "Arq. Hexagonal", "Design Systems"],
+        "items": [
+          "Diseño Modular",
+          "DDD",
+          "Arq. Hexagonal",
+          "Design Systems"
+        ],
         "bracket": "[ ]"
       },
       {
         "title": "Testing",
-        "items": ["Vitest", "Jest", "Playwright", "Cypress", "Pact"],
+        "items": [
+          "Vitest",
+          "Jest",
+          "Playwright",
+          "Cypress",
+          "Pact"
+        ],
         "bracket": "( )"
       },
       {
         "title": "Mobile",
-        "items": ["NativeScript", "React Native", "Ionic"],
+        "items": [
+          "NativeScript",
+          "React Native",
+          "Ionic"
+        ],
         "bracket": "< >"
       },
       {
         "title": "Rendimiento y Herramientas",
-        "items": ["CI/CD", "Storybook", "Webpack / Vite", "Web Vitals"],
+        "items": [
+          "CI/CD",
+          "Storybook",
+          "Webpack / Vite",
+          "Web Vitals"
+        ],
         "bracket": "=>"
       },
       {
         "title": "Liderazgo",
-        "items": ["Agile / Scrum", "Mentoring", "Equipos Multidisciplinares"],
+        "items": [
+          "Agile / Scrum",
+          "Mentoring",
+          "Equipos Multidisciplinares"
+        ],
         "bracket": "::"
       }
     ]
@@ -126,41 +175,54 @@
       }
     ]
   },
-  "blog": {
-    "heading": "Blog",
-    "description": "Artículos sobre desarrollo web y tecnología",
-    "emptyState": "Todavía no hay artículos. ¡Vuelve pronto!",
-    "backToList": "← Volver al blog",
-    "translationWarning": "Este artículo fue escrito originalmente en catalán. Estás leyendo una traducción automática.",
-    "readOriginal": "Leer el original en catalán",
-    "notFoundTitle": "Artículo no encontrado",
-    "notFoundMessage": "El artículo que buscas no existe o ha sido eliminado.",
-    "notFoundBack": "← Volver al blog"
-  },
-  "contact": {
-    "heading": "Contacto",
-    "subtitle": "¿Tienes alguna pregunta o propuesta? ¡Envíame un mensaje!",
-    "description": "¿Tienes alguna pregunta o propuesta? Envíame un mensaje directamente desde aquí.",
-    "nameLabel": "Nombre",
-    "namePlaceholder": "Tu nombre",
-    "emailLabel": "Correo electrónico",
-    "emailPlaceholder": "tu@ejemplo.com",
-    "messageLabel": "Mensaje",
-    "messagePlaceholder": "¿En qué puedo ayudarte?",
-    "submitText": "Enviar el mensaje →",
-    "sendingText": "Enviando...",
-    "successHeading": "¡Mensaje enviado correctamente!",
-    "successMessage": "Te responderé lo antes posible.",
-    "sendAnother": "Enviar otro mensaje",
-    "honeypotLabel": "No rellene este campo",
-    "errorUnknown": "Error desconocido.",
-    "errorNetwork": "No se ha podido conectar con el servidor."
-  },
   "footer": {
     "contactHeading": "Contáctame",
     "sendMessage": "Envíame un mensaje →",
     "followHeading": "Sígueme",
     "copyright": "Todos los derechos reservados."
+  },
+  "languageSwitcher": {
+    "label": "Idioma",
+    "ca": "CA",
+    "es": "ES",
+    "en": "EN"
+  },
+  "theme": {
+    "toggleLabel": "Cambiar tema",
+    "light": "light",
+    "dark": "dark"
+  },
+  "blog": {
+    "heading": "Blog",
+    "description": "Artículos sobre desarrollo web y tecnología",
+    "emptyState": "Todavía no hay artículos. ¡Vuelve pronto!",
+    "backToList": "← Volver al blog",
+    "notFoundTitle": "Artículo no encontrado",
+    "notFoundMessage": "El artículo que buscas no existe o ha sido eliminado.",
+    "notFoundBack": "← Volver al blog",
+    "translationWarning": "Este artículo fue escrito originalmente en catalán. Estás leyendo una traducción automática.",
+    "readOriginal": "Leer el original en catalán"
+  },
+  "contact": {
+    "heading": "Contacto",
+    "description": "¿Tienes alguna pregunta o propuesta? Envíame un mensaje directamente desde aquí.",
+    "subtitle": "¿Tienes alguna pregunta o propuesta? ¡Envíame un mensaje!",
+    "nameLabel": "Nombre",
+    "emailLabel": "Correo electrónico",
+    "messageLabel": "Mensaje",
+    "namePlaceholder": "Tu nombre",
+    "emailPlaceholder": "tu@ejemplo.com",
+    "messagePlaceholder": "¿En qué puedo ayudarte?",
+    "submitButton": "Enviar el mensaje",
+    "submitting": "Enviando…",
+    "successHeading": "¡Mensaje enviado correctamente!",
+    "successMessage": "Te responderé lo antes posible.",
+    "sendAnother": "Enviar otro mensaje",
+    "errorUnknown": "Error desconocido.",
+    "errorNetwork": "No se ha podido conectar con el servidor.",
+    "honeypotLabel": "No rellene este campo",
+    "submitText": "Enviar el mensaje →",
+    "sendingText": "Enviando..."
   },
   "ara": {
     "title": "Ahora",
@@ -183,33 +245,39 @@
     ],
     "footer": "Esta es mi página \"ahora\" inspirada en el movimiento <link>now page</link>."
   },
-  "theme": {
-    "toggleLabel": "Cambiar tema",
-    "light": "light",
-    "dark": "dark"
-  },
   "atAGlance": {
     "heading": "De un vistazo",
     "coreStackTitle": "Stack Principal",
-    "coreTech": [
-      { "name": "Angular", "detail": "v2-18+" },
-      { "name": "TypeScript" },
-      { "name": "NgRx" },
-      { "name": "Nx", "detail": "Monorepos" },
-      { "name": "Vitest" },
-      { "name": "Playwright" }
-    ],
     "yearsCount": "15+",
     "yearsLabel": "años de experiencia",
+    "coreTech": [
+      {
+        "name": "Angular",
+        "detail": "v2-18+"
+      },
+      {
+        "name": "TypeScript"
+      },
+      {
+        "name": "NgRx"
+      },
+      {
+        "name": "Nx",
+        "detail": "Monorepos"
+      },
+      {
+        "name": "Vitest"
+      },
+      {
+        "name": "Playwright"
+      }
+    ],
+    "languagesTitle": "Idiomas",
     "latestPostTitle": "Último artículo",
+    "latestPostEmpty": "Próximamente...",
+    "readMore": "Leer más →",
     "noPostsYet": "Próximamente...",
     "ctaText": "¿Tienes algún proyecto en mente?",
     "ctaButton": "Hablemos →"
-  },
-  "languageSwitcher": {
-    "label": "Idioma",
-    "ca": "CA",
-    "es": "ES",
-    "en": "EN"
   }
 }
