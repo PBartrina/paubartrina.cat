@@ -225,15 +225,17 @@ function snapshotI18n() {
 }
 
 /**
- * After applying all file changes, validate every i18n JSON file:
+ * After applying all file changes, protect every i18n JSON file:
  *  - If the file on disk is invalid JSON → restore original entirely.
- *  - If valid JSON but missing original keys → deep-merge to restore them.
- *  - If valid JSON with all keys → leave as-is.
+ *  - Otherwise: merge Claude's version INTO original so that original
+ *    values always win for existing keys. Only genuinely NEW keys from
+ *    Claude are added. This prevents Claude from accidentally changing
+ *    translation values that existing tests depend on.
  */
 function validateAndFixI18n(originalSnapshot) {
   for (const [relPath, originalObj] of Object.entries(originalSnapshot)) {
     const abs = join(PROJECT_ROOT, relPath);
-    if (!existsSync(abs)) continue; // file wasn't modified
+    if (!existsSync(abs)) continue;
 
     let currentText;
     try {
@@ -242,12 +244,10 @@ function validateAndFixI18n(originalSnapshot) {
       continue;
     }
 
-    // Try to parse what's on disk now
     let currentObj;
     try {
       currentObj = JSON.parse(currentText);
     } catch (parseErr) {
-      // File on disk is NOT valid JSON — restore original entirely
       console.warn(
         `    ⚠️  ${relPath} is invalid JSON after apply (${parseErr.message}). Restoring original.`
       );
@@ -259,23 +259,28 @@ function validateAndFixI18n(originalSnapshot) {
       continue;
     }
 
-    // Check for dropped keys
-    const originalKeys = extractKeys(originalObj);
-    const currentKeys = new Set(extractKeys(currentObj));
-    const droppedKeys = originalKeys.filter((k) => !currentKeys.has(k));
+    // Merge: start with Claude's version (has new keys), overlay with
+    // original (restores all existing values). Result = original values
+    // preserved + Claude's new keys added.
+    const merged = deepMerge(currentObj, originalObj);
 
-    if (droppedKeys.length > 0) {
-      console.warn(
-        `    ⚠️  ${relPath} lost ${droppedKeys.length} key(s): ${droppedKeys.slice(0, 5).join(", ")}${droppedKeys.length > 5 ? "..." : ""}`
+    // Count new keys Claude added
+    const originalKeys = new Set(extractKeys(originalObj));
+    const mergedKeys = extractKeys(merged);
+    const newKeys = mergedKeys.filter((k) => !originalKeys.has(k));
+
+    writeFileSync(
+      abs,
+      JSON.stringify(merged, null, 2) + "\n",
+      "utf8"
+    );
+
+    if (newKeys.length > 0) {
+      console.log(
+        `    ✅ ${relPath}: preserved originals + added ${newKeys.length} new key(s): ${newKeys.slice(0, 5).join(", ")}${newKeys.length > 5 ? "..." : ""}`
       );
-      console.log(`    🔧 Restoring missing keys via deep-merge...`);
-      const restored = deepMerge(originalObj, currentObj);
-      writeFileSync(
-        abs,
-        JSON.stringify(restored, null, 2) + "\n",
-        "utf8"
-      );
-      console.log(`    ✅ ${relPath} fixed (${droppedKeys.length} key(s) restored)`);
+    } else {
+      console.log(`    ✅ ${relPath}: all original values preserved`);
     }
   }
 }
