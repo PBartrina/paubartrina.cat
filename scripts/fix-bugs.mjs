@@ -169,26 +169,23 @@ function applyFileChanges(changes) {
   for (const { path: filePath, content } of changes) {
     const abs = join(PROJECT_ROOT, filePath);
 
-    // For i18n JSON files: if Claude included ALL existing keys, write as-is
-    // (trusting Claude's intended value changes). If Claude dropped keys,
-    // deep-merge to restore the missing ones while keeping Claude's changes.
+    // For i18n JSON files: always deep-merge with the original.
+    // Claude's new/changed values win (overlay); any keys Claude omitted
+    // are restored from the original. We always serialize through
+    // JSON.stringify to ensure clean, consistent output.
     if (filePath.startsWith("src/i18n/messages/") && filePath.endsWith(".json")) {
       try {
         const original = JSON.parse(readFileSync(abs, "utf8"));
         const proposed = JSON.parse(content);
+        const merged = deepMerge(original, proposed);
         const originalKeys = extractKeys(original);
-        const proposedKeys = new Set(extractKeys(proposed));
-        const droppedKeys = originalKeys.filter((k) => !proposedKeys.has(k));
-
-        if (droppedKeys.length > 0) {
-          // Claude dropped keys — merge to restore them
-          const merged = deepMerge(original, proposed);
-          mkdirSync(dirname(abs), { recursive: true });
-          writeFileSync(abs, JSON.stringify(merged, null, 2) + "\n", "utf8");
-          console.log(`    📝 Updated (merged, restored ${droppedKeys.length} dropped key(s)): ${filePath}`);
-          continue;
-        }
-        // Claude included all keys — write as-is (trust Claude's values)
+        const mergedKeys = new Set(extractKeys(merged));
+        const restoredCount = originalKeys.filter((k) => !new Set(extractKeys(proposed)).has(k)).length;
+        mkdirSync(dirname(abs), { recursive: true });
+        writeFileSync(abs, JSON.stringify(merged, null, 2) + "\n", "utf8");
+        const suffix = restoredCount > 0 ? ` (restored ${restoredCount} dropped key(s))` : "";
+        console.log(`    📝 Updated (merged${suffix}): ${filePath}`);
+        continue;
       } catch {
         // If original doesn't exist or isn't valid JSON, fall through to plain write
       }
