@@ -13,7 +13,13 @@
  */
 
 import { execSync } from "child_process";
-import { readFileSync, writeFileSync, readdirSync, statSync } from "fs";
+import {
+  readFileSync,
+  writeFileSync,
+  readdirSync,
+  statSync,
+  existsSync,
+} from "fs";
 import { join, relative, dirname } from "path";
 import { mkdirSync } from "fs";
 import Anthropic from "@anthropic-ai/sdk";
@@ -22,11 +28,17 @@ const REPO = process.env.GITHUB_REPOSITORY ?? "PBartrina/paubartrina.cat";
 const [OWNER, REPO_NAME] = REPO.split("/");
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const PROJECT_ROOT = process.cwd();
-const MAX_ISSUES_PER_RUN = 3; // avoid runaway fixes
+const MAX_ISSUES_PER_RUN = 3;
+
+// i18n JSON file paths (relative)
+const I18N_DIR = "src/i18n/messages";
+const I18N_FILES = ["ca.json", "es.json", "en.json"].map(
+  (f) => `${I18N_DIR}/${f}`
+);
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-function run(cmd, { throwOnError = false } = {}) {
+function run(cmd) {
   try {
     return {
       ok: true,
@@ -37,7 +49,6 @@ function run(cmd, { throwOnError = false } = {}) {
       }),
     };
   } catch (err) {
-    if (throwOnError) throw err;
     return {
       ok: false,
       output: (err.stdout ?? "") + (err.stderr ?? ""),
@@ -45,11 +56,20 @@ function run(cmd, { throwOnError = false } = {}) {
   }
 }
 
-function collectSourceFiles(dir, extensions = [".ts", ".tsx", ".mdx", ".css", ".json"]) {
+function collectSourceFiles(
+  dir,
+  extensions = [".ts", ".tsx", ".mdx", ".css", ".json"]
+) {
   const files = [];
-  // .github excluded: the GitHub token lacks `workflows` permission, so any
-  // fix touching CI files would fail to push. Keep it out of Claude's context.
-  const skip = ["node_modules", ".next", ".git", ".github", "dist", "out", "coverage"];
+  const skip = [
+    "node_modules",
+    ".next",
+    ".git",
+    ".github",
+    "dist",
+    "out",
+    "coverage",
+  ];
   const skipFiles = ["package-lock.json", "pnpm-lock.yaml"];
   for (const entry of readdirSync(dir)) {
     if (skip.includes(entry)) continue;
@@ -57,7 +77,10 @@ function collectSourceFiles(dir, extensions = [".ts", ".tsx", ".mdx", ".css", ".
     const stat = statSync(full);
     if (stat.isDirectory()) {
       files.push(...collectSourceFiles(full, extensions));
-    } else if (extensions.some((ext) => entry.endsWith(ext)) && !skipFiles.includes(entry)) {
+    } else if (
+      extensions.some((ext) => entry.endsWith(ext)) &&
+      !skipFiles.includes(entry)
+    ) {
       files.push(full);
     }
   }
@@ -72,7 +95,7 @@ function readSourceSnapshot() {
     try {
       snapshot[rel] = readFileSync(f, "utf8");
     } catch {
-      // skip
+      /* skip unreadable */
     }
   }
   return snapshot;
@@ -128,8 +151,6 @@ function gitConfigureUser() {
 }
 
 function ensureOnMain() {
-  // Discard any uncommitted changes and untracked files left by a failed fix,
-  // so the next issue starts from a clean working tree.
   run("git checkout -- .");
   run("git clean -fd");
   run("git checkout main");
@@ -138,6 +159,27 @@ function ensureOnMain() {
 
 function createBranch(name) {
   run(`git checkout -b ${name}`);
+}
+
+/**
+ * Recursively extract all leaf-key paths from an object.
+ * E.g. { a: { b: 1, c: 2 }, d: 3 } → ["a.b", "a.c", "d"]
+ */
+function extractKeys(obj, prefix = "") {
+  const keys = [];
+  for (const key of Object.keys(obj)) {
+    const full = prefix ? `${prefix}.${key}` : key;
+    if (
+      typeof obj[key] === "object" &&
+      obj[key] !== null &&
+      !Array.isArray(obj[key])
+    ) {
+      keys.push(...extractKeys(obj[key], full));
+    } else {
+      keys.push(full);
+    }
+  }
+  return keys;
 }
 
 /**
@@ -164,33 +206,85 @@ function deepMerge(base, overlay) {
   return result;
 }
 
-function applyFileChanges(changes) {
-  // changes: Array<{ path: string, content: string }>
-  for (const { path: filePath, content } of changes) {
-    const abs = join(PROJECT_ROOT, filePath);
+// ─── Snapshot & restore i18n files ──────────────────────────────────────────
 
-    // For i18n JSON files: always deep-merge with the original.
-    // Claude's new/changed values win (overlay); any keys Claude omitted
-    // are restored from the original. We always serialize through
-    // JSON.stringify to ensure clean, consistent output.
-    if (filePath.startsWith("src/i18n/messages/") && filePath.endsWith(".json")) {
+/** Read all i18n JSON files from disk and return { path: parsedObject } */
+function snapshotI18n() {
+  const snapshot = {};
+  for (const relPath of I18N_FILES) {
+    const abs = join(PROJECT_ROOT, relPath);
+    if (existsSync(abs)) {
       try {
-        const original = JSON.parse(readFileSync(abs, "utf8"));
-        const proposed = JSON.parse(content);
-        const merged = deepMerge(original, proposed);
-        const originalKeys = extractKeys(original);
-        const mergedKeys = new Set(extractKeys(merged));
-        const restoredCount = originalKeys.filter((k) => !new Set(extractKeys(proposed)).has(k)).length;
-        mkdirSync(dirname(abs), { recursive: true });
-        writeFileSync(abs, JSON.stringify(merged, null, 2) + "\n", "utf8");
-        const suffix = restoredCount > 0 ? ` (restored ${restoredCount} dropped key(s))` : "";
-        console.log(`    📝 Updated (merged${suffix}): ${filePath}`);
-        continue;
+        snapshot[relPath] = JSON.parse(readFileSync(abs, "utf8"));
       } catch {
-        // If original doesn't exist or isn't valid JSON, fall through to plain write
+        console.warn(`    ⚠️  Could not parse ${relPath} for snapshot`);
       }
     }
+  }
+  return snapshot;
+}
 
+/**
+ * After applying all file changes, validate every i18n JSON file:
+ *  - If the file on disk is invalid JSON → restore original entirely.
+ *  - If valid JSON but missing original keys → deep-merge to restore them.
+ *  - If valid JSON with all keys → leave as-is.
+ */
+function validateAndFixI18n(originalSnapshot) {
+  for (const [relPath, originalObj] of Object.entries(originalSnapshot)) {
+    const abs = join(PROJECT_ROOT, relPath);
+    if (!existsSync(abs)) continue; // file wasn't modified
+
+    let currentText;
+    try {
+      currentText = readFileSync(abs, "utf8");
+    } catch {
+      continue;
+    }
+
+    // Try to parse what's on disk now
+    let currentObj;
+    try {
+      currentObj = JSON.parse(currentText);
+    } catch (parseErr) {
+      // File on disk is NOT valid JSON — restore original entirely
+      console.warn(
+        `    ⚠️  ${relPath} is invalid JSON after apply (${parseErr.message}). Restoring original.`
+      );
+      writeFileSync(
+        abs,
+        JSON.stringify(originalObj, null, 2) + "\n",
+        "utf8"
+      );
+      continue;
+    }
+
+    // Check for dropped keys
+    const originalKeys = extractKeys(originalObj);
+    const currentKeys = new Set(extractKeys(currentObj));
+    const droppedKeys = originalKeys.filter((k) => !currentKeys.has(k));
+
+    if (droppedKeys.length > 0) {
+      console.warn(
+        `    ⚠️  ${relPath} lost ${droppedKeys.length} key(s): ${droppedKeys.slice(0, 5).join(", ")}${droppedKeys.length > 5 ? "..." : ""}`
+      );
+      console.log(`    🔧 Restoring missing keys via deep-merge...`);
+      const restored = deepMerge(originalObj, currentObj);
+      writeFileSync(
+        abs,
+        JSON.stringify(restored, null, 2) + "\n",
+        "utf8"
+      );
+      console.log(`    ✅ ${relPath} fixed (${droppedKeys.length} key(s) restored)`);
+    }
+  }
+}
+
+// ─── Apply changes ──────────────────────────────────────────────────────────
+
+function applyFileChanges(changes) {
+  for (const { path: filePath, content } of changes) {
+    const abs = join(PROJECT_ROOT, filePath);
     mkdirSync(dirname(abs), { recursive: true });
     writeFileSync(abs, content, "utf8");
     console.log(`    📝 Updated: ${filePath}`);
@@ -199,8 +293,6 @@ function applyFileChanges(changes) {
 
 function commitAndPush(branchName, message) {
   run("git add -A");
-  // Write the commit message to a file to avoid shell-quoting issues with
-  // special characters (quotes, newlines, etc.) in Claude's summary text.
   const msgPath = join(PROJECT_ROOT, ".git", "AUTOMATED_COMMIT_MSG");
   writeFileSync(msgPath, message, "utf8");
   const commitResult = run(`git commit -F ".git/AUTOMATED_COMMIT_MSG"`);
@@ -208,13 +300,16 @@ function commitAndPush(branchName, message) {
     console.warn("    Nothing to commit.");
     return false;
   }
-  // Try force-push first (handles re-runs on the same branch),
-  // then fall back to a regular push for a brand-new branch.
-  const pushResult = run(`git push origin ${branchName} --force-with-lease`);
+  const pushResult = run(
+    `git push origin ${branchName} --force-with-lease`
+  );
   if (!pushResult.ok) {
     const pushResult2 = run(`git push -u origin ${branchName}`);
     if (!pushResult2.ok) {
-      console.warn("    ⚠️  Push failed:\n", pushResult2.output.slice(0, 500));
+      console.warn(
+        "    ⚠️  Push failed:\n",
+        pushResult2.output.slice(0, 500)
+      );
       return false;
     }
   }
@@ -225,20 +320,28 @@ function verifyBuild(runTests = false) {
   console.log("    🔨 Verifying build...");
   const ts = run("npx tsc --noEmit 2>&1");
   if (!ts.ok) {
-    console.warn("    ⚠️  TypeScript errors after fix:\n", ts.output.slice(0, 4000));
+    console.warn(
+      "    ⚠️  TypeScript errors after fix:\n",
+      ts.output.slice(0, 4000)
+    );
     return { ok: false, error: `TypeScript errors:\n${ts.output.slice(0, 6000)}` };
   }
   const build = run("npx next build 2>&1");
   if (!build.ok) {
-    console.warn("    ⚠️  Build failed after fix:\n", build.output.slice(0, 4000));
+    console.warn(
+      "    ⚠️  Build failed after fix:\n",
+      build.output.slice(0, 4000)
+    );
     return { ok: false, error: `Build failed:\n${build.output.slice(0, 6000)}` };
   }
   if (runTests) {
     console.log("    🧪 Running tests...");
-    // Run with --reporter=verbose so every test result is shown in the output
     const test = run("pnpm test -- --reporter=verbose 2>&1");
     if (!test.ok) {
-      console.warn("    ⚠️  Tests failed after fix:\n", test.output.slice(0, 8000));
+      console.warn(
+        "    ⚠️  Tests failed after fix:\n",
+        test.output.slice(0, 8000)
+      );
       return { ok: false, error: `Tests failed:\n${test.output.slice(0, 10000)}` };
     }
   }
@@ -250,17 +353,24 @@ function verifyBuild(runTests = false) {
 async function main() {
   console.log("🔧 paubartrina.cat — Auto Fixer\n");
 
-  // Fetch both bug issues and approved enhancement issues
-  const bugIssues = (await getOpenBugIssues()).map((i) => ({ ...i, _type: "bug" }));
-  const enhIssues = (await getApprovedEnhancementIssues()).map((i) => ({ ...i, _type: "enhancement" }));
-  const allIssues = [...bugIssues, ...enhIssues]; // bugs first
+  const bugIssues = (await getOpenBugIssues()).map((i) => ({
+    ...i,
+    _type: "bug",
+  }));
+  const enhIssues = (await getApprovedEnhancementIssues()).map((i) => ({
+    ...i,
+    _type: "enhancement",
+  }));
+  const allIssues = [...bugIssues, ...enhIssues];
 
   if (allIssues.length === 0) {
     console.log("✅ No open automated bugs or approved enhancements found.");
     return;
   }
 
-  console.log(`Found ${bugIssues.length} bug(s) and ${enhIssues.length} approved enhancement(s). Will process up to ${MAX_ISSUES_PER_RUN}.\n`);
+  console.log(
+    `Found ${bugIssues.length} bug(s) and ${enhIssues.length} approved enhancement(s). Will process up to ${MAX_ISSUES_PER_RUN}.\n`
+  );
 
   gitConfigureUser();
 
@@ -271,10 +381,16 @@ async function main() {
     const isBug = issue._type === "bug";
     const prefix = isBug ? "fix" : "feat";
     const emoji = isBug ? "🐛" : "✨";
-    console.log(`\n${emoji} Issue #${issue.number}: ${issue.title} [${issue._type}]`);
+    console.log(
+      `\n${emoji} Issue #${issue.number}: ${issue.title} [${issue._type}]`
+    );
 
-    // Read current source
+    // Ensure clean state
     ensureOnMain();
+
+    // Snapshot i18n files BEFORE changes so we can restore dropped keys later
+    const i18nSnapshot = snapshotI18n();
+
     const sourceSnapshot = readSourceSnapshot();
     const sourceContext = Object.entries(sourceSnapshot)
       .map(([path, content]) => {
@@ -286,14 +402,14 @@ async function main() {
       })
       .join("\n\n");
 
-    // Build type-aware prompt
     const task = isBug ? "fixing a bug" : "implementing an improvement";
     const extraRules = isBug
       ? ""
       : `\n- Include new test file(s) following the project's vitest patterns to verify the new behavior.\n- Be thorough: the improvement should be production-ready.`;
 
-    // Ask Claude for a fix
-    console.log(`    🤖 Asking Claude for a ${isBug ? "fix" : "implementation"}...`);
+    console.log(
+      `    🤖 Asking Claude for a ${isBug ? "fix" : "implementation"}...`
+    );
     let fixPlan;
     try {
       const response = await client.messages.create({
@@ -331,24 +447,28 @@ Provide a ${isBug ? "fix" : "complete implementation"} for this issue. Return ON
 Rules:
 - Only change files that are necessary to ${isBug ? "fix the issue" : "implement the improvement"}.
 - Do not change unrelated code.
-- Preserve all existing functionality.
+- Preserve all existing functionality — do NOT remove, rename or restructure existing translation keys.
 - Keep the same coding style.${extraRules}
-- If you modify any JSON translation file (src/i18n/messages/*.json), include the complete file with all existing keys plus any new ones you add.
+- CRITICAL: If you include a translation file (src/i18n/messages/*.json), you MUST include EVERY existing key with its original value intact. Only ADD new keys or change values you explicitly intend to modify. Never restructure, rename, or reorganize the JSON — keep the exact same nesting structure.
 - If the issue is not ${isBug ? "fixable" : "implementable"} (e.g. requires secret env vars or manual action), return { "summary": "NOT_FIXABLE", "changes": [] }`,
           },
         ],
       });
 
       if (response.stop_reason === "max_tokens") {
-        throw new Error("Response truncated (max_tokens reached). The fix may be too large.");
+        throw new Error(
+          "Response truncated (max_tokens reached). The fix may be too large."
+        );
       }
       let text = response.content[0].text.trim();
-      // Strip markdown code fences if present (e.g. ```json ... ```)
       const fenceMatch = text.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/);
       if (fenceMatch) text = fenceMatch[1].trim();
       fixPlan = JSON.parse(text);
     } catch (err) {
-      console.error("    ❌ Claude failed to return a valid response:", err.message);
+      console.error(
+        "    ❌ Claude failed to return a valid response:",
+        err.message
+      );
       continue;
     }
 
@@ -357,19 +477,22 @@ Rules:
       !Array.isArray(fixPlan.changes) ||
       fixPlan.changes.length === 0
     ) {
-      console.log(`    ⏭️  Issue not automatically ${isBug ? "fixable" : "implementable"}. Skipping.`);
+      console.log(
+        `    ⏭️  Issue not automatically ${isBug ? "fixable" : "implementable"}. Skipping.`
+      );
       continue;
     }
 
-    // Reject fixes that touch protected paths (e.g. workflow files require
-    // a GitHub token with the `workflows` scope, which we don't have).
+    // Reject fixes that touch protected paths
     const protectedPaths = [".github/"];
     const touchesProtected = fixPlan.changes.some((c) =>
       protectedPaths.some((p) => c.path.startsWith(p))
     );
     if (touchesProtected) {
       const blocked = fixPlan.changes.map((c) => c.path).join(", ");
-      console.log(`    ⏭️  Changes touch protected path(s) [${blocked}] — skipping (needs manual intervention).`);
+      console.log(
+        `    ⏭️  Changes touch protected path(s) [${blocked}] — skipping.`
+      );
       continue;
     }
 
@@ -378,111 +501,27 @@ Rules:
     try {
       createBranch(branchName);
     } catch {
-      console.warn(`    ⚠️  Branch ${branchName} may already exist. Continuing...`);
+      console.warn(
+        `    ⚠️  Branch ${branchName} may already exist. Continuing...`
+      );
       run(`git checkout ${branchName}`);
     }
 
-    // Apply changes
+    // Apply changes (plain writes)
     console.log(`    Applying ${fixPlan.changes.length} file change(s)...`);
     applyFileChanges(fixPlan.changes);
 
-    // Verify — run tests for enhancements, not just build
-    let verification = verifyBuild(!isBug);
+    // Post-apply: validate i18n JSON files and restore any dropped keys
+    console.log("    🔍 Validating i18n translation files...");
+    validateAndFixI18n(i18nSnapshot);
 
-    // Retry once: if verification failed, ask Claude to fix the errors
-    if (!verification.ok) {
-      console.log("    🔄 Verification failed. Asking Claude to fix the errors (retry 1/1)...");
-
-      // Read the current (broken) source state so Claude sees its own changes
-      const retrySnapshot = readSourceSnapshot();
-      const retryContext = Object.entries(retrySnapshot)
-        .map(([path, content]) => {
-          const capped = content.length > 3000
-            ? content.slice(0, 3000) + "\n...[truncated]"
-            : content;
-          return `### ${path}\n\`\`\`\n${capped}\n\`\`\``;
-        })
-        .join("\n\n");
-
-      try {
-        const retryResponse = await client.messages.create({
-          model: "claude-opus-4-5",
-          max_tokens: 16384,
-          messages: [
-            {
-              role: "user",
-              content: `You are a senior software engineer. You just applied changes to a Next.js 16 / TypeScript / Tailwind CSS v4 project but verification failed.
-
-## Original issue
-
-**Title**: ${issue.title}
-
-**Description**:
-${issue.body ?? "(no body)"}
-
-## Verification errors
-
-\`\`\`
-${verification.error}
-\`\`\`
-
-## Current source files (after your previous changes)
-
-${retryContext}
-
-## Your task
-
-Fix the verification errors. Return ONLY valid JSON (no markdown, no explanation) with this shape:
-{
-  "summary": "One-sentence description of what you fixed",
-  "changes": [
-    {
-      "path": "relative/path/to/file.tsx",
-      "content": "complete new file content (not a diff, the full file)"
-    }
-  ]
-}
-
-Rules:
-- Only change files necessary to fix the verification errors.
-- Preserve all existing functionality.
-- Keep the same coding style.
-- If you modify any JSON translation file (src/i18n/messages/*.json), include the complete file with all existing keys plus any new ones you add.
-- If the errors are not fixable, return { "summary": "NOT_FIXABLE", "changes": [] }`,
-            },
-          ],
-        });
-
-        if (retryResponse.stop_reason === "max_tokens") {
-          throw new Error("Retry response truncated (max_tokens reached).");
-        }
-        let retryText = retryResponse.content[0].text.trim();
-        const retryFence = retryText.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/);
-        if (retryFence) retryText = retryFence[1].trim();
-        const retryPlan = JSON.parse(retryText);
-
-        if (
-          retryPlan.summary === "NOT_FIXABLE" ||
-          !Array.isArray(retryPlan.changes) ||
-          retryPlan.changes.length === 0
-        ) {
-          console.log("    ❌ Claude could not fix the verification errors.");
-        } else {
-          console.log(`    Applying ${retryPlan.changes.length} retry fix(es)...`);
-          applyFileChanges(retryPlan.changes);
-          fixPlan.summary += ` — also: ${retryPlan.summary}`;
-          fixPlan.changes = [...fixPlan.changes, ...retryPlan.changes.filter(
-            (rc) => !fixPlan.changes.some((fc) => fc.path === rc.path)
-          )];
-          verification = verifyBuild(!isBug);
-        }
-      } catch (retryErr) {
-        console.error("    ❌ Retry failed:", retryErr.message);
-      }
-    }
+    // Verify build (+ tests for enhancements)
+    const verification = verifyBuild(!isBug);
 
     if (!verification.ok) {
-      console.log("    ❌ Changes did not pass verification after retry. Rolling back branch.");
+      console.log(
+        "    ❌ Changes did not pass verification. Rolling back branch."
+      );
       ensureOnMain();
       run(`git branch -D ${branchName} 2>/dev/null || true`);
       continue;
