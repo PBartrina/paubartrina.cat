@@ -28,7 +28,7 @@ const REPO = process.env.GITHUB_REPOSITORY ?? "PBartrina/paubartrina.cat";
 const [OWNER, REPO_NAME] = REPO.split("/");
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const PROJECT_ROOT = process.cwd();
-const MAX_ISSUES_PER_RUN = 3;
+const MAX_ISSUES_PER_RUN = 1;
 
 // i18n JSON file paths (relative)
 const I18N_DIR = "src/i18n/messages";
@@ -410,7 +410,7 @@ async function main() {
     const task = isBug ? "fixing a bug" : "implementing an improvement";
     const extraRules = isBug
       ? ""
-      : `\n- Include new test file(s) following the project's vitest patterns to verify the new behavior.\n- Be thorough: the improvement should be production-ready.`;
+      : `\n- Include or update test file(s) following the project's vitest patterns to verify the new behavior. If existing tests break due to your changes, update them too.\n- Be thorough: the improvement should be production-ready.`;
 
     console.log(
       `    🤖 Asking Claude for a ${isBug ? "fix" : "implementation"}...`
@@ -419,7 +419,7 @@ async function main() {
     try {
       const response = await client.messages.create({
         model: "claude-opus-4-5",
-        max_tokens: 16384,
+        max_tokens: 32768,
         messages: [
           {
             role: "user",
@@ -454,7 +454,8 @@ Rules:
 - Do not change unrelated code.
 - Preserve all existing functionality — do NOT remove, rename or restructure existing translation keys.
 - Keep the same coding style.${extraRules}
-- CRITICAL: If you include a translation file (src/i18n/messages/*.json), you MUST include EVERY existing key with its original value intact. Only ADD new keys or change values you explicitly intend to modify. Never restructure, rename, or reorganize the JSON — keep the exact same nesting structure.
+- CRITICAL i18n rules: A post-processing step will REVERT all existing translation values back to their originals. You can only ADD new keys — existing values will NOT change no matter what you write. Therefore: (1) Do NOT rely on changing existing translation text. (2) If you need new text, add a NEW key. (3) Any tests you write must expect the ORIGINAL translation values from the source files above, not modified ones.
+- If you update or create tests, make sure they match the actual rendered output using the ORIGINAL translation values shown in the source files. Do not hardcode translation text that differs from what exists in the source JSON files.
 - If the issue is not ${isBug ? "fixable" : "implementable"} (e.g. requires secret env vars or manual action), return { "summary": "NOT_FIXABLE", "changes": [] }`,
           },
         ],
