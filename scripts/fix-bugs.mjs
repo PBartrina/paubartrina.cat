@@ -417,7 +417,8 @@ async function main() {
     );
     let fixPlan;
     try {
-      const response = await client.messages.create({
+      // Use streaming to avoid the 10-minute timeout on large requests
+      const stream = client.messages.stream({
         model: "claude-opus-4-5",
         max_tokens: 32768,
         messages: [
@@ -460,6 +461,7 @@ Rules:
           },
         ],
       });
+      const response = await stream.finalMessage();
 
       if (response.stop_reason === "max_tokens") {
         throw new Error(
