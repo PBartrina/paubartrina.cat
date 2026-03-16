@@ -55,18 +55,21 @@ function readSourceSnapshot() {
 }
 
 async function getExistingIssues() {
-  const url = `https://api.github.com/repos/${OWNER}/${REPO_NAME}/issues?labels=enhancement,automated&state=open&per_page=100`;
-  const resp = await fetch(url, {
-    headers: {
-      Authorization: `Bearer ${GITHUB_TOKEN}`,
-      Accept: "application/vnd.github+json",
-    },
-  });
-  if (!resp.ok) {
-    console.warn("Could not fetch existing issues:", await resp.text());
-    return [];
+  // Fetch both open AND closed issues to avoid re-proposing rejected/completed ones
+  const results = [];
+  for (const state of ["open", "closed"]) {
+    const url = `https://api.github.com/repos/${OWNER}/${REPO_NAME}/issues?labels=enhancement,automated&state=${state}&per_page=100`;
+    const resp = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${GITHUB_TOKEN}`,
+        Accept: "application/vnd.github+json",
+      },
+    });
+    if (resp.ok) {
+      results.push(...(await resp.json()));
+    }
   }
-  return resp.json();
+  return results;
 }
 
 async function createIssue(title, body) {
@@ -110,7 +113,17 @@ async function main() {
     .map(([path, content]) => `### ${path}\n\`\`\`\n${cap(content, 3000)}\n\`\`\``)
     .join("\n\n");
 
-  // 3. Ask Claude for improvement suggestions
+  // 3. Fetch existing open improvement issues BEFORE asking Claude
+  //    so we can pass them to Claude to avoid duplicates
+  const existing = await getExistingIssues();
+  const existingTitles = new Set(existing.map((i) => i.title.toLowerCase()));
+  const existingList = existing.length > 0
+    ? existing.map((i) => `- #${i.number}: ${i.title}`).join("\n")
+    : "(none)";
+
+  console.log(`Found ${existing.length} existing open improvement issue(s).`);
+
+  // 4. Ask Claude for improvement suggestions
   console.log("Asking Claude for improvement suggestions...");
   const client = new Anthropic();
 
@@ -137,6 +150,10 @@ ${sourceContext}
 
 ${fileList}
 
+## Already proposed improvements (DO NOT suggest these again, even with different wording)
+
+${existingList}
+
 ## Your task
 
 Suggest up to ${MAX_SUGGESTIONS} impactful improvements across these categories:
@@ -157,6 +174,7 @@ Return ONLY valid JSON (no markdown, no explanation) with this shape:
 Rules:
 - Be specific and actionable. Include file paths and concrete implementation details.
 - Do NOT suggest things that are already implemented in the code.
+- Do NOT suggest anything similar to the "Already proposed improvements" listed above, even if worded differently.
 - Focus on genuinely impactful improvements, not trivial nitpicks.
 - Each suggestion must be independently implementable.
 - If you have fewer than ${MAX_SUGGESTIONS} meaningful suggestions, return fewer. Quality over quantity.
@@ -184,11 +202,7 @@ Rules:
 
   console.log(`\nClaude suggested ${suggestions.length} improvement(s).`);
 
-  // 4. Fetch existing open improvement issues to avoid duplicates
-  const existing = await getExistingIssues();
-  const existingTitles = new Set(existing.map((i) => i.title.toLowerCase()));
-
-  // 5. Create GitHub issues
+  // 5. Create GitHub issues (dedup against existing titles as a safety net)
   let created = 0;
   for (const suggestion of suggestions.slice(0, MAX_SUGGESTIONS)) {
     const lowerTitle = suggestion.title.toLowerCase();

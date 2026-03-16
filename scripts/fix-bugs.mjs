@@ -358,23 +358,65 @@ function verifyBuild(runTests = false) {
 async function main() {
   console.log("🔧 paubartrina.cat — Auto Fixer\n");
 
-  const bugIssues = (await getOpenBugIssues()).map((i) => ({
-    ...i,
-    _type: "bug",
-  }));
-  const enhIssues = (await getApprovedEnhancementIssues()).map((i) => ({
-    ...i,
-    _type: "enhancement",
-  }));
-  const allIssues = [...bugIssues, ...enhIssues];
+  // Accept specific issue numbers as CLI arguments:
+  //   node scripts/fix-bugs.mjs 11 12 14
+  // If none given, fetch all open bug + approved enhancement issues.
+  const requestedIssues = process.argv.slice(2).map(Number).filter(Boolean);
+
+  let allIssues;
+
+  if (requestedIssues.length > 0) {
+    console.log(`Processing requested issue(s): ${requestedIssues.join(", ")}\n`);
+    // Fetch each issue individually
+    const fetched = await Promise.all(
+      requestedIssues.map(async (num) => {
+        try {
+          const issue = await githubRequest(
+            `/repos/${OWNER}/${REPO_NAME}/issues/${num}`
+          );
+          const labels = (issue.labels ?? []).map((l) =>
+            typeof l === "string" ? l : l.name
+          );
+          const isBug =
+            labels.includes("bug") && labels.includes("automated");
+          const isEnh =
+            labels.includes("enhancement") &&
+            labels.includes("automated") &&
+            labels.includes("approved");
+          if (!isBug && !isEnh) {
+            console.warn(
+              `    ⚠️  Issue #${num} doesn't have the right labels (bug+automated or enhancement+automated+approved). Skipping.`
+            );
+            return null;
+          }
+          return { ...issue, _type: isBug ? "bug" : "enhancement" };
+        } catch (err) {
+          console.error(`    ❌ Could not fetch issue #${num}: ${err.message}`);
+          return null;
+        }
+      })
+    );
+    allIssues = fetched.filter(Boolean);
+  } else {
+    const bugIssues = (await getOpenBugIssues()).map((i) => ({
+      ...i,
+      _type: "bug",
+    }));
+    const enhIssues = (await getApprovedEnhancementIssues()).map((i) => ({
+      ...i,
+      _type: "enhancement",
+    }));
+    allIssues = [...bugIssues, ...enhIssues];
+  }
 
   if (allIssues.length === 0) {
-    console.log("✅ No open automated bugs or approved enhancements found.");
+    console.log("✅ No issues to process.");
     return;
   }
 
+  const limit = requestedIssues.length > 0 ? allIssues.length : MAX_ISSUES_PER_RUN;
   console.log(
-    `Found ${bugIssues.length} bug(s) and ${enhIssues.length} approved enhancement(s). Will process up to ${MAX_ISSUES_PER_RUN}.\n`
+    `Found ${allIssues.length} issue(s) to process (limit: ${limit}).\n`
   );
 
   gitConfigureUser();
@@ -382,7 +424,7 @@ async function main() {
   const client = new Anthropic();
   let fixed = 0;
 
-  for (const issue of allIssues.slice(0, MAX_ISSUES_PER_RUN)) {
+  for (const issue of allIssues.slice(0, limit)) {
     const isBug = issue._type === "bug";
     const prefix = isBug ? "fix" : "feat";
     const emoji = isBug ? "🐛" : "✨";
