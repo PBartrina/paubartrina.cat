@@ -2,8 +2,8 @@ name: Improvement Proposer
 
 on:
   schedule:
-    # Runs every day at 07:00 UTC (before bug detector)
-    - cron: "0 7 * * *"
+    # Runs every 3 days at 07:00 UTC
+    - cron: "0 7 */3 * *"
   workflow_dispatch: # allow manual trigger from GitHub UI
 
 jobs:
