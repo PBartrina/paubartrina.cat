@@ -55,21 +55,30 @@ function readSourceSnapshot() {
 }
 
 async function getExistingIssues() {
-  // Fetch both open AND closed issues to avoid re-proposing rejected/completed ones
+  // Fetch ALL automated issues (enhancements + bugs, open + closed)
+  // so Claude sees everything that's been proposed or fixed already.
   const results = [];
-  for (const state of ["open", "closed"]) {
-    const url = `https://api.github.com/repos/${OWNER}/${REPO_NAME}/issues?labels=enhancement,automated&state=${state}&per_page=100`;
-    const resp = await fetch(url, {
-      headers: {
-        Authorization: `Bearer ${GITHUB_TOKEN}`,
-        Accept: "application/vnd.github+json",
-      },
-    });
-    if (resp.ok) {
-      results.push(...(await resp.json()));
+  for (const labels of ["enhancement,automated", "bug,automated"]) {
+    for (const state of ["open", "closed"]) {
+      const url = `https://api.github.com/repos/${OWNER}/${REPO_NAME}/issues?labels=${labels}&state=${state}&per_page=100`;
+      const resp = await fetch(url, {
+        headers: {
+          Authorization: `Bearer ${GITHUB_TOKEN}`,
+          Accept: "application/vnd.github+json",
+        },
+      });
+      if (resp.ok) {
+        results.push(...(await resp.json()));
+      }
     }
   }
-  return results;
+  // Deduplicate by issue number (an issue may match multiple label queries)
+  const seen = new Set();
+  return results.filter((i) => {
+    if (seen.has(i.number)) return false;
+    seen.add(i.number);
+    return true;
+  });
 }
 
 async function createIssue(title, body) {
@@ -117,11 +126,16 @@ async function main() {
   //    so we can pass them to Claude to avoid duplicates
   const existing = await getExistingIssues();
   const existingTitles = new Set(existing.map((i) => i.title.toLowerCase()));
+  // Include title + first 200 chars of body so Claude understands what was proposed
   const existingList = existing.length > 0
-    ? existing.map((i) => `- #${i.number}: ${i.title}`).join("\n")
+    ? existing.map((i) => {
+        const state = i.state === "open" ? "open" : "closed";
+        const bodyPreview = (i.body ?? "").slice(0, 200).replace(/\n/g, " ");
+        return `- #${i.number} [${state}]: ${i.title} — ${bodyPreview}`;
+      }).join("\n")
     : "(none)";
 
-  console.log(`Found ${existing.length} existing open improvement issue(s).`);
+  console.log(`Found ${existing.length} existing automated issue(s) (open + closed).`);
 
   // 4. Ask Claude for improvement suggestions
   console.log("Asking Claude for improvement suggestions...");
@@ -150,7 +164,10 @@ ${sourceContext}
 
 ${fileList}
 
-## Already proposed improvements (DO NOT suggest these again, even with different wording)
+## Already proposed issues — bugs AND improvements (DO NOT duplicate any of these)
+
+The following issues have already been created (some open, some closed/resolved).
+Do NOT suggest anything that overlaps with these, even if worded differently or approaching the same problem from a different angle. If an issue covers a topic (e.g., XSS, accessibility, RSS), that topic is OFF LIMITS.
 
 ${existingList}
 
@@ -203,11 +220,31 @@ Rules:
   console.log(`\nClaude suggested ${suggestions.length} improvement(s).`);
 
   // 5. Create GitHub issues (dedup against existing titles as a safety net)
+  // Build keyword sets from existing issue titles for fuzzy matching
+  const existingKeywords = existing.map((i) => {
+    const words = i.title.toLowerCase().replace(/[^a-z0-9\s]/g, "").split(/\s+/).filter((w) => w.length > 3);
+    return { number: i.number, title: i.title, words: new Set(words) };
+  });
+
   let created = 0;
   for (const suggestion of suggestions.slice(0, MAX_SUGGESTIONS)) {
     const lowerTitle = suggestion.title.toLowerCase();
+
+    // Exact title match
     if (existingTitles.has(lowerTitle)) {
-      console.log(`  ⏭️  Skipping (already open): ${suggestion.title}`);
+      console.log(`  ⏭️  Skipping (exact duplicate): ${suggestion.title}`);
+      continue;
+    }
+
+    // Fuzzy match: if >50% of significant words overlap with an existing issue
+    const newWords = lowerTitle.replace(/[^a-z0-9\s]/g, "").split(/\s+/).filter((w) => w.length > 3);
+    const fuzzyMatch = existingKeywords.find((existing) => {
+      if (existing.words.size === 0 || newWords.length === 0) return false;
+      const overlap = newWords.filter((w) => existing.words.has(w)).length;
+      return overlap / Math.max(newWords.length, existing.words.size) > 0.5;
+    });
+    if (fuzzyMatch) {
+      console.log(`  ⏭️  Skipping (similar to #${fuzzyMatch.number} "${fuzzyMatch.title}"): ${suggestion.title}`);
       continue;
     }
     const result = await createIssue(suggestion.title, suggestion.body);
