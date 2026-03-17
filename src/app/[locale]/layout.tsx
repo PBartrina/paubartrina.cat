@@ -60,6 +60,9 @@ export async function generateMetadata({
       languages: Object.fromEntries(
         locales.map((l) => [l, `https://paubartrina.cat/${l}`])
       ),
+      types: {
+        'application/rss+xml': `https://paubartrina.cat/${locale}/blog/feed.xml`,
+      },
     },
   };
 }
@@ -101,26 +104,32 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
             __html: themeInitScript,
           }}
         />
+        <link
+          rel="alternate"
+          type="application/rss+xml"
+          title="Pau Bartrina – Blog RSS Feed"
+          href={`https://paubartrina.cat/${locale}/blog/feed.xml`}
+        />
       </head>
       <body
-        className={`${jetbrainsMono.variable} ${raleway.variable} flex min-h-screen flex-col antialiased`}
+        className={`${jetbrainsMono.variable} ${raleway.variable} flex min-h-screen flex-col bg-bg-primary font-mono antialiased`}
       >
         <a
           href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[100] focus:rounded focus:bg-bg-dark focus:px-4 focus:py-2 focus:font-mono focus:text-sm focus:text-text-on-dark"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-bg-dark focus:px-4 focus:py-2 focus:text-text-on-dark focus:outline-none focus:ring-2 focus:ring-text-accent"
         >
           {t("skipToContent")}
         </a>
-        <NextIntlClientProvider messages={messages}>
-          <ThemeProvider>
+        <ThemeProvider>
+          <NextIntlClientProvider messages={messages}>
             <Navbar />
             <main id="main-content" className="flex-1">
               {children}
             </main>
             <Footer />
             <ThemeToggle />
-          </ThemeProvider>
-        </NextIntlClientProvider>
+          </NextIntlClientProvider>
+        </ThemeProvider>
         <Analytics />
         <SpeedInsights />
       </body>
