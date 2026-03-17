@@ -1,9 +1,15 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 
 interface PageProps {
   params: Promise<{ locale: string }>;
 }
+
+const richComponents = {
+  strong: (chunks: ReactNode) => <strong>{chunks}</strong>,
+  code: (chunks: ReactNode) => <code>{chunks}</code>,
+};
 
 export async function generateMetadata({
   params,
@@ -22,12 +28,8 @@ export default async function AraPage({ params }: PageProps) {
   setRequestLocale(locale);
 
   const t = await getTranslations({ locale, namespace: "ara" });
-  const priorities = t.raw("priorities") as string[];
-  const excitement = t.raw("excitement") as string[];
-
-  // Parse the footer to extract the link
-  const footerText = t("footer") as string;
-  const footerParts = footerText.split(/<link>|<\/link>/);
+  const priorityCount = (t.raw("priorities") as string[]).length;
+  const excitementCount = (t.raw("excitement") as string[]).length;
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
@@ -39,16 +41,18 @@ export default async function AraPage({ params }: PageProps) {
       </p>
 
       <div className="space-y-8 font-mono text-text-primary">
-        <p dangerouslySetInnerHTML={{ __html: t("location") }} />
-        <p dangerouslySetInnerHTML={{ __html: t("occupation") }} />
+        <p>{t.rich("location", richComponents)}</p>
+        <p>{t.rich("occupation", richComponents)}</p>
 
         <section>
           <h2 className="mb-4 text-2xl font-bold">
             {t("prioritiesHeading")}
           </h2>
           <div className="space-y-3 pl-4 text-sm leading-relaxed">
-            {priorities.map((text, i) => (
-              <p key={i} dangerouslySetInnerHTML={{ __html: text }} />
+            {Array.from({ length: priorityCount }, (_, i) => (
+              <p key={i}>
+                {t.rich(`priorities.${i}`, richComponents)}
+              </p>
             ))}
           </div>
         </section>
@@ -58,23 +62,27 @@ export default async function AraPage({ params }: PageProps) {
             {t("excitementHeading")}
           </h2>
           <div className="space-y-3 pl-4 text-sm leading-relaxed">
-            {excitement.map((text, i) => (
-              <p key={i} dangerouslySetInnerHTML={{ __html: text }} />
+            {Array.from({ length: excitementCount }, (_, i) => (
+              <p key={i}>
+                {t.rich(`excitement.${i}`, richComponents)}
+              </p>
             ))}
           </div>
         </section>
 
         <p className="mt-12 text-sm italic text-text-secondary">
-          {footerParts[0]}
-          <a
-            href="https://nownownow.com/about"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-text-accent hover:underline"
-          >
-            {footerParts[1]}
-          </a>
-          {footerParts[2]}
+          {t.rich("footer", {
+            link: (chunks: ReactNode) => (
+              <a
+                href="https://nownownow.com/about"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-text-accent hover:underline"
+              >
+                {chunks}
+              </a>
+            ),
+          })}
         </p>
       </div>
     </div>
