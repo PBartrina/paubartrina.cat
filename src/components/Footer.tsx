@@ -42,6 +42,14 @@ export default function Footer() {
                   {link.label}
                 </a>
               ))}
+              <a
+                href="/blog/feed.xml"
+                className="rounded-md border border-text-on-dark px-4 py-2 font-mono text-sm transition-colors hover:border-text-accent hover:text-text-accent"
+                title="RSS Feed"
+              >
+                <span aria-hidden="true">📡</span>
+                <span className="sr-only">RSS</span>
+              </a>
             </div>
           </div>
         </div>
