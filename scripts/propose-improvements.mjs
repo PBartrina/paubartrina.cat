@@ -195,7 +195,8 @@ Rules:
 - Focus on genuinely impactful improvements, not trivial nitpicks.
 - Each suggestion must be independently implementable.
 - If you have fewer than ${MAX_SUGGESTIONS} meaningful suggestions, return fewer. Quality over quantity.
-- If you have no meaningful suggestions, return an empty array: []`,
+- If you have no meaningful suggestions, return an empty array: []
+- CRITICAL: The body field must be a plain string safe for JSON. Do NOT use backticks, code fences, or markdown code blocks inside the JSON string values. Use plain text for code references.`,
       },
     ],
   });
@@ -205,6 +206,8 @@ Rules:
     let text = response.content[0].text.trim();
     const fenceMatch = text.match(/^```(?:json)?\s*([\s\S]*?)\s*```$/);
     if (fenceMatch) text = fenceMatch[1].trim();
+    // Sanitize: fix invalid JSON escape sequences (e.g. \` from code in body values)
+    text = text.replace(/\\`/g, "`").replace(/```[\w]*\n?/g, "").replace(/```/g, "");
     suggestions = JSON.parse(text);
   } catch (err) {
     console.error("Claude returned unexpected output:", response.content[0].text);
