@@ -10,6 +10,7 @@
     "about": "About Me",
     "experience": "Career",
     "now": "Now",
+    "uses": "Uses",
     "blog": "Blog",
     "contact": "Contact",
     "toggleMenu": "Toggle menu",
@@ -181,16 +182,38 @@
     "followHeading": "Follow me",
     "copyright": "All rights reserved."
   },
-  "languageSwitcher": {
-    "label": "Language",
-    "ca": "CA",
-    "es": "ES",
-    "en": "EN"
+  "contact": {
+    "heading": "Contact",
+    "description": "Have a question or proposal? Send me a message directly from here.",
+    "subtitle": "Have a question or proposal? Send me a message!",
+    "nameLabel": "Name",
+    "emailLabel": "Email",
+    "messageLabel": "Message",
+    "honeypotLabel": "Do not fill this field",
+    "submitButton": "Send message",
+    "sendingButton": "Sending...",
+    "successHeading": "Message sent successfully!",
+    "successMessage": "I'll get back to you as soon as possible.",
+    "sendAnother": "Send another message",
+    "errorUnknown": "Unknown error.",
+    "errorNetwork": "Could not connect to the server.",
+    "namePlaceholder": "Your name",
+    "emailPlaceholder": "you@example.com",
+    "messagePlaceholder": "How can I help you?",
+    "submitting": "Sending…",
+    "submitText": "Send message →",
+    "sendingText": "Sending..."
   },
   "theme": {
     "toggleLabel": "Toggle theme",
     "light": "light",
     "dark": "dark"
+  },
+  "languageSwitcher": {
+    "label": "Language",
+    "ca": "CA",
+    "es": "ES",
+    "en": "EN"
   },
   "blog": {
     "heading": "Blog",
@@ -202,48 +225,6 @@
     "notFoundBack": "← Back to blog",
     "translationWarning": "This article was originally written in Catalan. You are reading an automatic translation.",
     "readOriginal": "Read the original in Catalan"
-  },
-  "contact": {
-    "heading": "Contact",
-    "description": "Have a question or proposal? Send me a message directly from here.",
-    "subtitle": "Have a question or proposal? Send me a message!",
-    "nameLabel": "Name",
-    "emailLabel": "Email",
-    "messageLabel": "Message",
-    "namePlaceholder": "Your name",
-    "emailPlaceholder": "you@example.com",
-    "messagePlaceholder": "How can I help you?",
-    "submitButton": "Send message",
-    "submitting": "Sending…",
-    "successHeading": "Message sent successfully!",
-    "successMessage": "I'll get back to you as soon as possible.",
-    "sendAnother": "Send another message",
-    "errorUnknown": "Unknown error.",
-    "errorNetwork": "Could not connect to the server.",
-    "honeypotLabel": "Do not fill this field",
-    "submitText": "Send message →",
-    "sendingText": "Sending..."
-  },
-  "ara": {
-    "title": "Now",
-    "description": "What I'm doing now - my now page",
-    "heading": "What I'm doing now",
-    "lastUpdated": "Last updated: April 2025",
-    "location": "I live in <strong>Sant Pere de Vilamajor</strong>, at the foot of <strong>Montseny</strong>.",
-    "occupation": "I'm a <code>front-end web developer</code> and currently looking for work.",
-    "prioritiesHeading": "My priorities and project status",
-    "priorities": [
-      "Due to personal whims and \"strategic\" decisions, the company I was working at has dissolved and I'm now unemployed — that said, I only have gratitude towards the company where I spent nearly 8 years.",
-      "Time to get going with the website built with <strong>Nuxt</strong> that I had on stand-by.",
-      "<strong>Sven</strong> had a dental cleaning and they pulled one of his teeth (he was never the wise type).",
-      "We had a bit of drama with some water leaks this rainy month, but everything is under control now."
-    ],
-    "excitementHeading": "What excites me",
-    "excitement": [
-      "I'm on the home stretch of the book I started! I'm really enjoying it and will probably continue with the <strong>Stormlight Archive</strong> saga.",
-      "The bonsai trees are starting to sprout vigorously — now comes a beautiful season of <strong>pruning, repotting, and training</strong>."
-    ],
-    "footer": "This is my \"now\" page inspired by the <link>now page</link> movement."
   },
   "atAGlance": {
     "heading": "At a Glance",
@@ -275,9 +256,88 @@
     "languagesTitle": "Languages",
     "latestPostTitle": "Latest Post",
     "latestPostEmpty": "Coming soon...",
+    "latestPostRead": "Read post →",
     "readMore": "Read more →",
     "noPostsYet": "Coming soon...",
     "ctaText": "Have a project in mind?",
     "ctaButton": "Let's talk →"
+  },
+  "ara": {
+    "title": "Now",
+    "description": "What I'm doing now - my now page",
+    "heading": "What I'm doing now",
+    "lastUpdated": "Last updated: April 2025",
+    "location": "I live in <strong>Sant Pere de Vilamajor</strong>, at the foot of <strong>Montseny</strong>.",
+    "occupation": "I'm a <code>front-end web developer</code> and currently looking for work.",
+    "prioritiesHeading": "My priorities and project status",
+    "priorities": [
+      "Due to personal whims and \"strategic\" decisions, the company I was working at has dissolved and I'm now unemployed — that said, I only have gratitude towards the company where I spent nearly 8 years.",
+      "Time to get going with the website built with <strong>Nuxt</strong> that I had on stand-by.",
+      "<strong>Sven</strong> had a dental cleaning and they pulled one of his teeth (he was never the wise type).",
+      "We had a bit of drama with some water leaks this rainy month, but everything is under control now."
+    ],
+    "excitementHeading": "What excites me",
+    "excitement": [
+      "I'm on the home stretch of the book I started! I'm really enjoying it and will probably continue with the <strong>Stormlight Archive</strong> saga.",
+      "The bonsai trees are starting to sprout vigorously — now comes a beautiful season of <strong>pruning, repotting, and training</strong>."
+    ],
+    "footer": "This is my \"now\" page inspired by the <link>now page</link> movement."
+  },
+  "uses": {
+    "title": "Uses",
+    "description": "My development setup — editor, terminal, hardware, and applications.",
+    "heading": "Uses",
+    "subtitle": "My development setup and the tools I use daily.",
+    "editor": {
+      "heading": "Editor",
+      "items": [
+        "VS Code as my main editor with the One Dark Pro theme",
+        "Font: JetBrains Mono with ligatures enabled",
+        "Extensions: ESLint, Prettier, Angular Language Service, GitLens",
+        "Vim keybindings with the VSCodeVim extension",
+        "Settings Sync enabled to keep configuration across machines"
+      ]
+    },
+    "terminal": {
+      "heading": "Terminal",
+      "items": [
+        "iTerm2 with Oh My Zsh and the Powerlevel10k theme",
+        "tmux for session and pane management",
+        "Custom aliases for Git, npm, and quick navigation",
+        "fzf for fuzzy file and history search",
+        "bat, exa, and ripgrep as modern alternatives to cat, ls, and grep"
+      ]
+    },
+    "browser": {
+      "heading": "Browser & DevTools",
+      "items": [
+        "Arc Browser as my main browser",
+        "Firefox Developer Edition for cross-browser testing",
+        "Angular DevTools for debugging Angular applications",
+        "React Developer Tools when working with React",
+        "Lighthouse and Web Vitals for performance audits"
+      ]
+    },
+    "hardware": {
+      "heading": "Hardware",
+      "items": [
+        "MacBook Pro 14\" M3 Pro (2023)",
+        "External monitor LG 27\" 4K",
+        "Keychron K2 mechanical keyboard with Brown switches",
+        "Logitech MX Master 3 mouse",
+        "Herman Miller Aeron ergonomic chair"
+      ]
+    },
+    "desktop": {
+      "heading": "Desktop Apps",
+      "items": [
+        "Raycast as launcher and clipboard manager",
+        "Notion for notes and personal documentation",
+        "Figma for design and prototyping",
+        "Slack and Discord for communication",
+        "Docker Desktop for development containers"
+      ]
+    },
+    "footer": "Inspired by <link>uses.tech</link>, a directory of developer /uses pages."
   }
 }

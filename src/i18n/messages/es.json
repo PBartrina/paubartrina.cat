@@ -10,6 +10,7 @@
     "about": "Sobre Mí",
     "experience": "Trayectoria",
     "now": "Ahora",
+    "uses": "Herramientas",
     "blog": "Blog",
     "contact": "Contacto",
     "toggleMenu": "Abrir menú",
@@ -181,16 +182,38 @@
     "followHeading": "Sígueme",
     "copyright": "Todos los derechos reservados."
   },
-  "languageSwitcher": {
-    "label": "Idioma",
-    "ca": "CA",
-    "es": "ES",
-    "en": "EN"
+  "contact": {
+    "heading": "Contacto",
+    "description": "¿Tienes alguna pregunta o propuesta? Envíame un mensaje directamente desde aquí.",
+    "subtitle": "¿Tienes alguna pregunta o propuesta? ¡Envíame un mensaje!",
+    "nameLabel": "Nombre",
+    "emailLabel": "Correo electrónico",
+    "messageLabel": "Mensaje",
+    "honeypotLabel": "No rellene este campo",
+    "submitButton": "Enviar el mensaje",
+    "sendingButton": "Enviando...",
+    "successHeading": "¡Mensaje enviado correctamente!",
+    "successMessage": "Te responderé lo antes posible.",
+    "sendAnother": "Enviar otro mensaje",
+    "errorUnknown": "Error desconocido.",
+    "errorNetwork": "No se ha podido conectar con el servidor.",
+    "namePlaceholder": "Tu nombre",
+    "emailPlaceholder": "tu@ejemplo.com",
+    "messagePlaceholder": "¿En qué puedo ayudarte?",
+    "submitting": "Enviando…",
+    "submitText": "Enviar el mensaje →",
+    "sendingText": "Enviando..."
   },
   "theme": {
     "toggleLabel": "Cambiar tema",
     "light": "light",
     "dark": "dark"
+  },
+  "languageSwitcher": {
+    "label": "Idioma",
+    "ca": "CA",
+    "es": "ES",
+    "en": "EN"
   },
   "blog": {
     "heading": "Blog",
@@ -202,48 +225,6 @@
     "notFoundBack": "← Volver al blog",
     "translationWarning": "Este artículo fue escrito originalmente en catalán. Estás leyendo una traducción automática.",
     "readOriginal": "Leer el original en catalán"
-  },
-  "contact": {
-    "heading": "Contacto",
-    "description": "¿Tienes alguna pregunta o propuesta? Envíame un mensaje directamente desde aquí.",
-    "subtitle": "¿Tienes alguna pregunta o propuesta? ¡Envíame un mensaje!",
-    "nameLabel": "Nombre",
-    "emailLabel": "Correo electrónico",
-    "messageLabel": "Mensaje",
-    "namePlaceholder": "Tu nombre",
-    "emailPlaceholder": "tu@ejemplo.com",
-    "messagePlaceholder": "¿En qué puedo ayudarte?",
-    "submitButton": "Enviar el mensaje",
-    "submitting": "Enviando…",
-    "successHeading": "¡Mensaje enviado correctamente!",
-    "successMessage": "Te responderé lo antes posible.",
-    "sendAnother": "Enviar otro mensaje",
-    "errorUnknown": "Error desconocido.",
-    "errorNetwork": "No se ha podido conectar con el servidor.",
-    "honeypotLabel": "No rellene este campo",
-    "submitText": "Enviar el mensaje →",
-    "sendingText": "Enviando..."
-  },
-  "ara": {
-    "title": "Ahora",
-    "description": "Qué hago ahora - mi página ahora",
-    "heading": "Qué hago ahora",
-    "lastUpdated": "Última actualización: Abril 2025",
-    "location": "Vivo en <strong>Sant Pere de Vilamajor</strong>, en la parte baja del <strong>Montseny</strong>.",
-    "occupation": "Soy <code>programador web front-end</code> y actualmente busco trabajo.",
-    "prioritiesHeading": "Mis prioridades y el estado de proyectos",
-    "priorities": [
-      "Por caprichos personales y decisiones \"estratégicas\" la empresa donde trabajaba se ha disuelto y me quedo en paro, eso sí, solo tengo agradecimientos hacia la empresa donde he estado estos casi 8 años.",
-      "Tocará arrancar con fuerza la web con <strong>Nuxt</strong> que tenía en stand-by.",
-      "Al <strong>Sven</strong> le hemos hecho una limpieza dental y le han sacado una muela (juicio no ha tenido nunca).",
-      "Hemos tenido un poco de drama con unas filtraciones este mes de lluvias, pero ya está todo controlado."
-    ],
-    "excitementHeading": "Qué me entusiasma",
-    "excitement": [
-      "¡Ya estoy en la recta final del libro que empecé! Me está gustando y seguramente continuaré con la saga del <strong>Archivo de las Tormentas</strong>.",
-      "Los bonsáis están empezando a brotar con fuerza, ahora viene una época bonita de <strong>poda, trasplantes y formación</strong>."
-    ],
-    "footer": "Esta es mi página \"ahora\" inspirada en el movimiento <link>now page</link>."
   },
   "atAGlance": {
     "heading": "De un vistazo",
@@ -275,9 +256,88 @@
     "languagesTitle": "Idiomas",
     "latestPostTitle": "Último artículo",
     "latestPostEmpty": "Próximamente...",
+    "latestPostRead": "Leer artículo →",
     "readMore": "Leer más →",
     "noPostsYet": "Próximamente...",
     "ctaText": "¿Tienes algún proyecto en mente?",
     "ctaButton": "Hablemos →"
+  },
+  "ara": {
+    "title": "Ahora",
+    "description": "Qué hago ahora - mi página ahora",
+    "heading": "Qué hago ahora",
+    "lastUpdated": "Última actualización: Abril 2025",
+    "location": "Vivo en <strong>Sant Pere de Vilamajor</strong>, en la parte baja del <strong>Montseny</strong>.",
+    "occupation": "Soy <code>programador web front-end</code> y actualmente busco trabajo.",
+    "prioritiesHeading": "Mis prioridades y el estado de proyectos",
+    "priorities": [
+      "Por caprichos personales y decisiones \"estratégicas\" la empresa donde trabajaba se ha disuelto y me quedo en paro, eso sí, solo tengo agradecimientos hacia la empresa donde he estado estos casi 8 años.",
+      "Tocará arrancar con fuerza la web con <strong>Nuxt</strong> que tenía en stand-by.",
+      "Al <strong>Sven</strong> le hemos hecho una limpieza dental y le han sacado una muela (juicio no ha tenido nunca).",
+      "Hemos tenido un poco de drama con unas filtraciones este mes de lluvias, pero ya está todo controlado."
+    ],
+    "excitementHeading": "Qué me entusiasma",
+    "excitement": [
+      "¡Ya estoy en la recta final del libro que empecé! Me está gustando y seguramente continuaré con la saga del <strong>Archivo de las Tormentas</strong>.",
+      "Los bonsáis están empezando a brotar con fuerza, ahora viene una época bonita de <strong>poda, trasplantes y formación</strong>."
+    ],
+    "footer": "Esta es mi página \"ahora\" inspirada en el movimiento <link>now page</link>."
+  },
+  "uses": {
+    "title": "Herramientas",
+    "description": "Mi setup de desarrollo — editor, terminal, hardware y aplicaciones.",
+    "heading": "Herramientas",
+    "subtitle": "Mi setup de desarrollo y las herramientas que uso a diario.",
+    "editor": {
+      "heading": "Editor",
+      "items": [
+        "VS Code como editor principal con el tema One Dark Pro",
+        "Fuente: JetBrains Mono con ligaduras activadas",
+        "Extensiones: ESLint, Prettier, Angular Language Service, GitLens",
+        "Vim keybindings con la extensión VSCodeVim",
+        "Settings Sync activado para mantener la configuración entre máquinas"
+      ]
+    },
+    "terminal": {
+      "heading": "Terminal",
+      "items": [
+        "iTerm2 con Oh My Zsh y el tema Powerlevel10k",
+        "tmux para gestión de sesiones y paneles",
+        "Aliases personalizados para Git, npm y navegación rápida",
+        "fzf para búsqueda difusa de archivos e historial",
+        "bat, exa y ripgrep como alternativas modernas a cat, ls y grep"
+      ]
+    },
+    "browser": {
+      "heading": "Navegador y DevTools",
+      "items": [
+        "Arc Browser como navegador principal",
+        "Firefox Developer Edition para testing cross-browser",
+        "Angular DevTools para debugging de aplicaciones Angular",
+        "React Developer Tools cuando trabajo con React",
+        "Lighthouse y Web Vitals para auditorías de rendimiento"
+      ]
+    },
+    "hardware": {
+      "heading": "Hardware",
+      "items": [
+        "MacBook Pro 14\" M3 Pro (2023)",
+        "Monitor externo LG 27\" 4K",
+        "Teclado mecánico Keychron K2 con switches Brown",
+        "Ratón Logitech MX Master 3",
+        "Silla ergonómica Herman Miller Aeron"
+      ]
+    },
+    "desktop": {
+      "heading": "Aplicaciones de escritorio",
+      "items": [
+        "Raycast como launcher y clipboard manager",
+        "Notion para notas y documentación personal",
+        "Figma para diseño y prototipado",
+        "Slack y Discord para comunicación",
+        "Docker Desktop para contenedores de desarrollo"
+      ]
+    },
+    "footer": "Inspirado por <link>uses.tech</link>, un directorio de páginas /uses de desarrolladores."
   }
 }
