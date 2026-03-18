@@ -291,7 +291,7 @@
     "editor": {
       "heading": "Editor",
       "items": [
-        "VS Code as my main editor with the One Dark Pro theme",
+        "Webstorm as my main editor with the Islands Dark theme",
         "Font: JetBrains Mono with ligatures enabled",
         "Extensions: ESLint, Prettier, Angular Language Service, GitLens",
         "Vim keybindings with the VSCodeVim extension",
@@ -311,8 +311,8 @@
     "browser": {
       "heading": "Browser & DevTools",
       "items": [
-        "Arc Browser as my main browser",
-        "Firefox Developer Edition for cross-browser testing",
+        "Brave Browser as my main browser",
+        "Chrome for testing",
         "Angular DevTools for debugging Angular applications",
         "React Developer Tools when working with React",
         "Lighthouse and Web Vitals for performance audits"
@@ -321,9 +321,9 @@
     "hardware": {
       "heading": "Hardware",
       "items": [
-        "MacBook Pro 14\" M3 Pro (2023)",
-        "External monitor LG 27\" 4K",
-        "Keychron K2 mechanical keyboard with Brown switches",
+        "MacBook Pro 16\" M2 Max (2021)",
+        "2x External monitor BENQ 24\" 2K",
+        "Keychron K15 Pro mechanical keyboard with Brown switches",
         "Logitech MX Master 3 mouse",
         "Herman Miller Aeron ergonomic chair"
       ]
@@ -333,9 +333,8 @@
       "items": [
         "Raycast as launcher and clipboard manager",
         "Notion for notes and personal documentation",
-        "Figma for design and prototyping",
-        "Slack and Discord for communication",
-        "Docker Desktop for development containers"
+        "Slack and Teams for communication",
+        "Rancher Desktop for development containers"
       ]
     },
     "footer": "Inspired by <link>uses.tech</link>, a directory of developer /uses pages."

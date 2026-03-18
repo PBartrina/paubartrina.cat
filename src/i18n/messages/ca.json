@@ -291,7 +291,7 @@
     "editor": {
       "heading": "Editor",
       "items": [
-        "VS Code com a editor principal amb el tema One Dark Pro",
+        "Webstorm com a editor principal amb el tema Islands Dark",
         "Font: JetBrains Mono amb lligatures activades",
         "Extensions: ESLint, Prettier, Angular Language Service, GitLens",
         "Vim keybindings amb l'extensió VSCodeVim",
@@ -311,8 +311,8 @@
     "browser": {
       "heading": "Navegador i DevTools",
       "items": [
-        "Arc Browser com a navegador principal",
-        "Firefox Developer Edition per a testing cross-browser",
+        "Brave Browser com a navegador principal",
+        "Chrome per a testing",
         "Angular DevTools per a debugging d'aplicacions Angular",
         "React Developer Tools quan treballo amb React",
         "Lighthouse i Web Vitals per a auditories de rendiment"
@@ -321,9 +321,9 @@
     "hardware": {
       "heading": "Hardware",
       "items": [
-        "MacBook Pro 14\" M3 Pro (2023)",
-        "Monitor extern LG 27\" 4K",
-        "Teclat mecànic Keychron K2 amb switches Brown",
+        "MacBook Pro 16\" M2 Max (2021)",
+        "2x Monitor extern BENQ 24\" 2K",
+        "Teclat mecànic Keychron K15 Pro amb switches Brown",
         "Ratolí Logitech MX Master 3",
         "Cadira ergonòmica Herman Miller Aeron"
       ]
@@ -333,9 +333,8 @@
       "items": [
         "Raycast com a launcher i clipboard manager",
         "Notion per a notes i documentació personal",
-        "Figma per a disseny i prototipat",
-        "Slack i Discord per a comunicació",
-        "Docker Desktop per a contenidors de desenvolupament"
+        "Slack i Teams per a comunicació",
+        "Rancher Desktop per a contenidors de desenvolupament"
       ]
     },
     "footer": "Inspirat per <link>uses.tech</link>, un directori de pàgines /uses de desenvolupadors."
