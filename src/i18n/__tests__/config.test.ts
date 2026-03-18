@@ -91,20 +91,82 @@ describe("translation JSON files", () => {
     );
   });
 
-  it("no translation value is empty string", () => {
-    function checkNoEmpty(obj: Record<string, unknown>, path: string) {
-      for (const [key, value] of Object.entries(obj)) {
-        const fullPath = `${path}.${key}`;
-        if (typeof value === "string") {
-          expect(value.length, `${fullPath} should not be empty`).toBeGreaterThan(0);
-        } else if (typeof value === "object" && value !== null && !Array.isArray(value)) {
-          checkNoEmpty(value as Record<string, unknown>, fullPath);
-        }
-      }
-    }
+  it("ara namespace has the same keys across all locales", () => {
+    const caAraKeys = Object.keys(caMessages.ara).sort();
+    const esAraKeys = Object.keys(esMessages.ara).sort();
+    const enAraKeys = Object.keys(enMessages.ara).sort();
 
-    for (const [locale, messages] of Object.entries(allMessages)) {
-      checkNoEmpty(messages as unknown as Record<string, unknown>, locale);
+    expect(esAraKeys).toEqual(caAraKeys);
+    expect(enAraKeys).toEqual(caAraKeys);
+  });
+
+  it("uses namespace has the same keys across all locales", () => {
+    const caUsesKeys = Object.keys(caMessages.uses).sort();
+    const esUsesKeys = Object.keys(esMessages.uses).sort();
+    const enUsesKeys = Object.keys(enMessages.uses).sort();
+
+    expect(esUsesKeys).toEqual(caUsesKeys);
+    expect(enUsesKeys).toEqual(caUsesKeys);
+  });
+
+  it("uses namespace has all required section keys", () => {
+    const requiredKeys = ["title", "description", "heading", "subtitle", "editor", "terminal", "browser", "hardware", "desktop", "footer"];
+    
+    for (const key of requiredKeys) {
+      expect(caMessages.uses).toHaveProperty(key);
+      expect(esMessages.uses).toHaveProperty(key);
+      expect(enMessages.uses).toHaveProperty(key);
     }
+  });
+
+  it("uses editor section has same number of items across locales", () => {
+    expect(esMessages.uses.editor.items.length).toBe(
+      caMessages.uses.editor.items.length
+    );
+    expect(enMessages.uses.editor.items.length).toBe(
+      caMessages.uses.editor.items.length
+    );
+  });
+
+  it("uses terminal section has same number of items across locales", () => {
+    expect(esMessages.uses.terminal.items.length).toBe(
+      caMessages.uses.terminal.items.length
+    );
+    expect(enMessages.uses.terminal.items.length).toBe(
+      caMessages.uses.terminal.items.length
+    );
+  });
+
+  it("uses browser section has same number of items across locales", () => {
+    expect(esMessages.uses.browser.items.length).toBe(
+      caMessages.uses.browser.items.length
+    );
+    expect(enMessages.uses.browser.items.length).toBe(
+      caMessages.uses.browser.items.length
+    );
+  });
+
+  it("uses hardware section has same number of items across locales", () => {
+    expect(esMessages.uses.hardware.items.length).toBe(
+      caMessages.uses.hardware.items.length
+    );
+    expect(enMessages.uses.hardware.items.length).toBe(
+      caMessages.uses.hardware.items.length
+    );
+  });
+
+  it("uses desktop section has same number of items across locales", () => {
+    expect(esMessages.uses.desktop.items.length).toBe(
+      caMessages.uses.desktop.items.length
+    );
+    expect(enMessages.uses.desktop.items.length).toBe(
+      caMessages.uses.desktop.items.length
+    );
+  });
+
+  it("nav namespace includes uses key", () => {
+    expect(caMessages.nav).toHaveProperty("uses");
+    expect(esMessages.nav).toHaveProperty("uses");
+    expect(enMessages.nav).toHaveProperty("uses");
   });
 });

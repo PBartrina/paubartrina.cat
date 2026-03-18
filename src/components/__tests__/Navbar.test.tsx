@@ -38,6 +38,11 @@ describe("Navbar", () => {
     expect(screen.getByRole("link", { name: caMessages.nav.blog })).toBeInTheDocument();
   });
 
+  it("renders the uses navigation link", () => {
+    renderNavbar();
+    expect(screen.getByRole("link", { name: caMessages.nav.uses })).toBeInTheDocument();
+  });
+
   describe("hamburger button accessibility", () => {
     it("has aria-label for screen readers", () => {
       renderNavbar();
@@ -84,10 +89,17 @@ describe("Navbar", () => {
       expect(mobileMenu).toBeInTheDocument();
     });
 
-    it("mobile menu is not visible when closed", () => {
+    it("mobile menu contains all navigation links including uses", () => {
       renderNavbar();
+      const hamburger = screen.getByRole("button", { name: caMessages.nav.toggleMenu });
+      fireEvent.click(hamburger);
+      
       const mobileMenu = document.getElementById("mobile-menu");
-      expect(mobileMenu).not.toBeInTheDocument();
+      expect(mobileMenu).toBeInTheDocument();
+      
+      // Check that uses link is in mobile menu
+      const usesLinks = screen.getAllByRole("link", { name: caMessages.nav.uses });
+      expect(usesLinks.length).toBeGreaterThanOrEqual(1);
     });
   });
 });

@@ -10,6 +10,7 @@
     "about": "Sobre Mi",
     "experience": "Trajectòria",
     "now": "Ara",
+    "uses": "Eines",
     "blog": "Blog",
     "contact": "Contacte",
     "toggleMenu": "Obrir menú",
@@ -181,16 +182,38 @@
     "followHeading": "Segueix-me",
     "copyright": "Tots els drets reservats."
   },
-  "languageSwitcher": {
-    "label": "Idioma",
-    "ca": "CA",
-    "es": "ES",
-    "en": "EN"
+  "contact": {
+    "heading": "Contacte",
+    "description": "Tens alguna pregunta o proposta? Envia'm un missatge directament des d'aquí.",
+    "subtitle": "Tens alguna pregunta o proposta? Envia'm un missatge!",
+    "nameLabel": "Nom",
+    "emailLabel": "Correu electrònic",
+    "messageLabel": "Missatge",
+    "honeypotLabel": "No ompliu aquest camp",
+    "submitButton": "Envia el missatge",
+    "sendingButton": "Enviant...",
+    "successHeading": "Missatge enviat correctament!",
+    "successMessage": "Et respondré tan aviat com pugui.",
+    "sendAnother": "Envia un altre missatge",
+    "errorUnknown": "Error desconegut.",
+    "errorNetwork": "No s'ha pogut connectar amb el servidor.",
+    "namePlaceholder": "El teu nom",
+    "emailPlaceholder": "tu@exemple.com",
+    "messagePlaceholder": "En qué et puc ajudar?",
+    "submitting": "Enviant…",
+    "submitText": "Envia el missatge →",
+    "sendingText": "Enviant..."
   },
   "theme": {
     "toggleLabel": "Canviar tema",
     "light": "light",
     "dark": "dark"
+  },
+  "languageSwitcher": {
+    "label": "Idioma",
+    "ca": "CA",
+    "es": "ES",
+    "en": "EN"
   },
   "blog": {
     "heading": "Blog",
@@ -202,48 +225,6 @@
     "notFoundBack": "← Tornar al blog",
     "translationWarning": "Aquest article va ser escrit originalment en català. Estàs llegint una traducció automàtica.",
     "readOriginal": "Llegir l'original en català"
-  },
-  "contact": {
-    "heading": "Contacte",
-    "description": "Tens alguna pregunta o proposta? Envia'm un missatge directament des d'aquí.",
-    "subtitle": "Tens alguna pregunta o proposta? Envia'm un missatge!",
-    "nameLabel": "Nom",
-    "emailLabel": "Correu electrònic",
-    "messageLabel": "Missatge",
-    "namePlaceholder": "El teu nom",
-    "emailPlaceholder": "tu@exemple.com",
-    "messagePlaceholder": "En qué et puc ajudar?",
-    "submitButton": "Envia el missatge",
-    "submitting": "Enviant…",
-    "successHeading": "Missatge enviat correctament!",
-    "successMessage": "Et respondré tan aviat com pugui.",
-    "sendAnother": "Envia un altre missatge",
-    "errorUnknown": "Error desconegut.",
-    "errorNetwork": "No s'ha pogut connectar amb el servidor.",
-    "honeypotLabel": "No ompliu aquest camp",
-    "submitText": "Envia el missatge →",
-    "sendingText": "Enviant..."
-  },
-  "ara": {
-    "title": "Ara",
-    "description": "Què faig ara - la meva pàgina ara",
-    "heading": "Què faig ara",
-    "lastUpdated": "Última actualització: Abril 2025",
-    "location": "Visc a <strong>Sant Pere de Vilamajor</strong>, a la part baixa del <strong>Montseny</strong>.",
-    "occupation": "Sóc <code>programador web front-end</code> i actualment cerco feina.",
-    "prioritiesHeading": "Les meves prioritats i el estat de projectes",
-    "priorities": [
-      "Per capricis personals i decisions \"estratègiques\" l'empresa on treballava s'ha dissolt i em quedo a l'atur, això sí, només tinc agraïments cap a l'empresa on he estat aquests gairebé 8 anys.",
-      "Tocarà arrencar amb força la web amb <strong>Nuxt</strong> que tenia en stand-by.",
-      "A l''<strong>Sven</strong> li hem fet una neteja dental i li han tret un queixal (seny no n''ha tingut mai).",
-      "Hem tingut una mica de drama amb unes filtracions aquest mes de pluges, però ja està tot controlat."
-    ],
-    "excitementHeading": "Què m'engresca",
-    "excitement": [
-      "Ja estic a la recta final del llibre que vaig començar! M'està agradant i segurament continuaré amb la saga del <strong>Arxiu de les Tempestes</strong>.",
-      "Els bonsais estàn començant a brotar amb força, ara ve una època bonica de <strong>poda, transplantaments i formació</strong>."
-    ],
-    "footer": "Aquesta és la meva pàgina \"ara\" inspirada en el moviment <link>now page</link>."
   },
   "atAGlance": {
     "heading": "D'un cop d'ull",
@@ -275,9 +256,87 @@
     "languagesTitle": "Idiomes",
     "latestPostTitle": "Darrer article",
     "latestPostEmpty": "Pròximament...",
+    "latestPostRead": "Llegir article →",
     "readMore": "Llegir més →",
     "noPostsYet": "Properament...",
     "ctaText": "Tens algun projecte en ment?",
     "ctaButton": "Parlem →"
+  },
+  "ara": {
+    "title": "Ara",
+    "description": "Què faig ara - la meva pàgina ara",
+    "heading": "Què faig ara",
+    "lastUpdated": "Última actualització: Abril 2025",
+    "location": "Visc a <strong>Sant Pere de Vilamajor</strong>, a la part baixa del <strong>Montseny</strong>.",
+    "occupation": "Sóc <code>programador web front-end</code> i actualment cerco feina.",
+    "prioritiesHeading": "Les meves prioritats i el estat de projectes",
+    "priorities": [
+      "Per capricis personals i decisions \"estratègiques\" l'empresa on treballava s'ha dissolt i em quedo a l'atur, això sí, només tinc agraïments cap a l'empresa on he estat aquests gairebé 8 anys.",
+      "Tocarà arrencar amb força la web amb <strong>Nuxt</strong> que tenia en stand-by.",
+      "A l''<strong>Sven</strong> li hem fet una neteja dental i li han tret un queixal (seny no n''ha tingut mai).",
+      "Hem tingut una mica de drama amb unes filtracions aquest mes de pluges, però ja està tot controlat."
+    ],
+    "excitementHeading": "Què m'engresca",
+    "excitement": [
+      "Ja estic a la recta final del llibre que vaig començar! M'està agradant i segurament continuaré amb la saga del <strong>Arxiu de les Tempestes</strong>.",
+      "Els bonsais estàn començant a brotar amb força, ara ve una època bonica de <strong>poda, transplantaments i formació</strong>."
+    ],
+    "footer": "Aquesta és la meva pàgina \"ara\" inspirada en el moviment <link>now page</link>."
+  },
+  "uses": {
+    "title": "Eines",
+    "description": "El meu setup de desenvolupament — editor, terminal, hardware i aplicacions.",
+    "heading": "Eines",
+    "subtitle": "El meu setup de desenvolupament i les eines que faig servir diàriament.",
+    "editor": {
+      "heading": "Editor",
+      "items": [
+        "Webstorm com a editor principal amb el tema Islands Dark",
+        "Font: JetBrains Mono amb lligatures activades",
+        "Extensions: ESLint, Prettier, Angular Language Service, GitLens",
+        "Vim keybindings amb l'extensió VSCodeVim",
+        "Settings Sync activat per mantenir la configuració entre màquines"
+      ]
+    },
+    "terminal": {
+      "heading": "Terminal",
+      "items": [
+        "iTerm2 amb Oh My Zsh i el tema Powerlevel10k",
+        "tmux per a gestió de sessions i panells",
+        "Aliases personalitzats per a Git, npm i navegació ràpida",
+        "fzf per a cerca difusa de fitxers i historial",
+        "bat, exa i ripgrep com a alternatives modernes a cat, ls i grep"
+      ]
+    },
+    "browser": {
+      "heading": "Navegador i DevTools",
+      "items": [
+        "Brave Browser com a navegador principal",
+        "Chrome per a testing",
+        "Angular DevTools per a debugging d'aplicacions Angular",
+        "React Developer Tools quan treballo amb React",
+        "Lighthouse i Web Vitals per a auditories de rendiment"
+      ]
+    },
+    "hardware": {
+      "heading": "Hardware",
+      "items": [
+        "MacBook Pro 16\" M2 Max (2021)",
+        "2x Monitor extern BENQ 24\" 2K",
+        "Teclat mecànic Keychron K15 Pro amb switches Brown",
+        "Ratolí Logitech MX Master 3",
+        "Cadira ergonòmica Herman Miller Aeron"
+      ]
+    },
+    "desktop": {
+      "heading": "Aplicacions d'escriptori",
+      "items": [
+        "Raycast com a launcher i clipboard manager",
+        "Notion per a notes i documentació personal",
+        "Slack i Teams per a comunicació",
+        "Rancher Desktop per a contenidors de desenvolupament"
+      ]
+    },
+    "footer": "Inspirat per <link>uses.tech</link>, un directori de pàgines /uses de desenvolupadors."
   }
 }
