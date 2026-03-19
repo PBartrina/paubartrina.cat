@@ -8,10 +8,10 @@ const mockedFs = vi.mocked(fs);
 
 // Sample post content
 const SAMPLE_POST_CA = `---
-title: "Hola Món!"
+title: "Pla i primera versió"
 date: "2026-03-09"
-description: "El meu primer article al blog."
-tags: ["general"]
+description: "Com va sorgir la idea i perquè ara."
+tags: ["pla"]
 published: true
 ---
 
@@ -19,10 +19,10 @@ Contingut del post.
 `;
 
 const SAMPLE_POST_EN = `---
-title: "Hello World!"
+title: "Plan and first version"
 date: "2026-03-09"
-description: "My first blog post."
-tags: ["general"]
+description: "How the idea came about and why now."
+tags: ["plan"]
 published: true
 ---
 
@@ -40,7 +40,7 @@ describe('RSS feed route handler', () => {
     
     // Default fs mocks
     mockedFs.existsSync = vi.fn().mockReturnValue(true);
-    mockedFs.readdirSync = vi.fn().mockReturnValue(['hola-mon.mdx'] as unknown as fs.Dirent[]);
+    mockedFs.readdirSync = vi.fn().mockReturnValue(['pla-i-primera-versio.mdx'] as unknown as fs.Dirent[]);
     mockedFs.readFileSync = vi.fn().mockImplementation((filePath: fs.PathOrFileDescriptor) => {
       const p = filePath.toString().replace(/\\/g, '/');
       if (p.includes('/ca/')) return SAMPLE_POST_CA;
@@ -80,9 +80,9 @@ describe('RSS feed route handler', () => {
 
     const xml = await response.text();
     expect(xml).toContain('<item>');
-    expect(xml).toContain('<![CDATA[Hola Món!]]>');
-    expect(xml).toContain('https://paubartrina.cat/ca/blog/hola-mon');
-    expect(xml).toContain('<![CDATA[El meu primer article al blog.]]>');
+    expect(xml).toContain('<![CDATA[Pla i primera versió]]>');
+    expect(xml).toContain('https://paubartrina.cat/ca/blog/pla-i-primera-versio');
+    expect(xml).toContain('<![CDATA[Com va sorgir la idea i perquè ara.]]>');
   });
 
   it('returns 404 for invalid locale', async () => {
@@ -107,15 +107,15 @@ describe('RSS feed route handler', () => {
     expect(response.status).toBe(200);
     const xml = await response.text();
     expect(xml).toContain('<language>en</language>');
-    expect(xml).toContain('<![CDATA[Hello World!]]>');
+    expect(xml).toContain('<![CDATA[Plan and first version]]>');
   });
 
   it('works with Spanish locale', async () => {
     mockedFs.readFileSync = vi.fn().mockReturnValue(`---
-title: "Hola Mundo!"
+title: "Plan y primera versión"
 date: "2026-03-09"
-description: "Mi primer articulo."
-tags: ["general"]
+description: "Cómo surgió la idea y por qué ahora."
+tags: ["plan"]
 published: true
 ---
 
