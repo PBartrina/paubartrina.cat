@@ -56,6 +56,21 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   const t = await getTranslations({ locale, namespace: "blog" });
 
+  const blogPostingJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.description,
+    datePublished: post.date,
+    inLanguage: locale,
+    url: `https://paubartrina.cat/${locale}/blog/${slug}`,
+    author: {
+      "@type": "Person",
+      name: "Pau Bartrina",
+      url: "https://paubartrina.cat",
+    },
+  };
+
   const { content } = await compileMDX({
     source: post.content,
     options: {
@@ -67,6 +82,11 @@ export default async function BlogPostPage({ params }: PageProps) {
   });
 
   return (
+    <>
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingJsonLd) }}
+    />
     <div className="mx-auto max-w-3xl px-6 py-12">
       <Link
         href="/blog"
@@ -117,5 +137,6 @@ export default async function BlogPostPage({ params }: PageProps) {
         <div className="prose prose-lg max-w-none">{content}</div>
       </article>
     </div>
+    </>
   );
 }

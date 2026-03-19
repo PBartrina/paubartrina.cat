@@ -16,8 +16,25 @@ export default async function Home({ params }: PageProps) {
 
   const latestPost = getAllPosts(locale)[0] ?? null;
 
+  const personJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: "Pau Bartrina",
+    jobTitle: "Front-end Web Developer",
+    url: `https://paubartrina.cat/${locale}`,
+    sameAs: [
+      "https://bsky.app/profile/paubartrina.cat",
+      "https://linkedin.com/in/paubartrina",
+      "https://github.com/PBartrina",
+    ],
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+      />
       <Hero />
       <AtAGlance latestPost={latestPost} />
       <Skills />
