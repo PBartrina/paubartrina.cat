@@ -8,6 +8,7 @@ import remarkGfm from "remark-gfm";
 import { getAllSlugs, getPostBySlug, getAvailableLocales } from "@/lib/blog";
 import { Link } from "@/i18n/navigation";
 import { locales } from "@/i18n/config";
+import ReadingProgress from "@/components/ReadingProgress";
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>;
@@ -83,6 +84,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   return (
     <>
+    <ReadingProgress />
     <script
       type="application/ld+json"
       dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingJsonLd) }}
