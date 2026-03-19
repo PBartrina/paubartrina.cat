@@ -15,21 +15,26 @@ const ThemeContext = createContext<ThemeContextType>({
 });
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  // Read persisted theme from localStorage immediately (lazy initializer).
-  // The blocking script in <head> has already set data-theme on the document,
-  // so we read localStorage to sync React state with that.
-  const [theme, setTheme] = useState<Theme>(() => {
-    if (typeof window === "undefined") return "light";
-    const stored = localStorage.getItem("theme") as Theme | null;
-    if (stored === "dark" || stored === "light") return stored;
-    // If no stored preference, check system preference (matching the blocking script logic)
-    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      return "dark";
-    }
-    return "light";
-  });
+  // Start with "light" on both server and client to avoid hydration mismatch.
+  // The blocking script in <head> already sets the correct data-theme visually.
+  // We sync React state from localStorage after mount.
+  const [theme, setTheme] = useState<Theme>("light");
 
-  // Sync document attribute when theme changes (for toggles after mount)
+  useEffect(() => {
+    const stored = localStorage.getItem("theme") as Theme | null;
+    let initial: Theme;
+    if (stored === "dark" || stored === "light") {
+      initial = stored;
+    } else {
+      initial = window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light";
+    }
+    setTheme(initial);
+    document.documentElement.setAttribute("data-theme", initial);
+  }, []);
+
+  // Sync document attribute when theme changes after mount
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
