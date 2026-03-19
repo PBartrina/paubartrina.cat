@@ -8,6 +8,7 @@ import remarkGfm from "remark-gfm";
 import { getAllSlugs, getPostBySlug, getAvailableLocales } from "@/lib/blog";
 import { Link } from "@/i18n/navigation";
 import { locales } from "@/i18n/config";
+import ReadingProgress from "@/components/ReadingProgress";
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>;
@@ -67,6 +68,8 @@ export default async function BlogPostPage({ params }: PageProps) {
   });
 
   return (
+    <>
+    <ReadingProgress />
     <div className="mx-auto max-w-3xl px-6 py-12">
       <Link
         href="/blog"
@@ -117,5 +120,6 @@ export default async function BlogPostPage({ params }: PageProps) {
         <div className="prose prose-lg max-w-none">{content}</div>
       </article>
     </div>
+    </>
   );
 }
