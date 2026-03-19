@@ -15,18 +15,16 @@ const ThemeContext = createContext<ThemeContextType>({
 });
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  // Read persisted theme from localStorage immediately (lazy initializer).
-  // The blocking script in <head> has already set data-theme on the document,
-  // so we read localStorage to sync React state with that.
+  // The lazy initializer runs only on the client. The server always returns
+  // "light", which may differ from the client value — suppressHydrationWarning
+  // on ThemeToggle's button suppresses that expected mismatch.
   const [theme, setTheme] = useState<Theme>(() => {
     if (typeof window === "undefined") return "light";
     const stored = localStorage.getItem("theme") as Theme | null;
     if (stored === "dark" || stored === "light") return stored;
-    // If no stored preference, check system preference (matching the blocking script logic)
-    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-      return "dark";
-    }
-    return "light";
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
   });
 
   // Sync document attribute when theme changes (for toggles after mount)

@@ -42,7 +42,7 @@ describe('RSS feed route handler', () => {
     mockedFs.existsSync = vi.fn().mockReturnValue(true);
     mockedFs.readdirSync = vi.fn().mockReturnValue(['hola-mon.mdx'] as unknown as fs.Dirent[]);
     mockedFs.readFileSync = vi.fn().mockImplementation((filePath: fs.PathOrFileDescriptor) => {
-      const p = filePath.toString();
+      const p = filePath.toString().replace(/\\/g, '/');
       if (p.includes('/ca/')) return SAMPLE_POST_CA;
       if (p.includes('/en/')) return SAMPLE_POST_EN;
       return SAMPLE_POST_CA;
