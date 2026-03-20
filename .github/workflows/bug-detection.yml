@@ -1,4 +1,4 @@
-name: Bug Detector
+name: Code Quality Scanner
 
 on:
   schedule:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   detect:
-    name: Detect Bugs
+    name: Scan Code Quality
     runs-on: ubuntu-latest
     permissions:
       contents: read
