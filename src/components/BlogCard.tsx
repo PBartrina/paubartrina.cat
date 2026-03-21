@@ -3,12 +3,15 @@ import type { BlogPostMeta } from "@/lib/blog";
 
 export default function BlogCard({ post }: { post: BlogPostMeta }) {
   return (
-    <article className="rounded-lg border border-card-border bg-card-bg p-6 transition-shadow hover:shadow-lg">
-      <Link href={`/blog/${post.slug}`}>
-        <h2 className="mb-2 font-mono text-xl font-bold text-text-primary hover:text-text-accent">
-          {post.title}
-        </h2>
-      </Link>
+    <article className="relative rounded-lg border border-card-border bg-card-bg p-6 transition-shadow hover:shadow-lg">
+      <Link
+        href={`/blog/${post.slug}`}
+        className="absolute inset-0 rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-text-accent"
+        aria-label={post.title}
+      />
+      <h2 className="mb-2 font-mono text-xl font-bold text-text-primary">
+        {post.title}
+      </h2>
       <div className="mb-3 flex flex-wrap gap-3 font-mono text-xs text-text-secondary">
         <time>{post.date}</time>
         <span>{post.readingTime}</span>
