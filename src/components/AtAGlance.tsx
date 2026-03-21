@@ -1,17 +1,15 @@
-"use client";
-
-import { useLocale, useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import type { BlogPostMeta } from "@/lib/blog";
 
 interface AtAGlanceProps {
   latestPost: BlogPostMeta | null;
+  locale: string;
 }
 
-export default function AtAGlance({ latestPost }: AtAGlanceProps) {
-  const locale = useLocale();
-  const t = useTranslations("atAGlance");
-  const about = useTranslations("about");
+export default async function AtAGlance({ latestPost, locale }: AtAGlanceProps) {
+  const t = await getTranslations({ locale, namespace: "atAGlance" });
+  const about = await getTranslations({ locale, namespace: "about" });
 
   const coreTech = t.raw("coreTech") as Array<{
     name: string;
@@ -119,7 +117,11 @@ export default function AtAGlance({ latestPost }: AtAGlanceProps) {
                 </Link>
                 <div className="mt-2 flex gap-3 font-mono text-xs text-text-secondary">
                   <time dateTime={latestPost.date}>
-                    {new Date(latestPost.date).toLocaleDateString(locale, { year: "numeric", month: "short", day: "numeric" })}
+                    {new Date(latestPost.date).toLocaleDateString(locale, {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
                   </time>
                   <span>{latestPost.readingTime}</span>
                 </div>

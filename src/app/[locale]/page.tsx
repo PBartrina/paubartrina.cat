@@ -36,7 +36,7 @@ export default async function Home({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
       />
       <Hero />
-      <AtAGlance latestPost={latestPost} />
+      <AtAGlance latestPost={latestPost} locale={locale} />
       <Skills />
       <Experience />
       <Education />
