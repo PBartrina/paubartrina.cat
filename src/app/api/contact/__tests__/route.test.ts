@@ -114,6 +114,23 @@ describe("POST /api/contact", () => {
     expect(json.error).toBeTruthy();
   });
 
+  it("escapes HTML in user-supplied fields to prevent XSS", async () => {
+    mockSend.mockClear();
+    const { POST } = await import("../route");
+    const xssBody = {
+      name: '<script>alert(1)</script>',
+      email: "xss@example.com",
+      message: '<img src=x onerror=alert(1)>',
+      website: "",
+    };
+    await POST(makeRequest(xssBody, "10.10.10.10"));
+    const sentHtml = mockSend.mock.calls[0][0].html;
+    expect(sentHtml).not.toContain("<script>");
+    expect(sentHtml).not.toContain("<img");
+    expect(sentHtml).toContain("&lt;script&gt;");
+    expect(sentHtml).toContain("&lt;img");
+  });
+
   it("returns 500 when RESEND_API_KEY env var is missing", async () => {
     vi.stubEnv("RESEND_API_KEY", "");
     const { POST } = await import("../route");

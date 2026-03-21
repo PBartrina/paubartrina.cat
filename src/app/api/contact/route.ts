@@ -23,6 +23,15 @@ function isRateLimited(ip: string): boolean {
   return false;
 }
 
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#x27;");
+}
+
 function isValidEmail(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
@@ -85,13 +94,13 @@ export async function POST(req: NextRequest) {
     await resend.emails.send({
       from: "Web de Pau Bartrina <noreply@paubartrina.cat>",
       to: contactEmail,
-      replyTo: `${name.trim()} <${email.trim()}>`,
-      subject: `Nou missatge de contacte de ${name.trim()}`,
+      replyTo: `${escapeHtml(name.trim())} <${email.trim()}>`,
+      subject: `Nou missatge de contacte de ${escapeHtml(name.trim())}`,
       html: `
-        <p><strong>Nom:</strong> ${name.trim()}</p>
-        <p><strong>Correu:</strong> ${email.trim()}</p>
+        <p><strong>Nom:</strong> ${escapeHtml(name.trim())}</p>
+        <p><strong>Correu:</strong> ${escapeHtml(email.trim())}</p>
         <hr />
-        <p>${message.trim().replace(/\n/g, "<br>")}</p>
+        <p>${escapeHtml(message.trim()).replace(/\n/g, "<br>")}</p>
       `,
     });
 
