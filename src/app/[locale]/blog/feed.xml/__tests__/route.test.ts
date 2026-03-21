@@ -159,6 +159,33 @@ Contenido.
     expect(response.headers.get('Cache-Control')).toBe('public, max-age=3600, s-maxage=3600');
   });
 
+  it('escapes dangerous content in CDATA and XML fields', async () => {
+    mockedFs.readFileSync = vi.fn().mockReturnValue(`---
+title: "Test ]]> injection & <script>alert(1)</script>"
+date: "2026-03-09"
+description: "Desc with ]]> and <img onerror=x>"
+tags: ["test"]
+published: true
+---
+
+Content.
+`);
+
+    const { GET } = await importRoute();
+    const response = await GET(
+      new Request('http://localhost/ca/blog/feed.xml'),
+      { params: Promise.resolve({ locale: 'ca' }) }
+    );
+
+    const xml = await response.text();
+    // The literal ]]> from the title should be split into ]]]]><![CDATA[>
+    expect(xml).toContain(']]]]><![CDATA[>');
+    // The <script> tag inside CDATA is safe (CDATA content is not parsed as markup)
+    // but verify the CDATA sections are properly terminated
+    expect(xml).toContain('<title><![CDATA[');
+    expect(xml).toContain('<description><![CDATA[');
+  });
+
   it('includes atom:link self reference', async () => {
     const { GET } = await importRoute();
     const response = await GET(

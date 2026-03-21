@@ -1,6 +1,18 @@
 import { getAllPosts } from '@/lib/blog';
 import { locales } from '@/i18n/config';
 
+function escapeXml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function safeCdata(str: string): string {
+  return str.replace(/]]>/g, ']]]]><![CDATA[>');
+}
+
 export async function GET(
   _req: Request,
   { params }: { params: Promise<{ locale: string }> }
@@ -18,11 +30,11 @@ export async function GET(
     .map(
       (p) => `
     <item>
-      <title><![CDATA[${p.title}]]></title>
-      <link>${base}/${locale}/blog/${p.slug}</link>
-      <guid isPermaLink="true">${base}/${locale}/blog/${p.slug}</guid>
+      <title><![CDATA[${safeCdata(p.title)}]]></title>
+      <link>${base}/${locale}/blog/${escapeXml(p.slug)}</link>
+      <guid isPermaLink="true">${base}/${locale}/blog/${escapeXml(p.slug)}</guid>
       <pubDate>${new Date(p.date).toUTCString()}</pubDate>
-      <description><![CDATA[${p.description}]]></description>
+      <description><![CDATA[${safeCdata(p.description)}]]></description>
     </item>`
     )
     .join('');
