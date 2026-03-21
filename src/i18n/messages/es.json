@@ -224,7 +224,8 @@
     "notFoundMessage": "El artículo que buscas no existe o ha sido eliminado.",
     "notFoundBack": "← Volver al blog",
     "translationWarning": "Este artículo fue escrito originalmente en catalán. Estás leyendo una traducción automática.",
-    "readOriginal": "Leer el original en catalán"
+    "readOriginal": "Leer el original en catalán",
+    "allTags": "Todos"
   },
   "atAGlance": {
     "heading": "De un vistazo",

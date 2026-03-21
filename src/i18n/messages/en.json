@@ -224,7 +224,8 @@
     "notFoundMessage": "The post you're looking for doesn't exist or has been removed.",
     "notFoundBack": "← Back to blog",
     "translationWarning": "This article was originally written in Catalan. You are reading an automatic translation.",
-    "readOriginal": "Read the original in Catalan"
+    "readOriginal": "Read the original in Catalan",
+    "allTags": "All"
   },
   "atAGlance": {
     "heading": "At a Glance",

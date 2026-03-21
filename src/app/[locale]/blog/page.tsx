@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { getAllPosts } from "@/lib/blog";
-import BlogCard from "@/components/BlogCard";
+import BlogList from "@/components/BlogList";
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -35,11 +35,7 @@ export default async function BlogPage({ params }: PageProps) {
       {posts.length === 0 ? (
         <p className="font-mono text-text-secondary">{t("emptyState")}</p>
       ) : (
-        <div className="space-y-6">
-          {posts.map((post) => (
-            <BlogCard key={post.slug} post={post} />
-          ))}
-        </div>
+        <BlogList posts={posts} allTagsLabel={t("allTags")} />
       )}
     </div>
   );
