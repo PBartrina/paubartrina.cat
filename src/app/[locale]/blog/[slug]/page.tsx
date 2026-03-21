@@ -33,17 +33,34 @@ export async function generateMetadata({
   if (!post) return {};
 
   const availableLocales = getAvailableLocales(slug);
+  const canonicalUrl = `https://paubartrina.cat/${locale}/blog/${slug}`;
+  const ogImageUrl = `https://paubartrina.cat/${locale}/blog/${slug}/opengraph-image`;
 
   return {
     title: post.title,
     description: post.description,
     alternates: {
+      canonical: canonicalUrl,
       languages: Object.fromEntries(
         availableLocales.map((l) => [
           l,
           `https://paubartrina.cat/${l}/blog/${slug}`,
         ])
       ),
+    },
+    openGraph: {
+      title: post.title,
+      description: post.description,
+      url: canonicalUrl,
+      type: 'article',
+      publishedTime: post.date,
+      images: [{ url: ogImageUrl, width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.title,
+      description: post.description,
+      images: [ogImageUrl],
     },
   };
 }
@@ -106,37 +123,37 @@ export default async function BlogPostPage({ params }: PageProps) {
           <Link
             href={`/blog/${slug}`}
             locale="ca"
-            className="text-sm text-amber-800 underline dark:text-amber-200"
+            className="mt-2 inline-block text-sm text-amber-600 hover:underline dark:text-amber-400"
           >
             {t("readOriginal")}
           </Link>
         </div>
       )}
 
-      <article>
-        <header className="mb-8">
-          <h1 className="mb-4 font-mono text-4xl font-bold text-text-primary">
-            {post.title}
-          </h1>
-          <div className="flex flex-wrap gap-4 font-mono text-sm text-text-secondary">
-            <time>{post.date}</time>
-            <span>{post.readingTime}</span>
+      <header className="mb-8">
+        <h1 className="mb-4 font-mono text-3xl font-bold text-text-primary md:text-4xl">
+          {post.title}
+        </h1>
+        <div className="flex flex-wrap gap-3 font-mono text-sm text-text-secondary">
+          <time>{post.date}</time>
+          <span>{post.readingTime}</span>
+        </div>
+        {post.tags.length > 0 && (
+          <div className="mt-4 flex flex-wrap gap-2">
+            {post.tags.map((tag) => (
+              <span
+                key={tag}
+                className="rounded-full border border-border-color px-3 py-1 font-mono text-xs text-text-secondary"
+              >
+                {tag}
+              </span>
+            ))}
           </div>
-          {post.tags.length > 0 && (
-            <div className="mt-4 flex flex-wrap gap-2">
-              {post.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full border border-border-color px-3 py-1 font-mono text-xs text-text-secondary"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          )}
-        </header>
+        )}
+      </header>
 
-        <div className="prose prose-lg max-w-none">{content}</div>
+      <article className="prose prose-lg max-w-none">
+        {content}
       </article>
     </div>
     </>
