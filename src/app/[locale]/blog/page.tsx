@@ -2,9 +2,14 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { getAllPosts } from "@/lib/blog";
 import BlogList from "@/components/BlogList";
+import { locales } from "@/i18n/config";
 
 interface PageProps {
   params: Promise<{ locale: string }>;
+}
+
+export function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
 }
 
 export async function generateMetadata({
