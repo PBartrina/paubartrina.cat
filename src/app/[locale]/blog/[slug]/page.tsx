@@ -9,6 +9,7 @@ import { getAllSlugs, getPostBySlug, getAvailableLocales } from "@/lib/blog";
 import { Link } from "@/i18n/navigation";
 import { locales } from "@/i18n/config";
 import ReadingProgress from "@/components/ReadingProgress";
+import CodeBlock from "@/components/CodeBlock";
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>;
@@ -91,6 +92,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   const { content } = await compileMDX({
     source: post.content,
+    components: { pre: CodeBlock },
     options: {
       mdxOptions: {
         remarkPlugins: [remarkGfm],
