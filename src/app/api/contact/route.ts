@@ -5,9 +5,18 @@ import { Resend } from "resend";
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
 const RATE_LIMIT = 5;
 const RATE_WINDOW_MS = 15 * 60 * 1000;
+const MAX_MAP_SIZE = 10_000;
 
 function isRateLimited(ip: string): boolean {
   const now = Date.now();
+
+  // Evict expired entries when the map grows too large
+  if (rateLimitMap.size > MAX_MAP_SIZE) {
+    for (const [key, val] of rateLimitMap) {
+      if (now > val.resetTime) rateLimitMap.delete(key);
+    }
+  }
+
   const record = rateLimitMap.get(ip);
 
   if (!record || now > record.resetTime) {
@@ -21,6 +30,11 @@ function isRateLimited(ip: string): boolean {
 
   record.count += 1;
   return false;
+}
+
+function sanitizeHeaderValue(str: string): string {
+  // Strip control characters (CR, LF, NUL, etc.) to prevent header injection
+  return str.replace(/[\x00-\x1F\x7F]/g, "");
 }
 
 function escapeHtml(str: string): string {
@@ -94,7 +108,7 @@ export async function POST(req: NextRequest) {
     await resend.emails.send({
       from: "Web de Pau Bartrina <noreply@paubartrina.cat>",
       to: contactEmail,
-      replyTo: `${escapeHtml(name.trim())} <${email.trim()}>`,
+      replyTo: `"${sanitizeHeaderValue(name.trim()).replace(/"/g, '\\"')}" <${email.trim()}>`,
       subject: `Nou missatge de contacte de ${escapeHtml(name.trim())}`,
       html: `
         <p><strong>Nom:</strong> ${escapeHtml(name.trim())}</p>
