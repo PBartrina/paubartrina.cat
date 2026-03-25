@@ -5,6 +5,7 @@ import Skills from "@/components/Skills";
 import Experience from "@/components/Experience";
 import Education from "@/components/Education";
 import { getAllPosts } from "@/lib/blog";
+import { safeJsonLd } from "@/lib/utils";
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -33,7 +34,7 @@ export default async function Home({ params }: PageProps) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(personJsonLd) }}
       />
       <Hero />
       <AtAGlance latestPost={latestPost} locale={locale} />

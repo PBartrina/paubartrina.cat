@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { slugify } from "../utils";
+import { slugify, safeJsonLd } from "../utils";
 
 describe("slugify", () => {
   it("lowercases the string", () => {
@@ -49,5 +49,24 @@ describe("slugify", () => {
 
   it("returns empty string for all-punctuation input", () => {
     expect(slugify("!@#$%^&*()")).toBe("");
+  });
+});
+
+describe("safeJsonLd", () => {
+  it("serialises a plain object to JSON", () => {
+    const result = safeJsonLd({ "@type": "Person", name: "Pau" });
+    expect(JSON.parse(result)).toEqual({ "@type": "Person", name: "Pau" });
+  });
+
+  it("escapes < to prevent </script> breakout", () => {
+    const result = safeJsonLd({ title: "</script><script>alert(1)</script>" });
+    expect(result).not.toContain("</script>");
+    expect(result).toContain("\\u003c");
+  });
+
+  it("round-trips correctly after unescaping", () => {
+    const obj = { headline: "A <em>great</em> post" };
+    const escaped = safeJsonLd(obj);
+    expect(JSON.parse(escaped)).toEqual(obj);
   });
 });

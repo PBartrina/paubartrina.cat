@@ -10,6 +10,7 @@ import { Link } from "@/i18n/navigation";
 import { locales } from "@/i18n/config";
 import ReadingProgress from "@/components/ReadingProgress";
 import CodeBlock from "@/components/CodeBlock";
+import { safeJsonLd } from "@/lib/utils";
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>;
@@ -106,7 +107,7 @@ export default async function BlogPostPage({ params }: PageProps) {
     <ReadingProgress />
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingJsonLd) }}
+      dangerouslySetInnerHTML={{ __html: safeJsonLd(blogPostingJsonLd) }}
     />
     <div className="mx-auto max-w-3xl px-6 py-12">
       <Link
