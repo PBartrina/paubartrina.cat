@@ -83,7 +83,8 @@ function readSourceSnapshot() {
 async function getAllAutomatedIssues() {
   const all = [];
   for (const state of ["open", "closed"]) {
-    const url = `https://api.github.com/repos/${OWNER}/${REPO_NAME}/issues?labels=bug,automated&state=${state}&per_page=100`;
+    // Fetch ALL automated issues (bugs AND enhancements) so dedup is comprehensive
+    const url = `https://api.github.com/repos/${OWNER}/${REPO_NAME}/issues?labels=automated&state=${state}&per_page=100`;
     const resp = await fetch(url, {
       headers: {
         Authorization: `Bearer ${GITHUB_TOKEN}`,
@@ -130,14 +131,49 @@ function wordSet(str) {
   );
 }
 
-function isDuplicate(newTitle, existingIssues) {
-  const lower = newTitle.toLowerCase();
-  const newWords = wordSet(newTitle);
+function isDuplicate(newTitle, newBody, existingIssues) {
+  const lowerTitle = newTitle.toLowerCase();
+  const newTitleWords = wordSet(newTitle);
+  // Extract file paths from the new issue body for location-based dedup
+  const newPaths = new Set(
+    [...(newBody || "").matchAll(/`([^`]+\.[a-z]{2,4})`/g)]
+      .map((m) => m[1])
+      .filter((p) => p.includes("/"))
+  );
+
   return existingIssues.some((issue) => {
-    if (issue.title.toLowerCase() === lower) return true;
-    const existingWords = wordSet(issue.title);
-    const overlap = [...newWords].filter((w) => existingWords.has(w)).length;
-    return overlap / Math.max(newWords.size, existingWords.size) > 0.5;
+    // Exact title match
+    if (issue.title.toLowerCase() === lowerTitle) return true;
+
+    // Title word overlap ≥ 60% (raised from 50%)
+    const existingTitleWords = wordSet(issue.title);
+    const titleOverlap = [...newTitleWords].filter((w) =>
+      existingTitleWords.has(w)
+    ).length;
+    if (
+      titleOverlap / Math.max(newTitleWords.size, existingTitleWords.size) >
+      0.6
+    )
+      return true;
+
+    // Same file path AND overlapping title words ≥ 40%
+    if (newPaths.size > 0) {
+      const existingPaths = new Set(
+        [...(issue.body || "").matchAll(/`([^`]+\.[a-z]{2,4})`/g)]
+          .map((m) => m[1])
+          .filter((p) => p.includes("/"))
+      );
+      const sharedPaths = [...newPaths].filter((p) => existingPaths.has(p));
+      if (
+        sharedPaths.length > 0 &&
+        titleOverlap /
+          Math.max(newTitleWords.size, existingTitleWords.size) >
+          0.4
+      )
+        return true;
+    }
+
+    return false;
   });
 }
 
@@ -185,10 +221,17 @@ async function main() {
   );
 
   const existingIssuesSummary = existingIssues
-    .map(
-      (i) =>
-        `- [${i.state}] ${i.title}: ${(i.body || "").slice(0, 150).replace(/\n/g, " ")}`
-    )
+    .map((i) => {
+      const body = (i.body || "").replace(/\n/g, " ");
+      // Extract file paths from the body to help Claude do semantic dedup
+      const paths = [...body.matchAll(/`([^`]+\.[a-z]{2,4})`/g)]
+        .map((m) => m[1])
+        .filter((p) => p.includes("/") || p.includes("."))
+        .slice(0, 5)
+        .join(", ");
+      const pathHint = paths ? ` [files: ${paths}]` : "";
+      return `- [#${i.number}] [${i.state}] ${i.title}${pathHint}: ${body.slice(0, 300)}`;
+    })
     .join("\n");
 
   // 4. Build source context
@@ -333,7 +376,7 @@ If there are no actionable issues, return an empty array: []`;
 
   let created = 0;
   for (const issue of issues) {
-    if (isDuplicate(issue.title, existingIssues)) {
+    if (isDuplicate(issue.title, issue.body, existingIssues)) {
       console.log(`  ⏭️  Skipping (duplicate): ${issue.title}`);
       continue;
     }

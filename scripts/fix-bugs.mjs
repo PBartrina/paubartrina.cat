@@ -118,9 +118,10 @@ async function githubRequest(path, options = {}) {
   return resp.json();
 }
 
-async function getOpenBugIssues() {
+async function getApprovedBugIssues() {
+  // Only fix bugs that a human has explicitly approved
   return githubRequest(
-    `/repos/${OWNER}/${REPO_NAME}/issues?labels=bug,automated&state=open&per_page=50`
+    `/repos/${OWNER}/${REPO_NAME}/issues?labels=bug,automated,approved&state=open&per_page=50`
   );
 }
 
@@ -128,6 +129,24 @@ async function getApprovedEnhancementIssues() {
   return githubRequest(
     `/repos/${OWNER}/${REPO_NAME}/issues?labels=enhancement,automated,approved&state=open&per_page=50`
   );
+}
+
+/**
+ * Returns true if there is already an open PR whose body references this
+ * issue number (e.g. "closes #42", "fixes #42", "#42").
+ * Uses the GitHub search API.
+ */
+async function hasOpenPR(issueNumber) {
+  try {
+    const q = encodeURIComponent(
+      `repo:${OWNER}/${REPO_NAME} is:pr is:open #${issueNumber} in:body`
+    );
+    const result = await githubRequest(`/search/issues?q=${q}&per_page=5`);
+    return (result.total_count ?? 0) > 0;
+  } catch {
+    // If search API fails, play it safe and don't skip
+    return false;
+  }
 }
 
 async function createPR(title, body, head, base = "main") {
@@ -377,15 +396,18 @@ async function main() {
           const labels = (issue.labels ?? []).map((l) =>
             typeof l === "string" ? l : l.name
           );
+          // When invoked by number, require approved on both bugs and enhancements
           const isBug =
-            labels.includes("bug") && labels.includes("automated");
+            labels.includes("bug") &&
+            labels.includes("automated") &&
+            labels.includes("approved");
           const isEnh =
             labels.includes("enhancement") &&
             labels.includes("automated") &&
             labels.includes("approved");
           if (!isBug && !isEnh) {
             console.warn(
-              `    ⚠️  Issue #${num} doesn't have the right labels (bug+automated or enhancement+automated+approved). Skipping.`
+              `    ⚠️  Issue #${num} doesn't have the right labels (bug+automated+approved or enhancement+automated+approved). Skipping.`
             );
             return null;
           }
@@ -398,7 +420,7 @@ async function main() {
     );
     allIssues = fetched.filter(Boolean);
   } else {
-    const bugIssues = (await getOpenBugIssues()).map((i) => ({
+    const bugIssues = (await getApprovedBugIssues()).map((i) => ({
       ...i,
       _type: "bug",
     }));
@@ -431,6 +453,13 @@ async function main() {
     console.log(
       `\n${emoji} Issue #${issue.number}: ${issue.title} [${issue._type}]`
     );
+
+    // Skip if an open PR already references this issue
+    const prExists = await hasOpenPR(issue.number);
+    if (prExists) {
+      console.log(`    ⏭️  Skipping — an open PR already references #${issue.number}.`);
+      continue;
+    }
 
     // Ensure clean state
     ensureOnMain();
