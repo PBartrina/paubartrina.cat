@@ -1,4 +1,4 @@
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 
 const socialLinks = [
@@ -9,6 +9,7 @@ const socialLinks = [
 
 export default function Footer() {
   const t = useTranslations("footer");
+  const locale = useLocale();
 
   return (
     <footer id="contact" className="bg-bg-dark text-text-on-dark">
@@ -43,7 +44,7 @@ export default function Footer() {
                 </a>
               ))}
               <a
-                href="/blog/feed.xml"
+                href={`/${locale}/blog/feed.xml`}
                 className="rounded-md border border-text-on-dark px-4 py-2 font-mono text-sm transition-colors hover:border-text-accent hover:text-text-accent"
                 title="RSS Feed"
               >
