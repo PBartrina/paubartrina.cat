@@ -1,7 +1,7 @@
 /**
  * @vitest-environment happy-dom
  */
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import BlogList from "@/components/BlogList";
 import type { BlogPostMeta } from "@/lib/blog";
@@ -14,10 +14,26 @@ vi.mock("@/components/BlogCard", () => ({
   ),
 }));
 
-vi.mock("@/i18n/navigation", () => ({
-  Link: ({ href, children, ...props }: { href: string; children: React.ReactNode }) => (
-    <a href={href} {...props}>{children}</a>
-  ),
+vi.mock("@/components/TagFilter", () => ({
+  default: ({
+    allTags,
+    allTagsLabel,
+    selectedTag,
+  }: {
+    allTags: string[];
+    allTagsLabel: string;
+    selectedTag?: string;
+  }) =>
+    allTags.length > 0 ? (
+      <div aria-label="Filter by tag">
+        <button>{allTagsLabel}</button>
+        {allTags.map((tag) => (
+          <button key={tag} aria-pressed={selectedTag === tag}>
+            {tag}
+          </button>
+        ))}
+      </div>
+    ) : null,
 }));
 
 const makePosts = (): BlogPostMeta[] => [
@@ -63,33 +79,30 @@ describe("BlogList", () => {
     expect(screen.getByRole("button", { name: "typescript" })).toBeTruthy();
   });
 
-  it("filters posts when a tag is selected", () => {
-    render(<BlogList posts={makePosts()} allTagsLabel="All" />);
-    fireEvent.click(screen.getByRole("button", { name: "react" }));
+  it("filters posts when selectedTag='react'", () => {
+    render(
+      <BlogList posts={makePosts()} allTagsLabel="All" selectedTag="react" />
+    );
     const cards = screen.getAllByTestId("blog-card");
     expect(cards).toHaveLength(2);
     expect(cards[0]).toHaveAttribute("data-slug", "post-a");
     expect(cards[1]).toHaveAttribute("data-slug", "post-b");
   });
 
-  it("shows only matching post when tag with one post is selected", () => {
-    render(<BlogList posts={makePosts()} allTagsLabel="All" />);
-    fireEvent.click(screen.getByRole("button", { name: "typescript" }));
+  it("filters to one post when selectedTag='typescript'", () => {
+    render(
+      <BlogList
+        posts={makePosts()}
+        allTagsLabel="All"
+        selectedTag="typescript"
+      />
+    );
     const cards = screen.getAllByTestId("blog-card");
     expect(cards).toHaveLength(2);
   });
 
-  it("deselects tag and shows all posts when same tag clicked again", () => {
-    render(<BlogList posts={makePosts()} allTagsLabel="All" />);
-    fireEvent.click(screen.getByRole("button", { name: "react" }));
-    fireEvent.click(screen.getByRole("button", { name: "react" }));
-    expect(screen.getAllByTestId("blog-card")).toHaveLength(3);
-  });
-
-  it("shows all posts when All button is clicked after a tag filter", () => {
-    render(<BlogList posts={makePosts()} allTagsLabel="All" />);
-    fireEvent.click(screen.getByRole("button", { name: "react" }));
-    fireEvent.click(screen.getByRole("button", { name: "All" }));
+  it("shows all posts when selectedTag is undefined", () => {
+    render(<BlogList posts={makePosts()} allTagsLabel="All" selectedTag={undefined} />);
     expect(screen.getAllByTestId("blog-card")).toHaveLength(3);
   });
 
@@ -103,7 +116,18 @@ describe("BlogList", () => {
     render(<BlogList posts={makePosts()} allTagsLabel="All" />);
     const buttons = screen.getAllByRole("button");
     const tagLabels = buttons.map((b) => b.textContent);
-    expect(tagLabels).toContain("react");
-    expect(tagLabels.indexOf("react")).toBeLessThan(tagLabels.indexOf("typescript"));
+    expect(tagLabels.indexOf("react")).toBeLessThan(
+      tagLabels.indexOf("typescript")
+    );
+  });
+
+  it("marks the selected tag as active", () => {
+    render(
+      <BlogList posts={makePosts()} allTagsLabel="All" selectedTag="react" />
+    );
+    const reactBtn = screen.getByRole("button", { name: "react" });
+    expect(reactBtn.getAttribute("aria-pressed")).toBe("true");
+    const tsBtn = screen.getByRole("button", { name: "typescript" });
+    expect(tsBtn.getAttribute("aria-pressed")).toBe("false");
   });
 });

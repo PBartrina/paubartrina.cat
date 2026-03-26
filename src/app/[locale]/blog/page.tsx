@@ -6,6 +6,7 @@ import { locales } from "@/i18n/config";
 
 interface PageProps {
   params: Promise<{ locale: string }>;
+  searchParams: Promise<{ tag?: string }>;
 }
 
 export function generateStaticParams() {
@@ -24,8 +25,9 @@ export async function generateMetadata({
   };
 }
 
-export default async function BlogPage({ params }: PageProps) {
+export default async function BlogPage({ params, searchParams }: PageProps) {
   const { locale } = await params;
+  const { tag } = await searchParams;
   setRequestLocale(locale);
 
   const t = await getTranslations({ locale, namespace: "blog" });
@@ -40,7 +42,7 @@ export default async function BlogPage({ params }: PageProps) {
       {posts.length === 0 ? (
         <p className="font-mono text-text-secondary">{t("emptyState")}</p>
       ) : (
-        <BlogList posts={posts} allTagsLabel={t("allTags")} />
+        <BlogList posts={posts} allTagsLabel={t("allTags")} selectedTag={tag} />
       )}
     </div>
   );
