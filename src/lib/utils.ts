@@ -1,4 +1,12 @@
 /**
+ * Safely serialises an object for injection into a <script type="application/ld+json">.
+ * Escapes `<` as `\u003c` to prevent </script> breakout XSS.
+ */
+export function safeJsonLd(obj: unknown): string {
+  return JSON.stringify(obj).replace(/</g, "\\u003c");
+}
+
+/**
  * Converts a string to a URL-safe slug.
  * - Lowercases the string
  * - Strips diacritics (è→e, à→a, ç→c, etc.)
