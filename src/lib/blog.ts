@@ -20,6 +20,7 @@ export interface BlogPost {
 
 export interface BlogPostMeta {
   slug: string;
+  locale: string;
   title: string;
   date: string;
   description: string;
@@ -45,6 +46,7 @@ export function getAllPosts(locale: string): BlogPostMeta[] {
 
       return {
         slug,
+        locale,
         title: data.title || slug,
         date: data.date || "",
         description: data.description || "",
