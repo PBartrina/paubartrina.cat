@@ -40,6 +40,8 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "metadata" });
 
+  const ogImageUrl = "https://paubartrina.cat/og-default.png";
+
   return {
     title: {
       default: t("title"),
@@ -54,6 +56,20 @@ export async function generateMetadata({
       siteName: "Pau Bartrina",
       locale: t("ogLocale"),
       type: "website",
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: "Pau Bartrina – Senior Frontend Engineer",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("title"),
+      description: t("description"),
+      images: [ogImageUrl],
     },
     alternates: {
       canonical: `https://paubartrina.cat/${locale}`,
@@ -104,32 +120,26 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
             __html: themeInitScript,
           }}
         />
-        <link
-          rel="alternate"
-          type="application/rss+xml"
-          title="Pau Bartrina – Blog RSS Feed"
-          href={`https://paubartrina.cat/${locale}/blog/feed.xml`}
-        />
       </head>
       <body
-        className={`${jetbrainsMono.variable} ${raleway.variable} flex min-h-screen flex-col bg-bg-primary font-mono antialiased`}
+        className={`${jetbrainsMono.variable} ${raleway.variable} flex min-h-screen flex-col antialiased`}
       >
-        <a
-          href="#main-content"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-bg-dark focus:px-4 focus:py-2 focus:text-text-on-dark focus:outline-none focus:ring-2 focus:ring-text-accent"
-        >
-          {t("skipToContent")}
-        </a>
-        <ThemeProvider>
-          <NextIntlClientProvider messages={messages}>
+        <NextIntlClientProvider messages={messages}>
+          <ThemeProvider>
+            <a
+              href="#main-content"
+              className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-bg-dark focus:px-4 focus:py-2 focus:text-text-on-dark focus:outline-none focus:ring-2 focus:ring-text-accent"
+            >
+              {t("skipToContent")}
+            </a>
             <Navbar />
             <main id="main-content" className="flex-1">
               {children}
             </main>
             <Footer />
             <ThemeToggle />
-          </NextIntlClientProvider>
-        </ThemeProvider>
+          </ThemeProvider>
+        </NextIntlClientProvider>
         <Analytics />
         <SpeedInsights />
       </body>

@@ -19,9 +19,32 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "blog" });
 
+  const ogImageUrl = "https://paubartrina.cat/og-default.png";
+  const canonicalUrl = `https://paubartrina.cat/${locale}/blog`;
+
   return {
     title: t("heading"),
     description: t("description"),
+    openGraph: {
+      title: t("heading"),
+      description: t("description"),
+      url: canonicalUrl,
+      type: "website",
+      images: [
+        {
+          url: ogImageUrl,
+          width: 1200,
+          height: 630,
+          alt: "Pau Bartrina – Senior Frontend Engineer",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("heading"),
+      description: t("description"),
+      images: [ogImageUrl],
+    },
   };
 }
 
