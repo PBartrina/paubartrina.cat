@@ -8,6 +8,7 @@
   "nav": {
     "home": "Home",
     "about": "Sobre Mi",
+    "projects": "Projectes",
     "experience": "Trajectòria",
     "now": "Ara",
     "uses": "Eines",
@@ -176,62 +177,63 @@
       }
     ]
   },
-  "footer": {
-    "contactHeading": "Contacta'm",
-    "sendMessage": "Envia'm un missatge →",
-    "followHeading": "Segueix-me",
-    "copyright": "Tots els drets reservats."
-  },
-  "contact": {
-    "heading": "Contacte",
-    "description": "Tens alguna pregunta o proposta? Envia'm un missatge directament des d'aquí.",
-    "subtitle": "Tens alguna pregunta o proposta? Envia'm un missatge!",
-    "nameLabel": "Nom",
-    "emailLabel": "Correu electrònic",
-    "messageLabel": "Missatge",
-    "honeypotLabel": "No ompliu aquest camp",
-    "submitButton": "Envia el missatge",
-    "sendingButton": "Enviant...",
-    "successHeading": "Missatge enviat correctament!",
-    "successMessage": "Et respondré tan aviat com pugui.",
-    "sendAnother": "Envia un altre missatge",
-    "errorUnknown": "Error desconegut.",
-    "errorNetwork": "No s'ha pogut connectar amb el servidor.",
-    "namePlaceholder": "El teu nom",
-    "emailPlaceholder": "tu@exemple.com",
-    "messagePlaceholder": "En qué et puc ajudar?",
-    "submitting": "Enviant…",
-    "submitText": "Envia el missatge →",
-    "sendingText": "Enviant..."
-  },
-  "theme": {
-    "toggleLabel": "Canviar tema",
-    "light": "light",
-    "dark": "dark"
-  },
-  "languageSwitcher": {
-    "label": "Idioma",
-    "ca": "CA",
-    "es": "ES",
-    "en": "EN"
-  },
-  "blog": {
-    "heading": "Blog",
-    "description": "Articles sobre desenvolupament web i tecnologia",
-    "emptyState": "Encara no hi ha articles. Torna aviat!",
-    "backToList": "← Tornar al blog",
-    "notFoundTitle": "Article no trobat",
-    "notFoundMessage": "L'article que cerques no existeix o ha estat eliminat.",
-    "notFoundBack": "← Tornar al blog",
-    "translationWarning": "Aquest article va ser escrit originalment en català. Estàs llegint una traducció automàtica.",
-    "readOriginal": "Llegir l'original en català",
-    "allTags": "Tots"
+  "projects": {
+    "heading": "Projectes Destacats",
+    "featured": "Destacat",
+    "liveLink": "Veure",
+    "repoLink": "GitHub",
+    "items": [
+      {
+        "title": "paubartrina.cat",
+        "description": "Pàgina personal i blog construïda amb Next.js 16, TypeScript i Tailwind CSS v4. Inclou suport multiidioma, blog amb MDX i desplegament automàtic a Vercel.",
+        "tags": [
+          "Next.js",
+          "TypeScript",
+          "Tailwind CSS",
+          "MDX"
+        ],
+        "url": "https://paubartrina.cat",
+        "repo": "https://github.com/PBartrina/paubartrina.cat",
+        "highlight": true
+      },
+      {
+        "title": "Sistema de Gestió Bancària",
+        "description": "Dashboard Angular 17+ per a gestió de productes bancaris amb NgRx, arquitectura modular i cobertura de tests del 90%.",
+        "tags": [
+          "Angular",
+          "NgRx",
+          "Nx",
+          "Vitest"
+        ],
+        "highlight": false
+      },
+      {
+        "title": "Dashboard de Monitorització",
+        "description": "Interfície de visualització de dades en temps real amb Angular, D3.js i WebSockets per a infraestructura de servidors.",
+        "tags": [
+          "Angular",
+          "D3.js",
+          "WebSockets",
+          "RxJS"
+        ],
+        "highlight": false
+      },
+      {
+        "title": "App Mòbil IoT",
+        "description": "Aplicació NativeScript per a control de dispositius IoT amb autenticació OAuth2 i sincronització offline.",
+        "tags": [
+          "NativeScript",
+          "Angular",
+          "Bluetooth",
+          "SQLite"
+        ],
+        "highlight": false
+      }
+    ]
   },
   "atAGlance": {
     "heading": "D'un cop d'ull",
     "coreStackTitle": "Stack Principal",
-    "yearsCount": "15+",
-    "yearsLabel": "anys d'experiència",
     "coreTech": [
       {
         "name": "Angular",
@@ -254,41 +256,76 @@
         "name": "Playwright"
       }
     ],
-    "languagesTitle": "Idiomes",
+    "yearsCount": "15+",
+    "yearsLabel": "anys d'experiència",
+    "languagesLabel": "Idiomes",
     "latestPostTitle": "Darrer article",
+    "readMore": "Llegir més →",
+    "languagesTitle": "Idiomes",
     "latestPostEmpty": "Pròximament...",
     "latestPostRead": "Llegir article →",
-    "readMore": "Llegir més →",
     "noPostsYet": "Properament...",
     "ctaText": "Tens algun projecte en ment?",
     "ctaButton": "Parlem →"
   },
-  "ara": {
-    "title": "Ara",
-    "description": "Què faig ara - la meva pàgina ara",
-    "heading": "Què faig ara",
-    "lastUpdated": "Última actualització: Abril 2025",
-    "location": "Visc a <strong>Sant Pere de Vilamajor</strong>, a la part baixa del <strong>Montseny</strong>.",
-    "occupation": "Sóc <code>programador web front-end</code> i actualment cerco feina.",
-    "prioritiesHeading": "Les meves prioritats i el estat de projectes",
-    "priorities": [
-      "Per capricis personals i decisions \"estratègiques\" l'empresa on treballava s'ha dissolt i em quedo a l'atur, això sí, només tinc agraïments cap a l'empresa on he estat aquests gairebé 8 anys.",
-      "Tocarà arrencar amb força la web amb <strong>Nuxt</strong> que tenia en stand-by.",
-      "A l''<strong>Sven</strong> li hem fet una neteja dental i li han tret un queixal (seny no n''ha tingut mai).",
-      "Hem tingut una mica de drama amb unes filtracions aquest mes de pluges, però ja està tot controlat."
-    ],
-    "excitementHeading": "Què m'engresca",
-    "excitement": [
-      "Ja estic a la recta final del llibre que vaig començar! M'està agradant i segurament continuaré amb la saga del <strong>Arxiu de les Tempestes</strong>.",
-      "Els bonsais estàn començant a brotar amb força, ara ve una època bonica de <strong>poda, transplantaments i formació</strong>."
-    ],
-    "footer": "Aquesta és la meva pàgina \"ara\" inspirada en el moviment <link>now page</link>."
+  "footer": {
+    "contactHeading": "Contacta'm",
+    "sendMessage": "Envia'm un missatge →",
+    "followHeading": "Segueix-me",
+    "copyright": "Tots els drets reservats."
+  },
+  "languageSwitcher": {
+    "label": "Idioma",
+    "ca": "CA",
+    "es": "ES",
+    "en": "EN"
+  },
+  "theme": {
+    "toggleLabel": "Canviar tema",
+    "light": "light",
+    "dark": "dark"
+  },
+  "blog": {
+    "heading": "Blog",
+    "description": "Articles sobre desenvolupament web i tecnologia",
+    "emptyState": "Encara no hi ha articles. Torna aviat!",
+    "allTags": "Tots",
+    "readingTime": "min de lectura",
+    "backToList": "← Tornar al blog",
+    "notFoundTitle": "Article no trobat",
+    "notFoundMessage": "L'article que cerques no existeix o ha estat eliminat.",
+    "notFoundBack": "← Tornar al blog",
+    "translationWarning": "Aquest article va ser escrit originalment en català. Estàs llegint una traducció automàtica.",
+    "readOriginal": "Llegir l'original en català"
+  },
+  "contact": {
+    "heading": "Contacte",
+    "description": "Tens alguna pregunta o proposta? Envia'm un missatge directament des d'aquí.",
+    "subtitle": "Tens alguna pregunta o proposta? Envia'm un missatge!",
+    "nameLabel": "Nom",
+    "emailLabel": "Correu electrònic",
+    "messageLabel": "Missatge",
+    "messagePlaceholder": "En qué et puc ajudar?",
+    "submitButton": "Envia el missatge",
+    "sendingButton": "Enviant...",
+    "successHeading": "Missatge enviat correctament!",
+    "successMessage": "Et respondré tan aviat com pugui.",
+    "sendAnother": "Envia un altre missatge",
+    "errorUnknown": "Error desconegut.",
+    "errorNetwork": "No s'ha pogut connectar amb el servidor.",
+    "honeypotLabel": "No ompliu aquest camp",
+    "namePlaceholder": "El teu nom",
+    "emailPlaceholder": "tu@exemple.com",
+    "submitting": "Enviant…",
+    "submitText": "Envia el missatge →",
+    "sendingText": "Enviant..."
   },
   "uses": {
     "title": "Eines",
     "description": "El meu setup de desenvolupament — editor, terminal, hardware i aplicacions.",
     "heading": "Eines",
     "subtitle": "El meu setup de desenvolupament i les eines que faig servir diàriament.",
+    "intro": "Inspirat per <link>uses.tech</link>, aquí tens una llista de les eines que faig servir regularment.",
     "editor": {
       "heading": "Editor",
       "items": [
@@ -339,5 +376,27 @@
       ]
     },
     "footer": "Inspirat per <link>uses.tech</link>, un directori de pàgines /uses de desenvolupadors."
+  },
+  "ara": {
+    "title": "Ara",
+    "description": "Què faig ara - la meva pàgina ara",
+    "heading": "Què faig ara",
+    "lastUpdated": "Última actualització: Abril 2025",
+    "location": "Visc a <strong>Sant Pere de Vilamajor</strong>, a la part baixa del <strong>Montseny</strong>.",
+    "occupation": "Sóc <code>programador web front-end</code> i actualment cerco feina.",
+    "prioritiesHeading": "Les meves prioritats i el estat de projectes",
+    "priorities": [
+      "Per capricis personals i decisions \"estratègiques\" l'empresa on treballava s'ha dissolt i em quedo a l'atur, això sí, només tinc agraïments cap a l'empresa on he estat aquests gairebé 8 anys.",
+      "Tocarà arrencar amb força la web amb <strong>Nuxt</strong> que tenia en stand-by.",
+      "A l''<strong>Sven</strong> li hem fet una neteja dental i li han tret un queixal (seny no n''ha tingut mai).",
+      "Hem tingut una mica de drama amb unes filtracions aquest mes de pluges, però ja està tot controlat."
+    ],
+    "excitementHeading": "Què m'engresca",
+    "excitement": [
+      "Ja estic a la recta final del llibre que vaig començar! M'està agradant i segurament continuaré amb la saga del <strong>Arxiu de les Tempestes</strong>.",
+      "Els bonsais estàn començant a brotar amb força, ara ve una època bonica de <strong>poda, transplantaments i formació</strong>."
+    ],
+    "nowPageDescription": "Aquesta és una <link>pàgina /ara</link>, inspirada en el moviment de Derek Sivers.",
+    "footer": "Aquesta és la meva pàgina \"ara\" inspirada en el moviment <link>now page</link>."
   }
 }

@@ -8,6 +8,7 @@
   "nav": {
     "home": "Inicio",
     "about": "Sobre Mí",
+    "projects": "Proyectos",
     "experience": "Trayectoria",
     "now": "Ahora",
     "uses": "Herramientas",
@@ -176,62 +177,63 @@
       }
     ]
   },
-  "footer": {
-    "contactHeading": "Contáctame",
-    "sendMessage": "Envíame un mensaje →",
-    "followHeading": "Sígueme",
-    "copyright": "Todos los derechos reservados."
-  },
-  "contact": {
-    "heading": "Contacto",
-    "description": "¿Tienes alguna pregunta o propuesta? Envíame un mensaje directamente desde aquí.",
-    "subtitle": "¿Tienes alguna pregunta o propuesta? ¡Envíame un mensaje!",
-    "nameLabel": "Nombre",
-    "emailLabel": "Correo electrónico",
-    "messageLabel": "Mensaje",
-    "honeypotLabel": "No rellene este campo",
-    "submitButton": "Enviar el mensaje",
-    "sendingButton": "Enviando...",
-    "successHeading": "¡Mensaje enviado correctamente!",
-    "successMessage": "Te responderé lo antes posible.",
-    "sendAnother": "Enviar otro mensaje",
-    "errorUnknown": "Error desconocido.",
-    "errorNetwork": "No se ha podido conectar con el servidor.",
-    "namePlaceholder": "Tu nombre",
-    "emailPlaceholder": "tu@ejemplo.com",
-    "messagePlaceholder": "¿En qué puedo ayudarte?",
-    "submitting": "Enviando…",
-    "submitText": "Enviar el mensaje →",
-    "sendingText": "Enviando..."
-  },
-  "theme": {
-    "toggleLabel": "Cambiar tema",
-    "light": "light",
-    "dark": "dark"
-  },
-  "languageSwitcher": {
-    "label": "Idioma",
-    "ca": "CA",
-    "es": "ES",
-    "en": "EN"
-  },
-  "blog": {
-    "heading": "Blog",
-    "description": "Artículos sobre desarrollo web y tecnología",
-    "emptyState": "Todavía no hay artículos. ¡Vuelve pronto!",
-    "backToList": "← Volver al blog",
-    "notFoundTitle": "Artículo no encontrado",
-    "notFoundMessage": "El artículo que buscas no existe o ha sido eliminado.",
-    "notFoundBack": "← Volver al blog",
-    "translationWarning": "Este artículo fue escrito originalmente en catalán. Estás leyendo una traducción automática.",
-    "readOriginal": "Leer el original en catalán",
-    "allTags": "Todos"
+  "projects": {
+    "heading": "Proyectos Destacados",
+    "featured": "Destacado",
+    "liveLink": "Ver",
+    "repoLink": "GitHub",
+    "items": [
+      {
+        "title": "paubartrina.cat",
+        "description": "Página personal y blog construida con Next.js 16, TypeScript y Tailwind CSS v4. Incluye soporte multiidioma, blog con MDX y despliegue automático en Vercel.",
+        "tags": [
+          "Next.js",
+          "TypeScript",
+          "Tailwind CSS",
+          "MDX"
+        ],
+        "url": "https://paubartrina.cat",
+        "repo": "https://github.com/PBartrina/paubartrina.cat",
+        "highlight": true
+      },
+      {
+        "title": "Sistema de Gestión Bancaria",
+        "description": "Dashboard Angular 17+ para gestión de productos bancarios con NgRx, arquitectura modular y cobertura de tests del 90%.",
+        "tags": [
+          "Angular",
+          "NgRx",
+          "Nx",
+          "Vitest"
+        ],
+        "highlight": false
+      },
+      {
+        "title": "Dashboard de Monitorización",
+        "description": "Interfaz de visualización de datos en tiempo real con Angular, D3.js y WebSockets para infraestructura de servidores.",
+        "tags": [
+          "Angular",
+          "D3.js",
+          "WebSockets",
+          "RxJS"
+        ],
+        "highlight": false
+      },
+      {
+        "title": "App Móvil IoT",
+        "description": "Aplicación NativeScript para control de dispositivos IoT con autenticación OAuth2 y sincronización offline.",
+        "tags": [
+          "NativeScript",
+          "Angular",
+          "Bluetooth",
+          "SQLite"
+        ],
+        "highlight": false
+      }
+    ]
   },
   "atAGlance": {
     "heading": "De un vistazo",
     "coreStackTitle": "Stack Principal",
-    "yearsCount": "15+",
-    "yearsLabel": "años de experiencia",
     "coreTech": [
       {
         "name": "Angular",
@@ -254,41 +256,76 @@
         "name": "Playwright"
       }
     ],
-    "languagesTitle": "Idiomas",
+    "yearsCount": "15+",
+    "yearsLabel": "años de experiencia",
+    "languagesLabel": "Idiomas",
     "latestPostTitle": "Último artículo",
+    "readMore": "Leer más →",
+    "languagesTitle": "Idiomas",
     "latestPostEmpty": "Próximamente...",
     "latestPostRead": "Leer artículo →",
-    "readMore": "Leer más →",
     "noPostsYet": "Próximamente...",
     "ctaText": "¿Tienes algún proyecto en mente?",
     "ctaButton": "Hablemos →"
   },
-  "ara": {
-    "title": "Ahora",
-    "description": "Qué hago ahora - mi página ahora",
-    "heading": "Qué hago ahora",
-    "lastUpdated": "Última actualización: Abril 2025",
-    "location": "Vivo en <strong>Sant Pere de Vilamajor</strong>, en la parte baja del <strong>Montseny</strong>.",
-    "occupation": "Soy <code>programador web front-end</code> y actualmente busco trabajo.",
-    "prioritiesHeading": "Mis prioridades y el estado de proyectos",
-    "priorities": [
-      "Por caprichos personales y decisiones \"estratégicas\" la empresa donde trabajaba se ha disuelto y me quedo en paro, eso sí, solo tengo agradecimientos hacia la empresa donde he estado estos casi 8 años.",
-      "Tocará arrancar con fuerza la web con <strong>Nuxt</strong> que tenía en stand-by.",
-      "Al <strong>Sven</strong> le hemos hecho una limpieza dental y le han sacado una muela (juicio no ha tenido nunca).",
-      "Hemos tenido un poco de drama con unas filtraciones este mes de lluvias, pero ya está todo controlado."
-    ],
-    "excitementHeading": "Qué me entusiasma",
-    "excitement": [
-      "¡Ya estoy en la recta final del libro que empecé! Me está gustando y seguramente continuaré con la saga del <strong>Archivo de las Tormentas</strong>.",
-      "Los bonsáis están empezando a brotar con fuerza, ahora viene una época bonita de <strong>poda, trasplantes y formación</strong>."
-    ],
-    "footer": "Esta es mi página \"ahora\" inspirada en el movimiento <link>now page</link>."
+  "footer": {
+    "contactHeading": "Contáctame",
+    "sendMessage": "Envíame un mensaje →",
+    "followHeading": "Sígueme",
+    "copyright": "Todos los derechos reservados."
+  },
+  "languageSwitcher": {
+    "label": "Idioma",
+    "ca": "CA",
+    "es": "ES",
+    "en": "EN"
+  },
+  "theme": {
+    "toggleLabel": "Cambiar tema",
+    "light": "light",
+    "dark": "dark"
+  },
+  "blog": {
+    "heading": "Blog",
+    "description": "Artículos sobre desarrollo web y tecnología",
+    "emptyState": "Todavía no hay artículos. ¡Vuelve pronto!",
+    "allTags": "Todos",
+    "readingTime": "min de lectura",
+    "backToList": "← Volver al blog",
+    "notFoundTitle": "Artículo no encontrado",
+    "notFoundMessage": "El artículo que buscas no existe o ha sido eliminado.",
+    "notFoundBack": "← Volver al blog",
+    "translationWarning": "Este artículo fue escrito originalmente en catalán. Estás leyendo una traducción automática.",
+    "readOriginal": "Leer el original en catalán"
+  },
+  "contact": {
+    "heading": "Contacto",
+    "description": "¿Tienes alguna pregunta o propuesta? Envíame un mensaje directamente desde aquí.",
+    "subtitle": "¿Tienes alguna pregunta o propuesta? ¡Envíame un mensaje!",
+    "nameLabel": "Nombre",
+    "emailLabel": "Correo electrónico",
+    "messageLabel": "Mensaje",
+    "messagePlaceholder": "¿En qué puedo ayudarte?",
+    "submitButton": "Enviar el mensaje",
+    "sendingButton": "Enviando...",
+    "successHeading": "¡Mensaje enviado correctamente!",
+    "successMessage": "Te responderé lo antes posible.",
+    "sendAnother": "Enviar otro mensaje",
+    "errorUnknown": "Error desconocido.",
+    "errorNetwork": "No se ha podido conectar con el servidor.",
+    "honeypotLabel": "No rellene este campo",
+    "namePlaceholder": "Tu nombre",
+    "emailPlaceholder": "tu@ejemplo.com",
+    "submitting": "Enviando…",
+    "submitText": "Enviar el mensaje →",
+    "sendingText": "Enviando..."
   },
   "uses": {
     "title": "Herramientas",
     "description": "Mi setup de desarrollo — editor, terminal, hardware y aplicaciones.",
     "heading": "Herramientas",
     "subtitle": "Mi setup de desarrollo y las herramientas que uso a diario.",
+    "intro": "Inspirado por <link>uses.tech</link>, aquí tienes una lista de las herramientas que uso regularmente.",
     "editor": {
       "heading": "Editor",
       "items": [
@@ -339,5 +376,27 @@
       ]
     },
     "footer": "Inspirado por <link>uses.tech</link>, un directorio de páginas /uses de desarrolladores."
+  },
+  "ara": {
+    "title": "Ahora",
+    "description": "Qué hago ahora - mi página ahora",
+    "heading": "Qué hago ahora",
+    "lastUpdated": "Última actualización: Abril 2025",
+    "location": "Vivo en <strong>Sant Pere de Vilamajor</strong>, en la parte baja del <strong>Montseny</strong>.",
+    "occupation": "Soy <code>programador web front-end</code> y actualmente busco trabajo.",
+    "prioritiesHeading": "Mis prioridades y el estado de proyectos",
+    "priorities": [
+      "Por caprichos personales y decisiones \"estratégicas\" la empresa donde trabajaba se ha disuelto y me quedo en paro, eso sí, solo tengo agradecimientos hacia la empresa donde he estado estos casi 8 años.",
+      "Tocará arrancar con fuerza la web con <strong>Nuxt</strong> que tenía en stand-by.",
+      "Al <strong>Sven</strong> le hemos hecho una limpieza dental y le han sacado una muela (juicio no ha tenido nunca).",
+      "Hemos tenido un poco de drama con unas filtraciones este mes de lluvias, pero ya está todo controlado."
+    ],
+    "excitementHeading": "Qué me entusiasma",
+    "excitement": [
+      "¡Ya estoy en la recta final del libro que empecé! Me está gustando y seguramente continuaré con la saga del <strong>Archivo de las Tormentas</strong>.",
+      "Los bonsáis están empezando a brotar con fuerza, ahora viene una época bonita de <strong>poda, trasplantes y formación</strong>."
+    ],
+    "nowPageDescription": "Esta es una <link>página /ahora</link>, inspirada en el movimiento de Derek Sivers.",
+    "footer": "Esta es mi página \"ahora\" inspirada en el movimiento <link>now page</link>."
   }
 }
