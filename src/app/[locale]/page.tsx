@@ -2,6 +2,7 @@ import { setRequestLocale } from "next-intl/server";
 import Hero from "@/components/Hero";
 import AtAGlance from "@/components/AtAGlance";
 import Skills from "@/components/Skills";
+import Projects from "@/components/Projects";
 import Experience from "@/components/Experience";
 import Education from "@/components/Education";
 import { getAllPosts } from "@/lib/blog";
@@ -39,6 +40,7 @@ export default async function Home({ params }: PageProps) {
       <Hero />
       <AtAGlance latestPost={latestPost} locale={locale} />
       <Skills />
+      <Projects />
       <Experience />
       <Education />
     </>
