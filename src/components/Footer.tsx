@@ -1,4 +1,4 @@
-import { useTranslations, useLocale } from "next-intl";
+import { getTranslations, getLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 
 const socialLinks = [
@@ -7,9 +7,9 @@ const socialLinks = [
   { href: "https://github.com/PBartrina", label: "GitHub" },
 ];
 
-export default function Footer() {
-  const t = useTranslations("footer");
-  const locale = useLocale();
+export default async function Footer() {
+  const t = await getTranslations("footer");
+  const locale = await getLocale();
 
   return (
     <footer id="contact" className="bg-bg-dark text-text-on-dark">
