@@ -1,8 +1,8 @@
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 
-export default function BlogPostNotFound() {
-  const t = useTranslations("blog");
+export default async function BlogPostNotFound() {
+  const t = await getTranslations("blog");
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col items-center px-6 py-24 text-center">
