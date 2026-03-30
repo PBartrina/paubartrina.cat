@@ -1,7 +1,7 @@
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 
-export default function Hero() {
-  const t = useTranslations("hero");
+export default async function Hero() {
+  const t = await getTranslations("hero");
   const techBadges = t.raw("techBadges") as string[];
 
   return (
