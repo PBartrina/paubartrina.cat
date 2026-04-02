@@ -25,6 +25,12 @@ export async function generateMetadata({
   return {
     title: t("heading"),
     description: t("description"),
+    alternates: {
+      canonical: canonicalUrl,
+      languages: Object.fromEntries(
+        locales.map((l) => [l, `https://paubartrina.cat/${l}/blog`])
+      ),
+    },
     openGraph: {
       title: t("heading"),
       description: t("description"),
