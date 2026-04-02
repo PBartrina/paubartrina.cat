@@ -2,8 +2,8 @@ name: Auto Fixer
 
 on:
   schedule:
-    # Runs every day at 09:00 UTC (1 hour after bug detector)
-    - cron: "0 9 * * *"
+    # Runs every Monday at 09:00 UTC (1 hour after bug detector)
+    - cron: "0 9 * * 1"
   workflow_dispatch:
     inputs:
       issues:
