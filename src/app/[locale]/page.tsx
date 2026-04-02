@@ -7,9 +7,14 @@ import Experience from "@/components/Experience";
 import Education from "@/components/Education";
 import { getAllPosts } from "@/lib/blog";
 import { safeJsonLd } from "@/lib/utils";
+import { locales } from "@/i18n/config";
 
 interface PageProps {
   params: Promise<{ locale: string }>;
+}
+
+export function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
 }
 
 export default async function Home({ params }: PageProps) {
