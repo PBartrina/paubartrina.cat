@@ -398,5 +398,9 @@
     ],
     "nowPageDescription": "Aquesta és una <link>pàgina /ara</link>, inspirada en el moviment de Derek Sivers.",
     "footer": "Aquesta és la meva pàgina \"ara\" inspirada en el moviment <link>now page</link>."
+  },
+  "codeBlock": {
+    "copy": "Copia",
+    "copied": "Copiat!"
   }
 }
