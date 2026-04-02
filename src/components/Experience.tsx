@@ -1,7 +1,7 @@
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 
-export default function Experience() {
-  const t = useTranslations("experience");
+export default async function Experience() {
+  const t = await getTranslations("experience");
   const jobs = t.raw("jobs") as Array<{
     period: string;
     role: string;

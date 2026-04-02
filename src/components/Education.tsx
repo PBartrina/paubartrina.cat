@@ -1,7 +1,7 @@
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 
-export default function Education() {
-  const t = useTranslations("education");
+export default async function Education() {
+  const t = await getTranslations("education");
   const entries = t.raw("entries") as Array<{
     year: string;
     title: string;
