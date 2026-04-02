@@ -111,3 +111,90 @@ h1, h2, h3, h4 {
 .prose a:hover {
   opacity: 0.8;
 }
+
+/* ─── Syntax highlighting (rehype-highlight / hljs) ─────────────────
+   Code blocks always sit on var(--bg-dark) (deep purple), so these
+   token colours are tuned for dark-on-purple contrast and use CSS
+   custom properties so they automatically adjust between themes.
+   ──────────────────────────────────────────────────────────────── */
+
+/* Base token – inherits blush from .prose pre */
+.hljs { color: var(--text-on-dark); }
+
+/* Keywords: rose accent (const, let, import, function, class…) */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-meta {
+  color: var(--text-accent);
+  font-weight: 500;
+}
+
+/* Strings & template literals */
+.hljs-string,
+.hljs-template-string,
+.hljs-template-tag {
+  color: #8dd08a;   /* soft green — readable on both purple shades */
+}
+
+/* Attribute values (HTML/JSX) */
+.hljs-attr {
+  color: #8dd08a;
+}
+
+/* Comments */
+.hljs-comment,
+.hljs-quote {
+  color: #9080a8;
+  font-style: italic;
+}
+
+/* Numbers & regexp */
+.hljs-number,
+.hljs-regexp {
+  color: #d4a070;   /* warm amber */
+}
+
+/* Boolean & null literals */
+.hljs-literal {
+  color: var(--text-accent);
+}
+
+/* Function & class names */
+.hljs-title,
+.hljs-title.class_,
+.hljs-title.function_ {
+  color: #b090e8;   /* soft lavender */
+}
+
+/* Built-in types & globals */
+.hljs-built_in,
+.hljs-type {
+  color: #70c8d8;   /* teal / cyan */
+}
+
+/* HTML/JSX tag names */
+.hljs-name,
+.hljs-tag {
+  color: var(--text-accent);
+}
+
+/* Variables */
+.hljs-variable,
+.hljs-variable.language_ {
+  color: #d4c0f0;   /* light lavender */
+}
+
+/* Operators & punctuation — slightly dimmed */
+.hljs-operator,
+.hljs-punctuation {
+  color: #c0a8d8;
+}
+
+/* Params */
+.hljs-params {
+  color: var(--text-on-dark);
+}
+
+/* Emphasis */
+.hljs-emphasis  { font-style: italic; }
+.hljs-strong    { font-weight: bold; }
