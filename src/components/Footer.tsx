@@ -45,11 +45,10 @@ export default async function Footer() {
               ))}
               <a
                 href={`/${locale}/blog/feed.xml`}
+                aria-label={t("rssLabel")}
                 className="rounded-md border border-text-on-dark px-4 py-2 font-mono text-sm transition-colors hover:border-text-accent hover:text-text-accent"
-                title="RSS Feed"
               >
                 <span aria-hidden="true">📡</span>
-                <span className="sr-only">RSS</span>
               </a>
             </div>
           </div>

@@ -272,7 +272,8 @@
     "contactHeading": "Contacta'm",
     "sendMessage": "Envia'm un missatge →",
     "followHeading": "Segueix-me",
-    "copyright": "Tots els drets reservats."
+    "copyright": "Tots els drets reservats.",
+    "rssLabel": "Feed RSS"
   },
   "languageSwitcher": {
     "label": "Idioma",
