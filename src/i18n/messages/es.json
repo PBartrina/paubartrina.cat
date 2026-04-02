@@ -272,7 +272,8 @@
     "contactHeading": "Contáctame",
     "sendMessage": "Envíame un mensaje →",
     "followHeading": "Sígueme",
-    "copyright": "Todos los derechos reservados."
+    "copyright": "Todos los derechos reservados.",
+    "rssLabel": "Feed RSS"
   },
   "languageSwitcher": {
     "label": "Idioma",
