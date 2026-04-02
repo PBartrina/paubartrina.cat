@@ -11,21 +11,6 @@ export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
-const richComponents = {
-  strong: (chunks: ReactNode) => <strong>{chunks}</strong>,
-  code: (chunks: ReactNode) => <code className="rounded bg-card-bg px-1.5 py-0.5 font-mono text-sm">{chunks}</code>,
-  link: (chunks: ReactNode) => (
-    <a
-      href="https://uses.tech"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-text-accent hover:underline"
-    >
-      {chunks}
-    </a>
-  ),
-};
-
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
@@ -72,6 +57,23 @@ export default async function UsesPage({ params }: PageProps) {
   setRequestLocale(locale);
 
   const t = await getTranslations({ locale, namespace: "uses" });
+
+  // Defined inside the component so it has access to locale and runtime values
+  const richComponents = {
+    strong: (chunks: ReactNode) => <strong>{chunks}</strong>,
+    code: (chunks: ReactNode) => <code className="rounded bg-card-bg px-1.5 py-0.5 font-mono text-sm">{chunks}</code>,
+    link: (chunks: ReactNode) => (
+      // This link always points to uses.tech (the /uses inspiration directory)
+      <a
+        href="https://uses.tech"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-text-accent hover:underline"
+      >
+        {chunks}
+      </a>
+    ),
+  };
   
   const editorItems = t.raw("editor.items") as string[];
   const terminalItems = t.raw("terminal.items") as string[];
