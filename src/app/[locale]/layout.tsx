@@ -115,6 +115,8 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
   return (
     <html lang={locale} suppressHydrationWarning>
       <head>
+        <link rel="preconnect" href="https://va.vercel-scripts.com" />
+        <link rel="preconnect" href="https://vitals.vercel-insights.com" />
         <script
           dangerouslySetInnerHTML={{
             __html: themeInitScript,
