@@ -89,7 +89,7 @@ describe("BlogList", () => {
     expect(cards[1]).toHaveAttribute("data-slug", "post-b");
   });
 
-  it("filters to one post when selectedTag='typescript'", () => {
+  it("filters to two posts when selectedTag='typescript'", () => {
     render(
       <BlogList
         posts={makePosts()}
