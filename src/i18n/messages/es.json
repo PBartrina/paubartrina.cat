@@ -398,5 +398,9 @@
     ],
     "nowPageDescription": "Esta es una <link>página /ahora</link>, inspirada en el movimiento de Derek Sivers.",
     "footer": "Esta es mi página \"ahora\" inspirada en el movimiento <link>now page</link>."
+  },
+  "codeBlock": {
+    "copy": "Copiar",
+    "copied": "¡Copiado!"
   }
 }
