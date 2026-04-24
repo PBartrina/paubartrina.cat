@@ -2,8 +2,19 @@
  * @vitest-environment happy-dom
  */
 import { render, screen, act } from "@testing-library/react";
+import { NextIntlClientProvider } from "next-intl";
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import ReadingProgress from "@/components/ReadingProgress";
+
+const messages = { blog: { readingProgress: "Reading progress" } };
+
+function renderWithIntl(ui: React.ReactElement) {
+  return render(
+    <NextIntlClientProvider locale="en" messages={messages}>
+      {ui}
+    </NextIntlClientProvider>
+  );
+}
 
 function setScrollState({
   scrollY,
@@ -36,21 +47,21 @@ describe("ReadingProgress", () => {
   });
 
   it("renders a progressbar element", () => {
-    render(<ReadingProgress />);
+    renderWithIntl(<ReadingProgress />);
     expect(screen.getByRole("progressbar")).toBeTruthy();
   });
 
   it("has correct aria attributes", () => {
-    render(<ReadingProgress />);
+    renderWithIntl(<ReadingProgress />);
     const bar = screen.getByRole("progressbar");
     expect(bar).toHaveAttribute("aria-valuemin", "0");
     expect(bar).toHaveAttribute("aria-valuemax", "100");
-    expect(bar).toHaveAttribute("aria-label", "Reading progress");
+    expect(bar).toHaveAttribute("aria-label", messages.blog.readingProgress);
   });
 
   it("starts at 0% progress when at top of page", () => {
     setScrollState({ scrollY: 0, scrollHeight: 1000, innerHeight: 500 });
-    render(<ReadingProgress />);
+    renderWithIntl(<ReadingProgress />);
     const bar = screen.getByRole("progressbar");
     expect(bar).toHaveAttribute("aria-valuenow", "0");
     expect(bar.style.width).toBe("0%");
@@ -58,28 +69,28 @@ describe("ReadingProgress", () => {
 
   it("shows 50% progress when scrolled halfway", () => {
     setScrollState({ scrollY: 250, scrollHeight: 1000, innerHeight: 500 });
-    render(<ReadingProgress />);
+    renderWithIntl(<ReadingProgress />);
     const bar = screen.getByRole("progressbar");
     expect(bar).toHaveAttribute("aria-valuenow", "50");
   });
 
   it("shows 100% progress when scrolled to bottom", () => {
     setScrollState({ scrollY: 500, scrollHeight: 1000, innerHeight: 500 });
-    render(<ReadingProgress />);
+    renderWithIntl(<ReadingProgress />);
     const bar = screen.getByRole("progressbar");
     expect(bar).toHaveAttribute("aria-valuenow", "100");
   });
 
   it("clamps progress to 100% if scrollY exceeds docHeight", () => {
     setScrollState({ scrollY: 600, scrollHeight: 1000, innerHeight: 500 });
-    render(<ReadingProgress />);
+    renderWithIntl(<ReadingProgress />);
     const bar = screen.getByRole("progressbar");
     expect(bar).toHaveAttribute("aria-valuenow", "100");
   });
 
   it("updates progress on scroll event", () => {
     setScrollState({ scrollY: 0, scrollHeight: 1000, innerHeight: 500 });
-    render(<ReadingProgress />);
+    renderWithIntl(<ReadingProgress />);
     const bar = screen.getByRole("progressbar");
     expect(bar).toHaveAttribute("aria-valuenow", "0");
 
@@ -93,7 +104,7 @@ describe("ReadingProgress", () => {
 
   it("updates progress on resize event", () => {
     setScrollState({ scrollY: 250, scrollHeight: 1000, innerHeight: 500 });
-    render(<ReadingProgress />);
+    renderWithIntl(<ReadingProgress />);
 
     act(() => {
       Object.defineProperty(window, "innerHeight", {
@@ -110,20 +121,20 @@ describe("ReadingProgress", () => {
 
   it("handles case when document is shorter than viewport", () => {
     setScrollState({ scrollY: 0, scrollHeight: 400, innerHeight: 500 });
-    render(<ReadingProgress />);
+    renderWithIntl(<ReadingProgress />);
     const bar = screen.getByRole("progressbar");
     expect(bar).toHaveAttribute("aria-valuenow", "0");
     expect(bar.style.width).toBe("0%");
   });
 
   it("uses CSS variable for background color", () => {
-    render(<ReadingProgress />);
+    renderWithIntl(<ReadingProgress />);
     const bar = screen.getByRole("progressbar");
     expect(bar.style.backgroundColor).toBe("var(--text-accent)");
   });
 
   it("has fixed positioning at top of viewport", () => {
-    render(<ReadingProgress />);
+    renderWithIntl(<ReadingProgress />);
     const bar = screen.getByRole("progressbar");
     expect(bar.style.position).toBe("fixed");
     expect(bar.style.top).toBe("0px");

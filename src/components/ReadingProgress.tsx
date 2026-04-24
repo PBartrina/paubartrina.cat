@@ -1,8 +1,10 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 export default function ReadingProgress() {
+  const t = useTranslations("blog");
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
@@ -29,7 +31,7 @@ export default function ReadingProgress() {
       aria-valuenow={Math.round(progress)}
       aria-valuemin={0}
       aria-valuemax={100}
-      aria-label="Reading progress"
+      aria-label={t("readingProgress")}
       style={{
         position: "fixed",
         top: 0,
