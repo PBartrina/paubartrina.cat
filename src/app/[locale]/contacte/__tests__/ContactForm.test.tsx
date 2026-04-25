@@ -162,23 +162,25 @@ describe("ContactForm — successful submission", () => {
 
 describe("ContactForm — error states", () => {
   it("shows API error message on 400 response", async () => {
-    mockFetch(400, { error: "Correu invàlid." });
-    const { container } = renderForm();
-    await fillAndSubmit(container);
-
-    await waitFor(() => {
-      expect(screen.getByText("Correu invàlid.")).toBeInTheDocument();
-    });
-  });
-
-  it("shows API error message on 500 response", async () => {
-    mockFetch(500, { error: "Error intern del servidor." });
+    mockFetch(400, { error: "errorEmailInvalid" });
     const { container } = renderForm();
     await fillAndSubmit(container);
 
     await waitFor(() => {
       expect(
-        screen.getByText("Error intern del servidor.")
+        screen.getByText(caMessages.contact.errorEmailInvalid)
+      ).toBeInTheDocument();
+    });
+  });
+
+  it("shows API error message on 500 response", async () => {
+    mockFetch(500, { error: "errorServerConfig" });
+    const { container } = renderForm();
+    await fillAndSubmit(container);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(caMessages.contact.errorServerConfig)
       ).toBeInTheDocument();
     });
   });
@@ -206,11 +208,13 @@ describe("ContactForm — error states", () => {
   });
 
   it("re-enables submit button after an error", async () => {
-    mockFetch(500, { error: "Oops" });
+    mockFetch(500, { error: "errorSendFailed" });
     const { container } = renderForm();
     await fillAndSubmit(container);
 
-    await waitFor(() => screen.getByText("Oops"));
+    await waitFor(() =>
+      screen.getByText(caMessages.contact.errorSendFailed)
+    );
 
     expect(
       screen.getByRole("button", { name: /Envia el missatge/ })

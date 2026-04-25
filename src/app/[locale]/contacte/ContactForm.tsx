@@ -5,6 +5,21 @@ import { useTranslations } from "next-intl";
 
 type FormState = "idle" | "sending" | "success" | "error";
 
+const KNOWN_API_ERRORS = [
+  "errorRateLimit",
+  "errorInvalidRequest",
+  "errorNameRequired",
+  "errorEmailInvalid",
+  "errorMessageRequired",
+  "errorServerConfig",
+  "errorSendFailed",
+] as const;
+type ApiErrorCode = (typeof KNOWN_API_ERRORS)[number];
+
+function isKnownError(code: string): code is ApiErrorCode {
+  return (KNOWN_API_ERRORS as readonly string[]).includes(code);
+}
+
 const inputClass =
   "w-full rounded-md border border-card-border bg-bg-primary px-4 py-3 font-mono text-sm text-text-primary placeholder-text-secondary focus:border-text-accent focus:outline-none focus:ring-1 focus:ring-text-accent transition-colors";
 
@@ -34,7 +49,8 @@ export default function ContactForm() {
       if (res.ok && data.success) {
         setState("success");
       } else {
-        setErrorMsg(data.error ?? t("errorUnknown"));
+        const code = data.error ?? "";
+        setErrorMsg(isKnownError(code) ? t(code) : t("errorUnknown"));
         setState("error");
       }
     } catch {
