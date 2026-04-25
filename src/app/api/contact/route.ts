@@ -1,3 +1,4 @@
+import { ipAddress } from "@vercel/functions";
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
 
@@ -51,8 +52,12 @@ function isValidEmail(email: string): boolean {
 }
 
 export async function POST(req: NextRequest) {
+  // On Vercel, ipAddress() reads the verified edge IP and cannot be spoofed
+  // via crafted headers. Falls back to x-forwarded-for for local dev.
   const ip =
-    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
+    ipAddress(req) ??
+    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    "unknown";
 
   if (isRateLimited(ip)) {
     return NextResponse.json(
