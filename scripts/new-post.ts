@@ -94,6 +94,10 @@ published: true
 ---
 
 Escriu el teu contingut aquí...
+
+## Primera secció
+
+Contingut de la secció...
 `;
 
   const dir = blogDir("ca");
