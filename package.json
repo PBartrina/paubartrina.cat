@@ -28,7 +28,7 @@
   },
   "pnpm": {
     "overrides": {
-      "flatted": ">=3.3.2"
+      "flatted": ">=3.4.2"
     }
   },
   "devDependencies": {
