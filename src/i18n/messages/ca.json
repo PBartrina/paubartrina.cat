@@ -297,7 +297,8 @@
     "notFoundMessage": "L'article que cerques no existeix o ha estat eliminat.",
     "notFoundBack": "← Tornar al blog",
     "translationWarning": "Aquest article va ser escrit originalment en català. Estàs llegint una traducció automàtica.",
-    "readOriginal": "Llegir l'original en català"
+    "readOriginal": "Llegir l'original en català",
+    "readingProgress": "Progrés de lectura"
   },
   "contact": {
     "heading": "Contacte",
