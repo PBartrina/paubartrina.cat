@@ -274,7 +274,8 @@
     "followHeading": "Sígueme",
     "copyright": "Todos los derechos reservados.",
     "rssLabel": "Feed RSS",
-    "lastUpdated": "Actualizado: {date}"
+    "lastUpdated": "Actualizado: {date}",
+    "cvLink": "Ver / Imprimir CV"
   },
   "languageSwitcher": {
     "label": "Idioma",
@@ -441,6 +442,12 @@
         "relationship": "Colaborador"
       }
     ]
+  },
+  "cv": {
+    "title": "CV — Pau Bartrina",
+    "description": "CV imprimible de Pau Bartrina, Senior Frontend Engineer.",
+    "printButton": "Imprimir / Guardar como PDF",
+    "backHome": "Volver al inicio"
   },
   "codeBlock": {
     "copy": "Copiar",

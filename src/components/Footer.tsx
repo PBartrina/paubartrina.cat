@@ -58,16 +58,22 @@ export default async function Footer() {
           </div>
         </div>
 
-        <div className="mt-8 border-t border-bg-dark-secondary pt-6 text-center font-mono text-sm text-text-secondary">
-          <p>
+        <div className="mt-8 border-t border-bg-dark-secondary pt-6 flex flex-col items-center gap-2 font-mono text-sm text-text-secondary">
+          <div>
             &copy; {new Date().getFullYear()} Pau Bartrina.{" "}
             {t("copyright")}
-          </p>
+          </div>
           {lastUpdated && (
-            <p className="mt-1 text-xs opacity-60">
+            <p className="text-xs opacity-60">
               {t("lastUpdated", { date: lastUpdated })}
             </p>
           )}
+          <Link
+            href="/cv"
+            className="text-xs text-text-secondary opacity-60 hover:opacity-100 hover:text-text-accent transition-opacity"
+          >
+            {t("cvLink")}
+          </Link>
         </div>
       </div>
     </footer>
