@@ -1,5 +1,6 @@
 import { getTranslations, getLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { getLastCommitDate, formatCommitDate } from "@/lib/git";
 
 const socialLinks = [
   { href: "https://bsky.app/profile/paubartrina.cat", label: "Bluesky" },
@@ -10,6 +11,9 @@ const socialLinks = [
 export default async function Footer() {
   const t = await getTranslations("footer");
   const locale = await getLocale();
+
+  const rawDate = getLastCommitDate();
+  const lastUpdated = rawDate ? formatCommitDate(rawDate, locale) : null;
 
   return (
     <footer id="contact" className="bg-bg-dark text-text-on-dark">
@@ -55,8 +59,15 @@ export default async function Footer() {
         </div>
 
         <div className="mt-8 border-t border-bg-dark-secondary pt-6 text-center font-mono text-sm text-text-secondary">
-          &copy; {new Date().getFullYear()} Pau Bartrina.{" "}
-          {t("copyright")}
+          <p>
+            &copy; {new Date().getFullYear()} Pau Bartrina.{" "}
+            {t("copyright")}
+          </p>
+          {lastUpdated && (
+            <p className="mt-1 text-xs opacity-60">
+              {t("lastUpdated", { date: lastUpdated })}
+            </p>
+          )}
         </div>
       </div>
     </footer>

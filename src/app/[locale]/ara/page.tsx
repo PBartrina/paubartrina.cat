@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { locales } from "@/i18n/config";
+import { getLastCommitDate, formatCommitDate } from "@/lib/git";
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -65,14 +66,22 @@ export default async function AraPage({ params }: PageProps) {
   const priorityCount = (t.raw("priorities") as string[]).length;
   const excitementCount = (t.raw("excitement") as string[]).length;
 
+  const rawDate = getLastCommitDate([
+    "src/i18n/messages/ca.json",
+    "src/app/[locale]/ara/page.tsx",
+  ]);
+  const lastUpdated = rawDate ? formatCommitDate(rawDate, locale) : null;
+
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
       <h1 className="mb-2 font-mono text-4xl font-bold text-text-primary">
         {t("heading")}
       </h1>
-      <p className="mb-8 font-mono text-sm text-text-secondary">
-        {t("lastUpdated")}
-      </p>
+      {lastUpdated && (
+        <p className="mb-8 font-mono text-sm text-text-secondary">
+          {t("lastUpdated", { date: lastUpdated })}
+        </p>
+      )}
 
       <div className="space-y-8 font-mono text-text-primary">
         <p>{t.rich("location", richComponents)}</p>
