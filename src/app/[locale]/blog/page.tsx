@@ -64,9 +64,16 @@ export default async function BlogPage({ params, searchParams }: PageProps) {
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
-      <h1 className="mb-8 font-mono text-4xl font-bold text-text-primary">
-        {t("heading")}
-      </h1>
+      <div className="mb-8 flex flex-wrap items-baseline gap-4">
+        <h1 className="font-mono text-4xl font-bold text-text-primary">
+          {t("heading")}
+        </h1>
+        {posts.length > 0 && (
+          <span className="font-mono text-sm text-text-secondary">
+            {t("postCount", { count: posts.length })}
+          </span>
+        )}
+      </div>
 
       {posts.length === 0 ? (
         <p className="font-mono text-text-secondary">{t("emptyState")}</p>

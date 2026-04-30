@@ -5,10 +5,11 @@ import { compileMDX } from "next-mdx-remote/rsc";
 import rehypeHighlight from "rehype-highlight";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
-import { getAllSlugs, getPostBySlug, getAvailableLocales } from "@/lib/blog";
+import { getAllSlugs, getPostBySlug, getAvailableLocales, getAdjacentPosts } from "@/lib/blog";
 import { Link } from "@/i18n/navigation";
 import { locales } from "@/i18n/config";
 import ReadingProgress from "@/components/ReadingProgress";
+import PostNavigation from "@/components/PostNavigation";
 import CodeBlock from "@/components/CodeBlock";
 import { safeJsonLd } from "@/lib/utils";
 
@@ -75,6 +76,7 @@ export default async function BlogPostPage({ params }: PageProps) {
   if (!post) notFound();
 
   const t = await getTranslations({ locale, namespace: "blog" });
+  const { prev, next } = getAdjacentPosts(locale, slug);
 
   const blogPostingJsonLd = {
     "@context": "https://schema.org",
@@ -139,7 +141,8 @@ export default async function BlogPostPage({ params }: PageProps) {
         </h1>
         <div className="flex flex-wrap gap-3 font-mono text-sm text-text-secondary">
           <time>{post.date}</time>
-          <span>{post.readingTime}</span>
+          <span>{t("readingTime", { count: post.readingTimeMinutes })}</span>
+          <span>{t("wordCount", { count: post.wordCount })}</span>
         </div>
         {post.tags.length > 0 && (
           <div className="mt-4 flex flex-wrap gap-2">
@@ -158,6 +161,8 @@ export default async function BlogPostPage({ params }: PageProps) {
       <article className="prose prose-lg max-w-none">
         {content}
       </article>
+
+      <PostNavigation prev={prev} next={next} locale={locale} />
     </div>
     </>
   );

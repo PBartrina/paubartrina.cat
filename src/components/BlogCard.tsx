@@ -1,7 +1,10 @@
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import type { BlogPostMeta } from "@/lib/blog";
 
 export default function BlogCard({ post }: { post: BlogPostMeta }) {
+  const t = useTranslations("blog");
+
   return (
     <article className="relative rounded-lg border border-card-border bg-card-bg p-6 transition-shadow hover:shadow-lg">
       <Link
@@ -14,7 +17,7 @@ export default function BlogCard({ post }: { post: BlogPostMeta }) {
       </h2>
       <div className="mb-3 flex flex-wrap gap-3 font-mono text-xs text-text-secondary">
         <time>{post.date}</time>
-        <span>{post.readingTime}</span>
+        <span>{t("readingTime", { count: post.readingTimeMinutes })}</span>
       </div>
       <p className="mb-4 font-mono text-sm text-text-secondary">
         {post.description}

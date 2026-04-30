@@ -291,14 +291,18 @@
     "description": "Articles sobre desenvolupament web i tecnologia",
     "emptyState": "Encara no hi ha articles. Torna aviat!",
     "allTags": "Tots",
-    "readingTime": "min de lectura",
+    "readingTime": "{count} min de lectura",
     "backToList": "← Tornar al blog",
     "notFoundTitle": "Article no trobat",
     "notFoundMessage": "L'article que cerques no existeix o ha estat eliminat.",
     "notFoundBack": "← Tornar al blog",
     "translationWarning": "Aquest article va ser escrit originalment en català. Estàs llegint una traducció automàtica.",
     "readOriginal": "Llegir l'original en català",
-    "readingProgress": "Progrés de lectura"
+    "readingProgress": "Progrés de lectura",
+    "postCount": "{count, plural, one {# article} other {# articles}}",
+    "wordCount": "{count} paraules",
+    "prevPost": "← Anterior",
+    "nextPost": "Següent →"
   },
   "contact": {
     "heading": "Contacte",
