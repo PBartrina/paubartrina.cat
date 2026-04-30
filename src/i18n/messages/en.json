@@ -422,5 +422,11 @@
     "copyEmail": "Copy email",
     "emailCopied": "Copied!",
     "orEmail": "or email me directly"
+  },
+  "availability": {
+    "message": "Open to work — available for new opportunities.",
+    "cta": "Get in touch →",
+    "dismiss": "Dismiss banner",
+    "ariaLabel": "Availability status banner"
   }
 }
