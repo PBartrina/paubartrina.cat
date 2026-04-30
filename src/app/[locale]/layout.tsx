@@ -7,6 +7,7 @@ import { ThemeProvider } from "@/lib/theme";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ThemeToggle from "@/components/ThemeToggle";
+import ScrollToTop from "@/components/ScrollToTop";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { routing } from "@/i18n/routing";
@@ -140,6 +141,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
             </main>
             <Footer />
             <ThemeToggle />
+            <ScrollToTop />
           </ThemeProvider>
         </NextIntlClientProvider>
         <Analytics />

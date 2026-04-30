@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { locales } from "@/i18n/config";
 import ContactForm from "./ContactForm";
+import CopyEmail from "@/components/CopyEmail";
 
 const BASE_URL = "https://paubartrina.cat";
 const OG_IMAGE = `${BASE_URL}/og-default.png`;
@@ -65,6 +66,7 @@ export default async function ContactePage({ params }: PageProps) {
           </p>
 
           <ContactForm />
+          <CopyEmail />
         </div>
       </div>
     </section>

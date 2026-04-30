@@ -415,5 +415,11 @@
   "codeBlock": {
     "copy": "Copia",
     "copied": "Copiat!"
+  },
+  "common": {
+    "scrollToTop": "Tornar amunt",
+    "copyEmail": "Copia el correu",
+    "emailCopied": "Copiat!",
+    "orEmail": "o escriu-me directament"
   }
 }
