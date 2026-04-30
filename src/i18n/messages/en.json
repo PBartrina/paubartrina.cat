@@ -273,7 +273,8 @@
     "sendMessage": "Send me a message →",
     "followHeading": "Follow me",
     "copyright": "All rights reserved.",
-    "rssLabel": "RSS Feed"
+    "rssLabel": "RSS Feed",
+    "lastUpdated": "Updated: {date}"
   },
   "languageSwitcher": {
     "label": "Language",
@@ -390,7 +391,7 @@
     "title": "Now",
     "description": "What I'm doing now - my now page",
     "heading": "What I'm doing now",
-    "lastUpdated": "Last updated: April 2025",
+    "lastUpdated": "Last updated: {date}",
     "location": "I live in <strong>Sant Pere de Vilamajor</strong>, at the foot of <strong>Montseny</strong>.",
     "occupation": "I'm a <code>front-end web developer</code> and currently looking for work.",
     "prioritiesHeading": "My priorities and project status",

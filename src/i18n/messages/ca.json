@@ -273,7 +273,8 @@
     "sendMessage": "Envia'm un missatge →",
     "followHeading": "Segueix-me",
     "copyright": "Tots els drets reservats.",
-    "rssLabel": "Feed RSS"
+    "rssLabel": "Feed RSS",
+    "lastUpdated": "Actualitzat: {date}"
   },
   "languageSwitcher": {
     "label": "Idioma",
@@ -390,7 +391,7 @@
     "title": "Ara",
     "description": "Què faig ara - la meva pàgina ara",
     "heading": "Què faig ara",
-    "lastUpdated": "Última actualització: Abril 2025",
+    "lastUpdated": "Última actualització: {date}",
     "location": "Visc a <strong>Sant Pere de Vilamajor</strong>, a la part baixa del <strong>Montseny</strong>.",
     "occupation": "Sóc <code>programador web front-end</code> i actualment cerco feina.",
     "prioritiesHeading": "Les meves prioritats i el estat de projectes",

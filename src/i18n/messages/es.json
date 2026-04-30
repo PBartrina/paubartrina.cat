@@ -273,7 +273,8 @@
     "sendMessage": "Envíame un mensaje →",
     "followHeading": "Sígueme",
     "copyright": "Todos los derechos reservados.",
-    "rssLabel": "Feed RSS"
+    "rssLabel": "Feed RSS",
+    "lastUpdated": "Actualizado: {date}"
   },
   "languageSwitcher": {
     "label": "Idioma",
@@ -390,7 +391,7 @@
     "title": "Ahora",
     "description": "Qué hago ahora - mi página ahora",
     "heading": "Qué hago ahora",
-    "lastUpdated": "Última actualización: Abril 2025",
+    "lastUpdated": "Última actualización: {date}",
     "location": "Vivo en <strong>Sant Pere de Vilamajor</strong>, en la parte baja del <strong>Montseny</strong>.",
     "occupation": "Soy <code>programador web front-end</code> y actualmente busco trabajo.",
     "prioritiesHeading": "Mis prioridades y el estado de proyectos",
