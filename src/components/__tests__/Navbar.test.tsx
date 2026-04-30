@@ -102,5 +102,38 @@ describe("Navbar", () => {
       const projectsLinks = screen.getAllByRole("link", { name: caMessages.nav.projects });
       expect(projectsLinks.length).toBeGreaterThan(0);
     });
+
+    it("mobile menu has role=dialog and aria-modal=true", () => {
+      renderNavbar();
+      const hamburger = screen.getByRole("button", { name: caMessages.nav.toggleMenu });
+      fireEvent.click(hamburger);
+      const menu = document.getElementById("mobile-menu");
+      expect(menu).toHaveAttribute("role", "dialog");
+      expect(menu).toHaveAttribute("aria-modal", "true");
+    });
+
+    it("closes menu when Escape is pressed", () => {
+      renderNavbar();
+      const hamburger = screen.getByRole("button", { name: caMessages.nav.toggleMenu });
+      fireEvent.click(hamburger);
+      expect(hamburger).toHaveAttribute("aria-expanded", "true");
+
+      fireEvent.keyDown(document, { key: "Escape" });
+
+      expect(hamburger).toHaveAttribute("aria-expanded", "false");
+      expect(document.getElementById("mobile-menu")).not.toBeInTheDocument();
+    });
+
+    it("closes menu when a nav link is clicked", () => {
+      renderNavbar();
+      const hamburger = screen.getByRole("button", { name: caMessages.nav.toggleMenu });
+      fireEvent.click(hamburger);
+
+      const menu = document.getElementById("mobile-menu")!;
+      const firstLink = menu.querySelector("a")!;
+      fireEvent.click(firstLink);
+
+      expect(hamburger).toHaveAttribute("aria-expanded", "false");
+    });
   });
 });
