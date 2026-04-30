@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { setRequestLocale } from "next-intl/server";
 import Hero from "@/components/Hero";
 import AtAGlance from "@/components/AtAGlance";
@@ -5,6 +6,7 @@ import Skills from "@/components/Skills";
 import Projects from "@/components/Projects";
 import Experience from "@/components/Experience";
 import Education from "@/components/Education";
+import Testimonials from "@/components/Testimonials";
 import { getAllPosts } from "@/lib/blog";
 import { safeJsonLd } from "@/lib/utils";
 import { locales } from "@/i18n/config";
@@ -45,9 +47,18 @@ export default async function Home({ params }: PageProps) {
       <Hero />
       <AtAGlance latestPost={latestPost} locale={locale} />
       <Skills />
-      <Projects />
-      <Experience />
-      <Education />
+      <Suspense fallback={<div className="py-20" />}>
+        <Projects />
+      </Suspense>
+      <Suspense fallback={<div className="py-20" />}>
+        <Testimonials />
+      </Suspense>
+      <Suspense fallback={<div className="py-20" />}>
+        <Experience />
+      </Suspense>
+      <Suspense fallback={<div className="py-20" />}>
+        <Education />
+      </Suspense>
     </>
   );
 }

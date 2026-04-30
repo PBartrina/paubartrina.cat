@@ -417,6 +417,29 @@
     "nowPageDescription": "Aquesta és una <link>pàgina /ara</link>, inspirada en el moviment de Derek Sivers.",
     "footer": "Aquesta és la meva pàgina \"ara\" inspirada en el moviment <link>now page</link>."
   },
+  "testimonials": {
+    "heading": "Què en diuen",
+    "items": [
+      {
+        "quote": "En Pau té una capacitat excepcional per connectar requisits tècnics complexos amb solucions netes i mantenibles. La seva feina en la nostra arquitectura Angular va elevar el nivell de tot l'equip.",
+        "author": "Engineering Manager",
+        "company": "Byte Default",
+        "relationship": "Manager Directe"
+      },
+      {
+        "quote": "Treballar amb en Pau va ser una classe magistral de disciplina frontend. Va introduir pràctiques rigoroses de testing al nostre equip i va millorar considerablement la robustesa del codi base.",
+        "author": "Senior Developer",
+        "company": "Byte Default",
+        "relationship": "Company"
+      },
+      {
+        "quote": "L'experiència d'en Pau en Angular i la seva passió per l'experiència del desenvolupador van marcar una diferència real. Va lliurar funcionalitats d'alta qualitat mentre millorava contínuament les nostres eines i processos.",
+        "author": "Product Lead",
+        "company": "Ansys Iberia",
+        "relationship": "Col·laborador"
+      }
+    ]
+  },
   "codeBlock": {
     "copy": "Copia",
     "copied": "Copiat!"

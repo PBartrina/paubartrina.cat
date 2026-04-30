@@ -417,6 +417,29 @@
     "nowPageDescription": "This is a <link>/now page</link>, inspired by Derek Sivers' movement.",
     "footer": "This is my \"now\" page inspired by the <link>now page</link> movement."
   },
+  "testimonials": {
+    "heading": "What People Say",
+    "items": [
+      {
+        "quote": "Pau has an exceptional ability to bridge the gap between complex technical requirements and clean, maintainable solutions. His work on our Angular architecture raised the bar for the entire team.",
+        "author": "Engineering Manager",
+        "company": "Byte Default",
+        "relationship": "Direct Manager"
+      },
+      {
+        "quote": "Working with Pau was a master class in front-end discipline. He brought rigorous testing practices to our team and made the codebase significantly more robust overnight.",
+        "author": "Senior Developer",
+        "company": "Byte Default",
+        "relationship": "Colleague"
+      },
+      {
+        "quote": "Pau's Angular expertise and his passion for developer experience made a real difference. He shipped high-quality features while constantly improving our tooling and processes.",
+        "author": "Product Lead",
+        "company": "Ansys Iberia",
+        "relationship": "Collaborator"
+      }
+    ]
+  },
   "codeBlock": {
     "copy": "Copy",
     "copied": "Copied!"
