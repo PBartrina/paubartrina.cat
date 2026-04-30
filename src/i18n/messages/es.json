@@ -307,7 +307,9 @@
     "tableOfContents": "En esta página",
     "share": "Compartir",
     "copyLink": "Copiar enlace",
-    "linkCopied": "¡Enlace copiado!"
+    "linkCopied": "¡Enlace copiado!",
+    "searchPlaceholder": "Buscar artículos…",
+    "noResults": "Ningún artículo coincide con tu búsqueda."
   },
   "contact": {
     "heading": "Contacto",

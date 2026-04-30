@@ -307,7 +307,9 @@
     "tableOfContents": "En aquesta pàgina",
     "share": "Compartir",
     "copyLink": "Copiar l'enllaç",
-    "linkCopied": "Enllaç copiat!"
+    "linkCopied": "Enllaç copiat!",
+    "searchPlaceholder": "Cerca articles…",
+    "noResults": "Cap article coincideix amb la teva cerca."
   },
   "contact": {
     "heading": "Contacte",
