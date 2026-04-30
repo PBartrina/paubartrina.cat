@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { getAllPosts } from "@/lib/blog";
-import BlogList from "@/components/BlogList";
+import BlogSearch from "@/components/BlogSearch";
 import { locales } from "@/i18n/config";
 import { safeJsonLd } from "@/lib/utils";
 
@@ -102,7 +102,13 @@ export default async function BlogPage({ params, searchParams }: PageProps) {
         {posts.length === 0 ? (
           <p className="font-mono text-text-secondary">{t("emptyState")}</p>
         ) : (
-          <BlogList posts={posts} allTagsLabel={t("allTags")} selectedTag={tag} />
+          <BlogSearch
+            posts={posts}
+            allTagsLabel={t("allTags")}
+            selectedTag={tag}
+            searchPlaceholder={t("searchPlaceholder")}
+            noResultsLabel={t("noResults")}
+          />
         )}
       </div>
     </>

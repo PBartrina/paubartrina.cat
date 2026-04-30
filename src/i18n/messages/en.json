@@ -307,7 +307,9 @@
     "tableOfContents": "On this page",
     "share": "Share",
     "copyLink": "Copy link",
-    "linkCopied": "Link copied!"
+    "linkCopied": "Link copied!",
+    "searchPlaceholder": "Search posts…",
+    "noResults": "No posts match your search."
   },
   "contact": {
     "heading": "Contact",
