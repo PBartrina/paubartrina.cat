@@ -408,6 +408,29 @@
     "nowPageDescription": "Esta es una <link>página /ahora</link>, inspirada en el movimiento de Derek Sivers.",
     "footer": "Esta es mi página \"ahora\" inspirada en el movimiento <link>now page</link>."
   },
+  "testimonials": {
+    "heading": "Lo que dicen de mí",
+    "items": [
+      {
+        "quote": "Pau tiene una capacidad excepcional para tender puentes entre requisitos técnicos complejos y soluciones limpias y mantenibles. Su trabajo en nuestra arquitectura Angular elevó el listón para todo el equipo.",
+        "author": "Engineering Manager",
+        "company": "Byte Default",
+        "relationship": "Manager Directo"
+      },
+      {
+        "quote": "Trabajar con Pau fue una clase magistral de disciplina frontend. Introdujo prácticas rigurosas de testing en nuestro equipo y mejoró considerablemente la robustez del código base.",
+        "author": "Senior Developer",
+        "company": "Byte Default",
+        "relationship": "Compañero"
+      },
+      {
+        "quote": "La experiencia de Pau en Angular y su pasión por la experiencia del desarrollador marcaron una diferencia real. Entregó funcionalidades de alta calidad mientras mejoraba continuamente nuestras herramientas y procesos.",
+        "author": "Product Lead",
+        "company": "Ansys Iberia",
+        "relationship": "Colaborador"
+      }
+    ]
+  },
   "codeBlock": {
     "copy": "Copiar",
     "copied": "¡Copiado!"

@@ -1,4 +1,4 @@
-import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 
 interface Project {
   title: string;
@@ -9,8 +9,8 @@ interface Project {
   highlight?: boolean;
 }
 
-export default function Projects() {
-  const t = useTranslations("projects");
+export default async function Projects() {
+  const t = await getTranslations("projects");
   const projects = t.raw("items") as Project[];
 
   return (
