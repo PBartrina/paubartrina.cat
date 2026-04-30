@@ -9,6 +9,7 @@ import Footer from "@/components/Footer";
 import ThemeToggle from "@/components/ThemeToggle";
 import ScrollToTop from "@/components/ScrollToTop";
 import AvailabilityBanner from "@/components/AvailabilityBanner";
+import PageTransition from "@/components/PageTransition";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { routing } from "@/i18n/routing";
@@ -139,7 +140,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
             <Navbar />
             <AvailabilityBanner />
             <main id="main-content" className="flex-1">
-              {children}
+              <PageTransition>{children}</PageTransition>
             </main>
             <Footer />
             <ThemeToggle />
