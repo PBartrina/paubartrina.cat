@@ -15,6 +15,8 @@ export interface BlogPost {
   tags: string[];
   published: boolean;
   readingTime: string;
+  readingTimeMinutes: number;
+  wordCount: number;
   content: string;
 }
 
@@ -26,6 +28,12 @@ export interface BlogPostMeta {
   description: string;
   tags: string[];
   readingTime: string;
+  readingTimeMinutes: number;
+}
+
+export interface AdjacentPosts {
+  prev: BlogPostMeta | null;
+  next: BlogPostMeta | null;
 }
 
 export function getAllPosts(locale: string): BlogPostMeta[] {
@@ -44,6 +52,7 @@ export function getAllPosts(locale: string): BlogPostMeta[] {
         return null;
       }
 
+      const rt = readingTime(content);
       return {
         slug,
         locale,
@@ -51,7 +60,8 @@ export function getAllPosts(locale: string): BlogPostMeta[] {
         date: data.date || "",
         description: data.description || "",
         tags: data.tags || [],
-        readingTime: readingTime(content).text,
+        readingTime: rt.text,
+        readingTimeMinutes: Math.ceil(rt.minutes),
       };
     })
     .filter(Boolean) as BlogPostMeta[];
@@ -72,6 +82,7 @@ export function getPostBySlug(
   const raw = fs.readFileSync(filePath, "utf-8");
   const { data, content } = matter(raw);
 
+  const rt = readingTime(content);
   return {
     slug,
     title: data.title || slug,
@@ -79,8 +90,26 @@ export function getPostBySlug(
     description: data.description || "",
     tags: data.tags || [],
     published: data.published !== false,
-    readingTime: readingTime(content).text,
+    readingTime: rt.text,
+    readingTimeMinutes: Math.ceil(rt.minutes),
+    wordCount: rt.words,
     content,
+  };
+}
+
+export function getAdjacentPosts(
+  locale: string,
+  slug: string
+): AdjacentPosts {
+  const posts = getAllPosts(locale);
+  const index = posts.findIndex((p) => p.slug === slug);
+  if (index === -1) return { prev: null, next: null };
+
+  return {
+    // "next" post = published after current (lower index, since sorted desc)
+    next: index > 0 ? posts[index - 1] : null,
+    // "prev" post = published before current (higher index)
+    prev: index < posts.length - 1 ? posts[index + 1] : null,
   };
 }
 

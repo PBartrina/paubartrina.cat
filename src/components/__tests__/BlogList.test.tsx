@@ -43,7 +43,8 @@ const makePosts = (): BlogPostMeta[] => [
     date: "2026-01-01",
     description: "Desc A",
     tags: ["react", "typescript"],
-    readingTime: "2 min",
+    readingTime: "2 min read",
+    readingTimeMinutes: 2,
     locale: "en",
   },
   {
@@ -52,7 +53,8 @@ const makePosts = (): BlogPostMeta[] => [
     date: "2026-01-02",
     description: "Desc B",
     tags: ["react"],
-    readingTime: "3 min",
+    readingTime: "3 min read",
+    readingTimeMinutes: 3,
     locale: "en",
   },
   {
@@ -61,7 +63,8 @@ const makePosts = (): BlogPostMeta[] => [
     date: "2026-01-03",
     description: "Desc C",
     tags: ["typescript"],
-    readingTime: "4 min",
+    readingTime: "4 min read",
+    readingTimeMinutes: 4,
     locale: "en",
   },
 ];

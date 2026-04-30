@@ -291,14 +291,18 @@
     "description": "Artículos sobre desarrollo web y tecnología",
     "emptyState": "Todavía no hay artículos. ¡Vuelve pronto!",
     "allTags": "Todos",
-    "readingTime": "min de lectura",
+    "readingTime": "{count} min de lectura",
     "backToList": "← Volver al blog",
     "notFoundTitle": "Artículo no encontrado",
     "notFoundMessage": "El artículo que buscas no existe o ha sido eliminado.",
     "notFoundBack": "← Volver al blog",
     "translationWarning": "Este artículo fue escrito originalmente en catalán. Estás leyendo una traducción automática.",
     "readOriginal": "Leer el original en catalán",
-    "readingProgress": "Progreso de lectura"
+    "readingProgress": "Progreso de lectura",
+    "postCount": "{count, plural, one {# artículo} other {# artículos}}",
+    "wordCount": "{count} palabras",
+    "prevPost": "← Anterior",
+    "nextPost": "Siguiente →"
   },
   "contact": {
     "heading": "Contacto",
