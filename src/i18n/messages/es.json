@@ -422,5 +422,11 @@
     "copyEmail": "Copiar correo",
     "emailCopied": "¡Copiado!",
     "orEmail": "o escríbeme directamente"
+  },
+  "availability": {
+    "message": "En búsqueda activa — disponible para nuevas oportunidades.",
+    "cta": "Contáctame →",
+    "dismiss": "Cerrar banner",
+    "ariaLabel": "Banner de disponibilidad"
   }
 }

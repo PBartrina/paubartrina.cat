@@ -422,5 +422,11 @@
     "copyEmail": "Copia el correu",
     "emailCopied": "Copiat!",
     "orEmail": "o escriu-me directament"
+  },
+  "availability": {
+    "message": "Busco feina — disponible per a noves oportunitats.",
+    "cta": "Contacta'm →",
+    "dismiss": "Tancar banner",
+    "ariaLabel": "Banner de disponibilitat"
   }
 }

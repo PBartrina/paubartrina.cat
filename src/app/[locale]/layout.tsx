@@ -8,6 +8,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ThemeToggle from "@/components/ThemeToggle";
 import ScrollToTop from "@/components/ScrollToTop";
+import AvailabilityBanner from "@/components/AvailabilityBanner";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { routing } from "@/i18n/routing";
@@ -136,6 +137,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
               {t("skipToContent")}
             </a>
             <Navbar />
+            <AvailabilityBanner />
             <main id="main-content" className="flex-1">
               {children}
             </main>
