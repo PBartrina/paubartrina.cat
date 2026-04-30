@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import LanguageSwitcher from "./LanguageSwitcher";
@@ -16,9 +16,73 @@ const navLinks = [
   { href: "/contacte", labelKey: "contact" },
 ] as const;
 
+const FOCUSABLE_SELECTORS =
+  'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const t = useTranslations("nav");
+
+  const hamburgerRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  const closeMenu = useCallback(() => {
+    setMenuOpen(false);
+    // Return focus to hamburger button
+    hamburgerRef.current?.focus();
+  }, []);
+
+  // Close on Escape + focus trap
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        closeMenu();
+        return;
+      }
+
+      if (e.key !== "Tab") return;
+
+      const menu = menuRef.current;
+      if (!menu) return;
+
+      const focusable = Array.from(
+        menu.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTORS)
+      ).filter((el) => !el.closest("[aria-hidden='true']"));
+
+      if (focusable.length === 0) return;
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+
+      if (e.shiftKey) {
+        // Shift+Tab on first element → wrap to last
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        // Tab on last element → wrap to first
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [menuOpen, closeMenu]);
+
+  // Move focus into the menu when it opens
+  useEffect(() => {
+    if (!menuOpen) return;
+    const menu = menuRef.current;
+    if (!menu) return;
+    const first = menu.querySelector<HTMLElement>(FOCUSABLE_SELECTORS);
+    first?.focus();
+  }, [menuOpen]);
 
   return (
     <nav className="sticky top-0 z-50 bg-bg-dark text-text-on-dark">
@@ -52,8 +116,9 @@ export default function Navbar() {
 
         {/* Mobile hamburger */}
         <button
+          ref={hamburgerRef}
           className="flex flex-col gap-1.5 md:hidden"
-          onClick={() => setMenuOpen(!menuOpen)}
+          onClick={() => setMenuOpen((prev) => !prev)}
           aria-label={t("toggleMenu")}
           aria-expanded={menuOpen}
           aria-controls="mobile-menu"
@@ -75,13 +140,20 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <div id="mobile-menu" className="border-t border-bg-dark-secondary px-6 pb-4 md:hidden">
+        <div
+          ref={menuRef}
+          id="mobile-menu"
+          role="dialog"
+          aria-modal="true"
+          aria-label={t("toggleMenu")}
+          className="border-t border-bg-dark-secondary px-6 pb-4 md:hidden"
+        >
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               className="block py-2 font-mono text-sm transition-colors hover:text-text-accent"
-              onClick={() => setMenuOpen(false)}
+              onClick={closeMenu}
             >
               {t(link.labelKey)}
             </Link>
