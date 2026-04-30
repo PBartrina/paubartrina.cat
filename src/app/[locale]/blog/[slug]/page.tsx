@@ -6,11 +6,14 @@ import rehypeHighlight from "rehype-highlight";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import { getAllSlugs, getPostBySlug, getAvailableLocales, getAdjacentPosts } from "@/lib/blog";
+import { extractHeadings } from "@/lib/headings";
 import { Link } from "@/i18n/navigation";
 import { locales } from "@/i18n/config";
 import ReadingProgress from "@/components/ReadingProgress";
 import PostNavigation from "@/components/PostNavigation";
 import CodeBlock from "@/components/CodeBlock";
+import TableOfContents from "@/components/TableOfContents";
+import ShareButton from "@/components/ShareButton";
 import { safeJsonLd } from "@/lib/utils";
 
 interface PageProps {
@@ -78,6 +81,9 @@ export default async function BlogPostPage({ params }: PageProps) {
   const t = await getTranslations({ locale, namespace: "blog" });
   const { prev, next } = getAdjacentPosts(locale, slug);
 
+  const headings = extractHeadings(post.content);
+  const postUrl = `https://paubartrina.cat/${locale}/blog/${slug}`;
+
   const blogPostingJsonLd = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
@@ -85,7 +91,7 @@ export default async function BlogPostPage({ params }: PageProps) {
     description: post.description,
     datePublished: post.date,
     inLanguage: locale,
-    url: `https://paubartrina.cat/${locale}/blog/${slug}`,
+    url: postUrl,
     author: {
       "@type": "Person",
       name: "Pau Bartrina",
@@ -106,64 +112,84 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   return (
     <>
-    <ReadingProgress />
-    <script
-      type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: safeJsonLd(blogPostingJsonLd) }}
-    />
-    <div className="mx-auto max-w-3xl px-6 py-12">
-      <Link
-        href="/blog"
-        className="mb-8 inline-block font-mono text-sm text-text-accent hover:underline"
-      >
-        {t("backToList")}
-      </Link>
+      <ReadingProgress />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(blogPostingJsonLd) }}
+      />
+      <div className="mx-auto max-w-7xl px-6 py-12">
+        <div className="flex gap-16">
+          {/* Main article column */}
+          <div className="min-w-0 flex-1">
+            <Link
+              href="/blog"
+              className="mb-8 inline-block font-mono text-sm text-text-accent hover:underline"
+            >
+              {t("backToList")}
+            </Link>
 
-      {/* Translation warning banner */}
-      {locale !== "ca" && (
-        <div className="mb-6 rounded-md border border-amber-500/30 bg-amber-50 p-4 dark:bg-amber-950/20">
-          <p className="text-sm text-amber-800 dark:text-amber-200">
-            {t("translationWarning")}
-          </p>
-          <Link
-            href={`/blog/${slug}`}
-            locale="ca"
-            className="mt-2 inline-block text-sm text-amber-600 hover:underline dark:text-amber-400"
-          >
-            {t("readOriginal")}
-          </Link>
-        </div>
-      )}
+            {/* Translation warning banner */}
+            {locale !== "ca" && (
+              <div className="mb-6 rounded-md border border-amber-500/30 bg-amber-50 p-4 dark:bg-amber-950/20">
+                <p className="text-sm text-amber-800 dark:text-amber-200">
+                  {t("translationWarning")}
+                </p>
+                <Link
+                  href={`/blog/${slug}`}
+                  locale="ca"
+                  className="mt-2 inline-block text-sm text-amber-600 hover:underline dark:text-amber-400"
+                >
+                  {t("readOriginal")}
+                </Link>
+              </div>
+            )}
 
-      <header className="mb-8">
-        <h1 className="mb-4 font-mono text-3xl font-bold text-text-primary md:text-4xl">
-          {post.title}
-        </h1>
-        <div className="flex flex-wrap gap-3 font-mono text-sm text-text-secondary">
-          <time>{post.date}</time>
-          <span>{t("readingTime", { count: post.readingTimeMinutes })}</span>
-          <span>{t("wordCount", { count: post.wordCount })}</span>
-        </div>
-        {post.tags.length > 0 && (
-          <div className="mt-4 flex flex-wrap gap-2">
-            {post.tags.map((tag) => (
-              <span
-                key={tag}
-                className="rounded-full border border-border-color px-3 py-1 font-mono text-xs text-text-secondary"
-              >
-                {tag}
-              </span>
-            ))}
+            <header className="mb-8">
+              <h1 className="mb-4 font-mono text-3xl font-bold text-text-primary md:text-4xl">
+                {post.title}
+              </h1>
+              <div className="flex flex-wrap items-center gap-3 font-mono text-sm text-text-secondary">
+                <time>{post.date}</time>
+                <span>{t("readingTime", { count: post.readingTimeMinutes })}</span>
+                <span>{t("wordCount", { count: post.wordCount })}</span>
+                <ShareButton
+                  url={postUrl}
+                  title={post.title}
+                  labelShare={t("share")}
+                  labelCopied={t("linkCopied")}
+                  labelCopyLink={t("copyLink")}
+                />
+              </div>
+              {post.tags.length > 0 && (
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {post.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="rounded-full border border-border-color px-3 py-1 font-mono text-xs text-text-secondary"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </header>
+
+            <article className="prose prose-lg max-w-none">
+              {content}
+            </article>
+
+            <PostNavigation prev={prev} next={next} locale={locale} />
           </div>
-        )}
-      </header>
 
-      <article className="prose prose-lg max-w-none">
-        {content}
-      </article>
-
-      <PostNavigation prev={prev} next={next} locale={locale} />
-    </div>
+          {/* Sidebar TOC — desktop only, only when post has headings */}
+          {headings.length > 0 && (
+            <TableOfContents
+              headings={headings}
+              title={t("tableOfContents")}
+            />
+          )}
+        </div>
+      </div>
     </>
   );
 }
