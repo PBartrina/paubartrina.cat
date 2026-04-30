@@ -7,6 +7,7 @@ import Projects from "@/components/Projects";
 import Experience from "@/components/Experience";
 import Education from "@/components/Education";
 import Testimonials from "@/components/Testimonials";
+import RevealOnScroll from "@/components/RevealOnScroll";
 import { getAllPosts } from "@/lib/blog";
 import { safeJsonLd } from "@/lib/utils";
 import { locales } from "@/i18n/config";
@@ -46,18 +47,28 @@ export default async function Home({ params }: PageProps) {
       />
       <Hero />
       <AtAGlance latestPost={latestPost} locale={locale} />
-      <Skills />
+      <RevealOnScroll>
+        <Skills />
+      </RevealOnScroll>
       <Suspense fallback={<div className="py-20" />}>
-        <Projects />
+        <RevealOnScroll delay={50}>
+          <Projects />
+        </RevealOnScroll>
       </Suspense>
       <Suspense fallback={<div className="py-20" />}>
-        <Testimonials />
+        <RevealOnScroll delay={100}>
+          <Testimonials />
+        </RevealOnScroll>
       </Suspense>
       <Suspense fallback={<div className="py-20" />}>
-        <Experience />
+        <RevealOnScroll delay={150}>
+          <Experience />
+        </RevealOnScroll>
       </Suspense>
       <Suspense fallback={<div className="py-20" />}>
-        <Education />
+        <RevealOnScroll delay={200}>
+          <Education />
+        </RevealOnScroll>
       </Suspense>
     </>
   );
