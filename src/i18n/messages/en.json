@@ -303,7 +303,11 @@
     "postCount": "{count, plural, one {# post} other {# posts}}",
     "wordCount": "{count} words",
     "prevPost": "← Previous",
-    "nextPost": "Next →"
+    "nextPost": "Next →",
+    "tableOfContents": "On this page",
+    "share": "Share",
+    "copyLink": "Copy link",
+    "linkCopied": "Link copied!"
   },
   "contact": {
     "heading": "Contact",
