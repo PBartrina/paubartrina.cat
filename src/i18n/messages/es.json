@@ -411,5 +411,11 @@
   "codeBlock": {
     "copy": "Copiar",
     "copied": "¡Copiado!"
+  },
+  "common": {
+    "scrollToTop": "Volver arriba",
+    "copyEmail": "Copiar correo",
+    "emailCopied": "¡Copiado!",
+    "orEmail": "o escríbeme directamente"
   }
 }
