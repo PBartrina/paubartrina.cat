@@ -97,9 +97,39 @@ export default async function CVPage({ params }: PageProps) {
 
       {/* Summary */}
       <section className="mb-8">
+        <h2 className="mb-3 font-display text-xl font-bold text-text-primary">
+          {t("summaryHeading")}
+        </h2>
         <p className="font-mono text-sm leading-relaxed text-text-secondary">
           {tAbout("bio")}
         </p>
+      </section>
+
+      {/* Experience */}
+      <section className="mb-8">
+        <h2 className="mb-4 font-display text-xl font-bold text-text-primary">
+          {tExp("heading")}
+        </h2>
+        <div className="space-y-4">
+          {jobs.map((job) => (
+            <div key={`${job.company}-${job.period}`} className="border-l-2 border-border-color pl-4">
+              <div className="flex flex-wrap items-baseline justify-between gap-2">
+                <h3 className="font-mono text-base font-bold text-text-primary">
+                  {job.role}
+                </h3>
+                <span className="font-mono text-xs text-text-accent">
+                  {job.period}
+                </span>
+              </div>
+              <p className="font-mono text-sm text-text-secondary">
+                {job.company} · {job.location}
+              </p>
+              <p className="mt-1 font-mono text-xs leading-relaxed text-text-secondary">
+                {job.description}
+              </p>
+            </div>
+          ))}
+        </div>
       </section>
 
       {/* Skills */}
@@ -107,12 +137,12 @@ export default async function CVPage({ params }: PageProps) {
         <h2 className="mb-4 font-display text-xl font-bold text-text-primary">
           {tSkills("heading")}
         </h2>
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2">
           {categories.map((cat) => (
             <div key={cat.title}>
-              <p className="mb-1 font-mono text-xs font-semibold uppercase tracking-wide text-text-accent">
+              <h3 className="font-mono text-sm font-bold text-text-accent">
                 {cat.title}
-              </p>
+              </h3>
               <p className="font-mono text-xs text-text-secondary">
                 {cat.items.join(" · ")}
               </p>
@@ -121,79 +151,43 @@ export default async function CVPage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* Experience */}
-      <section className="mb-8">
-        <h2 className="mb-4 font-display text-xl font-bold text-text-primary">
-          {tExp("heading")}
-        </h2>
-        <ol className="space-y-5">
-          {jobs.map((job) => (
-            <li key={`${job.period}-${job.company}`} className="print:break-inside-avoid">
-              <div className="flex flex-wrap items-baseline justify-between gap-2">
-                <div>
-                  <span className="font-display font-semibold text-text-primary">
-                    {job.role}
-                  </span>
-                  <span className="mx-2 text-text-secondary">·</span>
-                  <span className="font-mono text-sm text-text-secondary">
-                    {job.company}
-                  </span>
-                  <span className="mx-2 text-text-secondary">·</span>
-                  <span className="font-mono text-sm text-text-secondary">
-                    {job.location}
-                  </span>
-                </div>
-                <span className="font-mono text-xs text-text-secondary">
-                  {job.period}
-                </span>
-              </div>
-              <p className="mt-1 font-mono text-sm leading-relaxed text-text-secondary">
-                {job.description}
-              </p>
-            </li>
-          ))}
-        </ol>
-      </section>
-
       {/* Education */}
       <section className="mb-8">
         <h2 className="mb-4 font-display text-xl font-bold text-text-primary">
           {tEdu("heading")}
         </h2>
-        <ol className="space-y-3">
-          {entries.map((entry) => (
-            <li key={`${entry.year}-${entry.title}`} className="flex flex-wrap items-baseline justify-between gap-2">
+        <div className="space-y-3">
+          {entries.map((edu) => (
+            <div key={edu.year} className="flex flex-wrap items-baseline justify-between gap-2">
               <div>
-                <span className="font-display font-semibold text-text-primary">
-                  {entry.title}
-                </span>
-                <span className="mx-2 text-text-secondary">·</span>
-                <span className="font-mono text-sm text-text-secondary">
-                  {entry.institution}
-                </span>
+                <h3 className="font-mono text-sm font-bold text-text-primary">
+                  {edu.title}
+                </h3>
+                <p className="font-mono text-xs text-text-secondary">
+                  {edu.institution}
+                </p>
               </div>
-              <span className="font-mono text-xs text-text-secondary">
-                {entry.year}
+              <span className="font-mono text-xs text-text-accent">
+                {edu.year}
               </span>
-            </li>
+            </div>
           ))}
-        </ol>
+        </div>
       </section>
 
       {/* Languages */}
       <section>
-        <h2 className="mb-4 font-display text-xl font-bold text-text-primary">
+        <h2 className="mb-3 font-display text-xl font-bold text-text-primary">
           {tAbout("languagesLabel")}
         </h2>
-        <ul className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap gap-4">
           {languages.map((lang) => (
-            <li key={lang.label} className="font-mono text-sm">
+            <div key={lang.label} className="font-mono text-sm">
               <span className="text-text-primary">{lang.label}</span>
-              <span className="mx-1.5 text-text-secondary">·</span>
-              <span className="text-text-secondary">{lang.level}</span>
-            </li>
+              <span className="ml-1 text-text-secondary">({lang.level})</span>
+            </div>
           ))}
-        </ul>
+        </div>
       </section>
     </div>
   );
