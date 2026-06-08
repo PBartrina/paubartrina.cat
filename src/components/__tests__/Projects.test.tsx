@@ -3,87 +3,78 @@
  */
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { NextIntlClientProvider } from "next-intl";
 import Projects from "../Projects";
 import caMessages from "@/i18n/messages/ca.json";
 import enMessages from "@/i18n/messages/en.json";
 
-// Mock useTranslations for server component
-vi.mock("next-intl", async () => {
-  const actual = await vi.importActual("next-intl");
-  return {
-    ...actual,
-    useTranslations: (namespace: string) => {
-      const messages = caMessages as Record<string, unknown>;
-      const ns = messages[namespace] as Record<string, unknown>;
-      const t = (key: string) => {
-        const keys = key.split(".");
-        let value: unknown = ns;
-        for (const k of keys) {
-          value = (value as Record<string, unknown>)[k];
-        }
-        return value as string;
-      };
-      t.raw = (key: string) => {
-        const keys = key.split(".");
-        let value: unknown = ns;
-        for (const k of keys) {
-          value = (value as Record<string, unknown>)[k];
-        }
-        return value;
-      };
-      return t;
-    },
-  };
-});
+// Mock next-intl/server so the async getTranslations works in JSDOM
+vi.mock("next-intl/server", () => ({
+  getTranslations: (namespace: string) => {
+    const messages = caMessages as Record<string, unknown>;
+    const ns = messages[namespace] as Record<string, unknown>;
+    const t = (key: string) => {
+      const keys = key.split(".");
+      let value: unknown = ns;
+      for (const k of keys) {
+        value = (value as Record<string, unknown>)[k];
+      }
+      return value as string;
+    };
+    t.raw = (key: string) => {
+      const keys = key.split(".");
+      let value: unknown = ns;
+      for (const k of keys) {
+        value = (value as Record<string, unknown>)[k];
+      }
+      return value;
+    };
+    return Promise.resolve(t);
+  },
+}));
 
-function renderProjects(locale: "ca" | "en" = "ca") {
-  const messages = locale === "ca" ? caMessages : enMessages;
-  return render(
-    <NextIntlClientProvider locale={locale} messages={messages}>
-      <Projects />
-    </NextIntlClientProvider>
-  );
+async function renderProjects() {
+  const jsx = await Projects();
+  return render(jsx);
 }
 
 describe("Projects", () => {
-  it("renders the section heading", () => {
-    renderProjects();
+  it("renders the section heading", async () => {
+    await renderProjects();
     expect(screen.getByRole("heading", { level: 2, name: caMessages.projects.heading })).toBeInTheDocument();
   });
 
-  it("renders all project cards", () => {
-    renderProjects();
+  it("renders all project cards", async () => {
+    await renderProjects();
     const projectItems = caMessages.projects.items;
     projectItems.forEach((project) => {
       expect(screen.getByText(project.title)).toBeInTheDocument();
     });
   });
 
-  it("renders project descriptions", () => {
-    renderProjects();
+  it("renders project descriptions", async () => {
+    await renderProjects();
     const firstProject = caMessages.projects.items[0];
     expect(screen.getByText(firstProject.description)).toBeInTheDocument();
   });
 
-  it("renders tech stack badges for each project", () => {
-    renderProjects();
+  it("renders tech stack badges for each project", async () => {
+    await renderProjects();
     const firstProject = caMessages.projects.items[0];
     firstProject.tags.forEach((tag) => {
       expect(screen.getByText(tag)).toBeInTheDocument();
     });
   });
 
-  it("renders featured badge for highlighted projects", () => {
-    renderProjects();
+  it("renders featured badge for highlighted projects", async () => {
+    await renderProjects();
     const highlightedProjects = caMessages.projects.items.filter((p) => p.highlight);
     expect(highlightedProjects.length).toBeGreaterThan(0);
     // Check that featured badge text exists
     expect(screen.getByText(caMessages.projects.featured)).toBeInTheDocument();
   });
 
-  it("renders live link for projects with url", () => {
-    renderProjects();
+  it("renders live link for projects with url", async () => {
+    await renderProjects();
     const projectWithUrl = caMessages.projects.items.find((p) => p.url);
     if (projectWithUrl) {
       const links = screen.getAllByRole("link", { name: new RegExp(caMessages.projects.liveLink) });
@@ -94,8 +85,8 @@ describe("Projects", () => {
     }
   });
 
-  it("renders repo link for projects with repo", () => {
-    renderProjects();
+  it("renders repo link for projects with repo", async () => {
+    await renderProjects();
     const projectWithRepo = caMessages.projects.items.find((p) => p.repo);
     if (projectWithRepo) {
       const links = screen.getAllByRole("link", { name: new RegExp(caMessages.projects.repoLink) });
@@ -105,14 +96,14 @@ describe("Projects", () => {
     }
   });
 
-  it("has correct section id for navigation", () => {
-    const { container } = renderProjects();
+  it("has correct section id for navigation", async () => {
+    const { container } = await renderProjects();
     const section = container.querySelector("#projects");
     expect(section).toBeInTheDocument();
   });
 
-  it("applies highlight styling to featured projects", () => {
-    const { container } = renderProjects();
+  it("applies highlight styling to featured projects", async () => {
+    const { container } = await renderProjects();
     // Featured projects should have border-text-accent class
     const highlightedCards = container.querySelectorAll(".border-text-accent");
     const highlightedProjects = caMessages.projects.items.filter((p) => p.highlight);
@@ -133,7 +124,7 @@ describe("Projects translations", () => {
 
   it("each project has required fields", () => {
     const requiredFields = ["title", "description", "tags"];
-    caMessages.projects.items.forEach((project, index) => {
+    caMessages.projects.items.forEach((project) => {
       requiredFields.forEach((field) => {
         expect(project).toHaveProperty(field);
       });

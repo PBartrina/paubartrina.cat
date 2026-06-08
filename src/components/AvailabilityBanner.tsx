@@ -11,11 +11,14 @@ export default function AvailabilityBanner() {
   const t = useTranslations("availability");
 
   useEffect(() => {
+    // Browser-only API — must run after mount to avoid SSR hydration mismatch.
     try {
       if (!localStorage.getItem(STORAGE_KEY)) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setVisible(true);
       }
     } catch {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setVisible(true);
     }
   }, []);

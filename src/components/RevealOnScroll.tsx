@@ -31,7 +31,9 @@ export default function RevealOnScroll({
   const [prefersReduced, setPrefersReduced] = useState(false);
 
   useEffect(() => {
+    // Browser-only API — must run after mount to avoid SSR hydration mismatch.
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setPrefersReduced(mq.matches);
     if (mq.matches) {
       setVisible(true);
