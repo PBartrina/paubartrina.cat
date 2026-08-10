@@ -1,0 +1,69 @@
+---
+title: "Cinco meses de bots: los números"
+date: "2026-08-10"
+description: "169 issues, 53 pull requests fusionados y qué he aprendido rechazando dos tercios de las propuestas"
+tags: ["automatitzacio", "dades", "retrospectiva", "claude"]
+published: true
+---
+
+En los dos artículos anteriores he explicado cómo está hecha esta web y cómo funcionan los bots que la mantienen. Este es el que realmente quería escribir: **qué ha producido todo esto**, con las cifras reales del repositorio y sin endulzarlas.
+
+Período: del 9 de marzo al 10 de agosto de 2026. Cinco meses justos.
+
+## Las cifras
+
+**169 issues** abiertos automáticamente. Repartidos casi a partes iguales: **83 errores** y **86 propuestas de mejora**. Una simetría que no planifiqué y que me sorprendió.
+
+De esos 169, he aprobado **55**. Es decir, **un 33%**.
+
+**53 pull requests fusionados**, con **+5.238 líneas añadidas y −1.501 eliminadas**.
+
+## El número que importa es el 33%
+
+Dos de cada tres cosas que los bots me proponen, las rechazo.
+
+Cuando vi esta cifra por primera vez la leí como un fracaso. Tardé unas semanas en entender que es exactamente al revés: **el 33% es el producto**. Un sistema que me propusiera solo cosas buenas sería un sistema que propone muy poco. Lo que quiero es uno que proponga generosamente y me deje la decisión barata.
+
+Rechazar un issue me cuesta cinco segundos. Revertir un cambio fusionado que no hacía falta me cuesta una tarde. Mientras esta asimetría exista, vale la pena que el bot sea un poco pesado.
+
+Y vale la pena mirárselo al revés: **55 tareas que yo no he tenido que pensar**. No escribir — *pensar*. El trabajo que me ahorra este sistema no es teclear, es el de mirar el proyecto un lunes por la mañana y decidir qué toca hacer.
+
+## En qué son buenos y en qué no
+
+El patrón es bastante claro después de cinco meses.
+
+**Son buenos en**: accesibilidad (atributos que faltan, contrastes, etiquetas de formulario), detalles de SEO, metadatos, dependencias con vulnerabilidades conocidas, casos límite que no había contemplado, y todo el trabajo aburrido y mecánico que yo iría posponiendo indefinidamente.
+
+**Son malos en**: priorizar. Un bot no sabe que esta web es mi currículum y no un producto con usuarios. Propone infraestructura para problemas que no tengo, optimizaciones para un tráfico que no recibo y abstracciones para código que nadie más tocará. No tiene criterio de producto porque no sabe qué es este producto, y eso no se soluciona con un *prompt* mejor.
+
+También son malos juzgando si algo ya está hecho. De ahí viene la comprobación de duplicados que tuve que añadir.
+
+## Fiabilidad
+
+| Workflow | Ejecuciones | Fallos |
+|---|---|---|
+| Improvement Proposer | 32 | 2 |
+| Code Quality Scanner | 51 | 4 |
+| Auto Fixer | 64 | 0 |
+
+El *fixer* no ha fallado nunca en 64 ejecuciones, cosa que me da un poco de miedo porque es el que tiene permisos de escritura.
+
+Hay un detalle en esta tabla que dice más del sistema que el resto del artículo: en cinco meses ha habido unas 22 semanas, y por tanto 22 lunes. Pero el *fixer* ha corrido **64 veces**. Significa que la gran mayoría de ejecuciones **las lanzo yo a mano**, cuando apruebo algo y no tengo ganas de esperarme al lunes.
+
+El cron acabó siendo el mínimo garantizado, no el mecanismo principal. Si volviera a empezar, quizá ni lo pondría.
+
+## La CI está para fallar
+
+De las últimas 100 ejecuciones de la integración continua, **25 han fallado**.
+
+Esta es, de todas las cifras del artículo, la que menos me preocupa. Una CI que no falla nunca no te está protegiendo de nada: solo te está confirmando que ya lo hacías bien. Un cuarto de fallos significa que hay cuatro gates reales (tipos, *lint*, tests y *build*) y que de vez en cuando hacen su trabajo, tanto con mi código como con el de los bots.
+
+## ¿Lo volvería a hacer?
+
+Sí, pero con una expectativa diferente de la que tenía en marzo.
+
+En marzo me pensaba que estaba construyendo algo que **mantendría la web sola**. Lo que he acabado teniendo es algo que **me trae el trabajo ya pensado** y espera que yo decida. Es menos espectacular de explicar y mucho más útil de tener.
+
+La lección, si hay alguna, es que la parte difícil de automatizar con IA no es conseguir que haga cosas. Es decidir **qué no la dejas hacer**. Todo el valor de este sistema está en aquella etiqueta `approved` que solo pongo yo, y en el hecho de que ningún bot puede fusionar nada.
+
+Cinco meses, 169 propuestas, 55 síes y 114 noes. Los noes también son trabajo hecho.

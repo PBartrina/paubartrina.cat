@@ -1,0 +1,69 @@
+---
+title: "Five months of bots: the numbers"
+date: "2026-08-10"
+description: "169 issues, 53 merged pull requests, and what I learned from rejecting two thirds of the proposals"
+tags: ["automatitzacio", "dades", "retrospectiva", "claude"]
+published: true
+---
+
+In the two previous articles I explained how this website is built and how the bots that maintain it work. This is the one I actually wanted to write: **what all of this has produced**, with the real numbers from the repository and without sugarcoating them.
+
+Period: from March 9 to August 10, 2026. Five months exactly.
+
+## The numbers
+
+**169 issues** opened automatically. Split almost evenly: **83 bugs** and **86 improvement proposals**. A symmetry I didn't plan and that surprised me.
+
+Of those 169, I approved **55**. That is, **33%**.
+
+**53 pull requests merged**, with **+5,238 lines added and −1,501 removed**.
+
+## The number that matters is 33%
+
+Two out of every three things the bots propose to me, I reject.
+
+When I first saw this figure I read it as a failure. It took me a few weeks to understand it's exactly the opposite: **the 33% is the product**. A system that only proposed good things would be a system that proposes very little. What I want is one that proposes generously and leaves the decision cheap for me.
+
+Rejecting an issue costs me five seconds. Reverting a merged change that wasn't needed costs me an afternoon. As long as this asymmetry exists, it's worth it for the bot to be a little pushy.
+
+And it's worth looking at it the other way around: **55 tasks I didn't have to think of**. Not write — *think of*. The work this system saves me isn't typing, it's looking at the project on a Monday morning and deciding what needs doing.
+
+## What they're good at and what they're not
+
+The pattern is fairly clear after five months.
+
+**They're good at**: accessibility (missing attributes, contrasts, form labels), SEO details, metadata, dependencies with known vulnerabilities, edge cases I hadn't considered, and all the boring, mechanical work I'd keep postponing indefinitely.
+
+**They're bad at**: prioritizing. A bot doesn't know that this website is my résumé and not a product with users. It proposes infrastructure for problems I don't have, optimizations for traffic I don't receive, and abstractions for code nobody else will touch. It has no product judgment because it doesn't know what this product is, and that can't be fixed with a better *prompt*.
+
+They're also bad at judging whether something is already done. That's where the duplicate check I had to add came from.
+
+## Reliability
+
+| Workflow | Runs | Failures |
+|---|---|---|
+| Improvement Proposer | 32 | 2 |
+| Code Quality Scanner | 51 | 4 |
+| Auto Fixer | 64 | 0 |
+
+The *fixer* has never failed in 64 runs, which scares me a little because it's the one with write permissions.
+
+There's a detail in this table that says more about the system than the rest of the article: in five months there have been about 22 weeks, and therefore 22 Mondays. But the *fixer* has run **64 times**. That means the vast majority of runs **I trigger manually**, when I approve something and don't feel like waiting until Monday.
+
+The cron ended up being the guaranteed minimum, not the main mechanism. If I started over, I might not even include it.
+
+## CI is there to fail
+
+Of the last 100 continuous integration runs, **25 failed**.
+
+This is, of all the figures in this article, the one that worries me least. A CI that never fails isn't protecting you from anything: it's only confirming you were already doing it right. A quarter of failures means there are four real gates (types, *lint*, tests, and *build*) and that from time to time they do their job, both with my code and with the bots' code.
+
+## Would I do it again?
+
+Yes, but with a different expectation from the one I had in March.
+
+In March I thought I was building something that **would maintain the website on its own**. What I ended up having is something that **brings me the work already thought through** and waits for me to decide. It's less spectacular to explain and much more useful to have.
+
+The lesson, if there is one, is that the hard part of automating with AI isn't getting it to do things. It's deciding **what you don't let it do**. All the value of this system lies in that `approved` label that only I apply, and in the fact that no bot can merge anything.
+
+Five months, 169 proposals, 55 yeses and 114 nos. The nos are work done too.
