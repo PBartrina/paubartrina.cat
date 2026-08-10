@@ -32,7 +32,7 @@ export async function generateMetadata({
       description: t("description"),
       url: canonicalUrl,
       type: "website",
-      images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: "Pau Bartrina – Senior Frontend Engineer" }],
+      images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: "Pau Bartrina – Senior Software Engineer" }],
     },
     twitter: {
       card: "summary_large_image",
