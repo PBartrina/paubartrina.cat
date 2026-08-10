@@ -1,0 +1,63 @@
+---
+title: "Bots que proposen, jo decideixo"
+date: "2026-08-09"
+description: "Com tres accions de GitHub troben feina, la fan, i per què el fre és la part important"
+tags: ["automatitzacio", "github-actions", "ia", "claude"]
+published: true
+---
+
+Al primer article d'aquesta web vaig escriure que estava dissenyant "un sistema automatitzat de millores i gestió de Issues a GitHub". Això existeix, fa cinc mesos que funciona, i aquest article explica com.
+
+Avís d'entrada: la part interessant no és que la IA escrigui codi. Això ja ho sabem tots. La part interessant és **on hi vaig posar el fre**.
+
+## Tres bots, un dilluns al matí
+
+Tot passa mentre esmorzo, encadenat amb una hora de diferència:
+
+| Hora (UTC) | Qui | Què fa |
+|---|---|---|
+| 07:00 | Improvement Proposer | Llegeix el codi i proposa fins a **3 millores** |
+| 08:00 | Code Quality Scanner | Busca problemes i obre fins a **5 issues** |
+| 09:00 | Auto Fixer | Agafa feina aprovada i obre un **pull request** |
+
+Els dos primers només tenen permís per **obrir issues**. No poden tocar el codi ni encara que vulguin: al fitxer del *workflow*, el permís de continguts és de només lectura. Això no és una qüestió de confiança, és una qüestió de disseny — un bot que no pot escriure no pot trencar res.
+
+L'**Improvement Proposer** mira el projecte i suggereix coses que hi podrien anar bé: accessibilitat, rendiment, SEO, funcionalitats que falten. Etiqueta els issues amb `enhancement` i `automated`.
+
+El **Code Quality Scanner** fa la feina contrària: busca el que ja hi és i està malament. Etiquetes `bug` i `automated`.
+
+Tots dos tenen una cosa que va resultar més important del que esperava: **comproven els issues que ja existeixen** — oberts i tancats — i comparen les paraules del títol per no tornar a proposar el mateix. Sense això, cada dilluns rebia les mateixes cinc idees. Un bot amb memòria de peix és pitjor que cap bot, perquè el soroll setmanal fa que deixis de llegir-lo.
+
+## L'etiqueta que ho canvia tot
+
+Aquí és on el sistema es guanya el sou. L'**Auto Fixer** no toca cap issue tret que tingui **tres etiquetes**: `bug` o `enhancement`, més `automated`, **més `approved`**.
+
+I l'etiqueta `approved` només la poso jo, a mà.
+
+Vol dir que cada dilluns a les nou el *fixer* es desperta, mira si hi ha feina que jo hagi beneït explícitament, i si no n'hi ha, es torna a dormir. El sistema no decideix què és important. Proposa, i espera.
+
+A sobre, quan corre sol, **només processa un issue per execució**. Podria fer-ne cinc. No en fa cinc perquè després jo he de revisar cinc *pull requests*, i un humà revisant cinc PRs de cop no revisa: aprova.
+
+## Què fa exactament quan arrenca
+
+Quan hi ha un issue aprovat, el *fixer* llegeix l'issue, llegeix els fitxers implicats, escriu el canvi, crea una branca (`fix/...` o `feat/...`), fa el *commit* i obre un *pull request* que referencia l'issue original.
+
+I llavors s'atura. No fusiona. **Mai fusiona.**
+
+Els dos bots de detecció fan servir **Claude Sonnet**, que és ràpid i barat per llegir molt de codi. El que escriu els canvis fa servir **Claude Opus**, perquè escriure codi correcte val la pena pagar-lo. Trobar problemes és fàcil; arreglar-los sense trencar res, no.
+
+## L'última porta
+
+Cada PR que obre el bot passa per la mateixa CI que els meus: comprovació de tipus, *lint*, tests i *build*. Si el bot ha escrit alguna cosa que no compila, ho sabem abans que jo ho llegeixi.
+
+Així que la cadena completa, de principi a fi, és aquesta:
+
+**El bot proposa → jo aprovo → el bot ho escriu → la CI ho verifica → jo el fusiono.**
+
+Hi ha exactament dos punts on hi ha un humà, i tots dos són decisions, no feina. Aquesta és tota la idea. No volia un sistema que treballés per mi mentre dormo; volia un sistema que **em portés la feina ja pensada** perquè jo només hagués de dir que sí o que no.
+
+## El que no explica ningú
+
+Un sistema així sembla molt més impressionant en un diagrama que en la pràctica. Els bots proposen coses òbvies, coses innecessàries i, de tant en tant, alguna cosa que no se m'havia acudit i que és bona de veritat. La proporció entre aquestes tres categories és la mètrica que realment importa.
+
+Tinc cinc mesos de dades sobre exactament això, i les explico al pròxim article. La conclusió curta: **la majoria de les seves idees les rebutjo**, i és precisament per això que el sistema funciona.

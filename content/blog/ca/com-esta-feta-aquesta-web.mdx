@@ -1,0 +1,59 @@
+---
+title: "Com està feta aquesta web"
+date: "2026-08-08"
+description: "El stack, les decisions i els detalls petits que fan que tot encaixi"
+tags: ["web", "nextjs", "ia", "claude"]
+published: true
+---
+
+Fa uns mesos vaig publicar la primera versió d'aquesta web i vaig prometre que allò només era el principi. Han passat cinc mesos, i ara sí que hi ha alguna cosa a explicar. Aquest article és el primer de tres: aquí explico **com està feta la web**; al següent, els bots que la mantenen; i al tercer, els números reals de tot plegat.
+
+## El stack, sense sorpreses
+
+No hi ha res exòtic aquí, i és deliberat:
+
+* **[Next.js 16](https://nextjs.org)** amb l'App Router. Tot el que es pot generar estàticament, es genera estàticament.
+* **TypeScript** en mode estricte. No és negociable: si el compilador no hi està d'acord, no entra.
+* **[Tailwind CSS v4](https://tailwindcss.com)** amb variables de tema pròpies, que és el que permet que el mode fosc i clar siguin només un atribut `data-theme` a l'arrel.
+* **[Vercel](https://vercel.com)**, pla gratuït. Per a una web personal, sobra.
+
+La font és **JetBrains Mono** a tot arreu. És una decisió estètica discutible i no penso discutir-la.
+
+## El blog són fitxers, no una base de dades
+
+Els articles són fitxers **MDX** dins de `content/blog/`, amb frontmatter llegit amb `gray-matter`. Cap CMS, cap base de dades, cap panell d'administració. Escriure un article és crear un fitxer i fer *commit*.
+
+Això té una conseqüència agradable: el temps de lectura, les etiquetes, l'índex de continguts i el *feed* RSS surten tots de llegir els mateixos fitxers en temps de *build*. No hi ha res a sincronitzar perquè no hi ha dues fonts de veritat.
+
+## Tres idiomes sense duplicar feina
+
+La web està en **català, castellà i anglès**, gestionada amb `next-intl`. Els textos de la interfície viuen en tres fitxers JSON; els articles, en tres carpetes paral·leles.
+
+La part que m'agrada: escric l'article **només en català**, i després executo un script que el tradueix als altres dos idiomes cridant l'API de Claude. Manté el frontmatter, la data i les etiquetes intactes, i només toca el títol, la descripció i el cos:
+
+```bash
+pnpm run translate-post com-esta-feta-aquesta-web
+```
+
+No és perfecte i sempre hi faig una repassada, però la diferència entre "he d'escriure això tres vegades" i "he de revisar això dues vegades" és exactament la diferència entre publicar i no publicar.
+
+## Els detalls petits
+
+Són els que m'han donat més gust de fer:
+
+* La data d'**última actualització** de la pàgina */ara* i del peu no està escrita a mà enlloc: surt de preguntar-li al `git` quan es va tocar per última vegada el fitxer corresponent. És impossible que quedi desactualitzada perquè ningú l'actualitza.
+* Cada article genera la seva pròpia **imatge d'Open Graph**, així que quan es comparteix un enllaç, la previsualització és la bona.
+* Hi ha un **CV imprimible** a `/cv` que és la mateixa informació que la home, però amb estils de `print`. Un `Ctrl+P` i ja tens un PDF.
+* Barra de progrés de lectura, índex de continguts, cerca al llistat d'articles, botó de compartir, animacions d'aparició en fer *scroll*. Cap d'aquestes coses és imprescindible; totes juntes són el que fa que una web es noti cuidada.
+
+## El que passa abans de publicar
+
+Cada *push* i cada *pull request* dispara una acció de GitHub que fa quatre coses en ordre: comprovació de tipus, *lint*, tests amb Vitest i *build* completa. Si qualsevol falla, no es fusiona.
+
+Sona excessiu per a una web personal. Ho és, fins que deixes que uns bots hi facin canvis sols — i aquesta és exactament la història del pròxim article.
+
+## Què ve ara
+
+La web ja no és el projecte. La web és **el banc de proves** del projecte, que és una altra cosa: veure fins on pot arribar un sistema on la IA proposa la feina, la fa, i jo només decideixo què entra.
+
+Al pròxim article explico com funciona aquest sistema. A l'últim, què ha produït realment en cinc mesos, amb els números a la mà i sense endolcir-los.

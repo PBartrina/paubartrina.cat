@@ -1,0 +1,69 @@
+---
+title: "Cinc mesos de bots: els números"
+date: "2026-08-10"
+description: "169 issues, 53 pull requests fusionats i què he après rebutjant dos terços de les propostes"
+tags: ["automatitzacio", "dades", "retrospectiva", "claude"]
+published: true
+---
+
+Als dos articles anteriors he explicat com està feta aquesta web i com funcionen els bots que la mantenen. Aquest és el que realment volia escriure: **què ha produït tot això**, amb les xifres reals del repositori i sense endolcir-les.
+
+Període: del 9 de març al 10 d'agost del 2026. Cinc mesos justos.
+
+## Les xifres
+
+**169 issues** oberts automàticament. Repartits gairebé a parts iguals: **83 errors** i **86 propostes de millora**. Una simetria que no vaig planificar i que em va sorprendre.
+
+D'aquests 169, n'he aprovat **55**. És a dir, **un 33%**.
+
+**53 pull requests fusionats**, amb **+5.238 línies afegides i −1.501 eliminades**.
+
+## El número que importa és el 33%
+
+Dos de cada tres coses que els bots em proposen, les rebutjo.
+
+Quan vaig veure aquesta xifra per primer cop la vaig llegir com un fracàs. Vaig trigar unes setmanes a entendre que és exactament al revés: **el 33% és el producte**. Un sistema que em proposés només coses bones seria un sistema que proposa molt poc. El que vull és un que proposi generosament i em deixi la decisió barata.
+
+Rebutjar un issue em costa cinc segons. Revertir un canvi fusionat que no calia em costa una tarda. Mentre aquesta asimetria existeixi, val la pena que el bot sigui una mica pesat.
+
+I val la pena mirar-s'ho al revés: **55 tasques que jo no he hagut de pensar**. No d'escriure — de *pensar*. La feina que m'estalvia aquest sistema no és teclejar, és la de mirar el projecte un dilluns al matí i decidir què toca fer.
+
+## En què són bons i en què no
+
+El patró és bastant clar després de cinc mesos.
+
+**Hi són bons**: accessibilitat (atributs que falten, contrastos, etiquetes de formulari), detalls de SEO, metadades, dependències amb vulnerabilitats conegudes, casos límit que no havia contemplat, i tota la feina avorreta i mecànica que jo aniria posposant indefinidament.
+
+**Hi són dolents**: prioritzar. Un bot no sap que aquesta web és el meu currículum i no un producte amb usuaris. Proposa infraestructura per a problemes que no tinc, optimitzacions per a un trànsit que no rebo i abstraccions per a codi que ningú més tocarà. No té criteri de producte perquè no sap què és aquest producte, i això no es soluciona amb un *prompt* millor.
+
+També són dolents jutjant si una cosa ja està feta. D'aquí ve la comprovació de duplicats que vaig haver d'afegir-hi.
+
+## Fiabilitat
+
+| Workflow | Execucions | Fallades |
+|---|---|---|
+| Improvement Proposer | 32 | 2 |
+| Code Quality Scanner | 51 | 4 |
+| Auto Fixer | 64 | 0 |
+
+El *fixer* no ha fallat mai en 64 execucions, cosa que em fa una mica de por perquè és el que té permisos d'escriptura.
+
+Hi ha un detall en aquesta taula que diu més del sistema que la resta de l'article: en cinc mesos hi ha hagut unes 22 setmanes, i per tant 22 dilluns. Però el *fixer* ha corregut **64 vegades**. Vol dir que la gran majoria d'execucions **les llanço jo a mà**, quan aprovo alguna cosa i no tinc ganes d'esperar-me al dilluns.
+
+El cron va acabar sent el mínim garantit, no el mecanisme principal. Si tornés a començar, potser ni el posaria.
+
+## La CI hi és per fallar
+
+De les últimes 100 execucions de la integració contínua, **25 han fallat**.
+
+Aquesta és, de totes les xifres de l'article, la que menys em preocupa. Una CI que no falla mai no t'està protegint de res: només t'està confirmant que ja ho feies bé. Un quart de fallades vol dir que hi ha quatre gates reals (tipus, *lint*, tests i *build*) i que de tant en tant fan la seva feina, tant amb el meu codi com amb el dels bots.
+
+## Ho tornaria a fer?
+
+Sí, però amb una expectativa diferent de la que tenia al març.
+
+Al març em pensava que estava construint una cosa que **mantindria la web sola**. El que he acabat tenint és una cosa que **em porta la feina ja pensada** i espera que jo decideixi. És menys espectacular d'explicar i molt més útil de tenir.
+
+La lliçó, si n'hi ha alguna, és que la part difícil d'automatitzar amb IA no és aconseguir que faci coses. És decidir **què no la deixes fer**. Tot el valor d'aquest sistema està en aquella etiqueta `approved` que només poso jo, i en el fet que cap bot pot fusionar res.
+
+Cinc mesos, 169 propostes, 55 sís i 114 nos. Els nos també són feina feta.

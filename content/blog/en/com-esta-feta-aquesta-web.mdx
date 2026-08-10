@@ -1,0 +1,59 @@
+---
+title: "How this website is made"
+date: "2026-08-08"
+description: "The stack, the decisions, and the small details that make everything fit together"
+tags: ["web", "nextjs", "ia", "claude"]
+published: true
+---
+
+A few months ago I published the first version of this website and promised that it was only the beginning. Five months have passed, and now there is actually something to explain. This article is the first of three: here I explain **how the website is made**; in the next one, the bots that maintain it; and in the third, the real numbers of the whole thing.
+
+## The stack, no surprises
+
+There's nothing exotic here, and it's deliberate:
+
+* **[Next.js 16](https://nextjs.org)** with the App Router. Everything that can be statically generated is statically generated.
+* **TypeScript** in strict mode. It's non-negotiable: if the compiler doesn't agree, it doesn't get in.
+* **[Tailwind CSS v4](https://tailwindcss.com)** with custom theme variables, which is what allows dark and light mode to be just a `data-theme` attribute on the root.
+* **[Vercel](https://vercel.com)**, free plan. For a personal website, it's more than enough.
+
+The font is **JetBrains Mono** everywhere. It's a debatable aesthetic decision and I don't intend to debate it.
+
+## The blog is files, not a database
+
+The articles are **MDX** files inside `content/blog/`, with frontmatter read using `gray-matter`. No CMS, no database, no admin panel. Writing an article is creating a file and making a *commit*.
+
+This has a pleasant consequence: the reading time, tags, table of contents, and RSS *feed* all come from reading the same files at *build* time. There's nothing to synchronize because there aren't two sources of truth.
+
+## Three languages without duplicating work
+
+The website is in **Catalan, Spanish, and English**, managed with `next-intl`. The interface texts live in three JSON files; the articles, in three parallel folders.
+
+The part I like: I write the article **only in Catalan**, and then I run a script that translates it to the other two languages by calling Claude's API. It keeps the frontmatter, date, and tags intact, and only touches the title, description, and body:
+
+```bash
+pnpm run translate-post com-esta-feta-aquesta-web
+```
+
+It's not perfect and I always do a review pass, but the difference between "I have to write this three times" and "I have to review this twice" is exactly the difference between publishing and not publishing.
+
+## The small details
+
+These are the ones I enjoyed making the most:
+
+* The **last updated** date on the */now* page and the footer isn't written by hand anywhere: it comes from asking `git` when the corresponding file was last touched. It's impossible for it to become outdated because nobody updates it.
+* Each article generates its own **Open Graph image**, so when a link is shared, the preview is the right one.
+* There's a **printable CV** at `/cv` that is the same information as the home page, but with `print` styles. A `Ctrl+P` and you've got a PDF.
+* Reading progress bar, table of contents, search in the article list, share button, scroll-triggered appearance animations. None of these things is essential; all of them together are what makes a website feel polished.
+
+## What happens before publishing
+
+Every *push* and every *pull request* triggers a GitHub action that does four things in order: type checking, *lint*, tests with Vitest, and a full *build*. If any of them fails, it doesn't get merged.
+
+It sounds excessive for a personal website. It is, until you let bots make changes on their own — and that's exactly the story of the next article.
+
+## What comes next
+
+The website is no longer the project. The website is **the testing ground** for the project, which is something else: seeing how far a system can go where AI proposes the work, does it, and I only decide what gets in.
+
+In the next article I explain how this system works. In the last one, what it has actually produced in five months, with the numbers in hand and without sugarcoating them.

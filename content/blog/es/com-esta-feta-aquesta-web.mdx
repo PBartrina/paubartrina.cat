@@ -1,0 +1,59 @@
+---
+title: "Cómo está hecha esta web"
+date: "2026-08-08"
+description: "El stack, las decisiones y los pequeños detalles que hacen que todo encaje"
+tags: ["web", "nextjs", "ia", "claude"]
+published: true
+---
+
+Hace unos meses publiqué la primera versión de esta web y prometí que aquello solo era el principio. Han pasado cinco meses, y ahora sí que hay algo que explicar. Este artículo es el primero de tres: aquí explico **cómo está hecha la web**; en el siguiente, los bots que la mantienen; y en el tercero, los números reales de todo el conjunto.
+
+## El stack, sin sorpresas
+
+No hay nada exótico aquí, y es deliberado:
+
+* **[Next.js 16](https://nextjs.org)** con el App Router. Todo lo que se puede generar estáticamente, se genera estáticamente.
+* **TypeScript** en modo estricto. No es negociable: si el compilador no está de acuerdo, no entra.
+* **[Tailwind CSS v4](https://tailwindcss.com)** con variables de tema propias, que es lo que permite que el modo oscuro y claro sean solo un atributo `data-theme` en la raíz.
+* **[Vercel](https://vercel.com)**, plan gratuito. Para una web personal, sobra.
+
+La fuente es **JetBrains Mono** en todas partes. Es una decisión estética discutible y no pienso discutirla.
+
+## El blog son ficheros, no una base de datos
+
+Los artículos son ficheros **MDX** dentro de `content/blog/`, con frontmatter leído con `gray-matter`. Ningún CMS, ninguna base de datos, ningún panel de administración. Escribir un artículo es crear un fichero y hacer *commit*.
+
+Esto tiene una consecuencia agradable: el tiempo de lectura, las etiquetas, el índice de contenidos y el *feed* RSS salen todos de leer los mismos ficheros en tiempo de *build*. No hay nada que sincronizar porque no hay dos fuentes de verdad.
+
+## Tres idiomas sin duplicar trabajo
+
+La web está en **catalán, castellano e inglés**, gestionada con `next-intl`. Los textos de la interfaz viven en tres ficheros JSON; los artículos, en tres carpetas paralelas.
+
+La parte que me gusta: escribo el artículo **solo en catalán**, y después ejecuto un script que lo traduce a los otros dos idiomas llamando a la API de Claude. Mantiene el frontmatter, la fecha y las etiquetas intactas, y solo toca el título, la descripción y el cuerpo:
+
+```bash
+pnpm run translate-post com-esta-feta-aquesta-web
+```
+
+No es perfecto y siempre le echo un repaso, pero la diferencia entre "tengo que escribir esto tres veces" y "tengo que revisar esto dos veces" es exactamente la diferencia entre publicar y no publicar.
+
+## Los pequeños detalles
+
+Son los que más me han gustado hacer:
+
+* La fecha de **última actualización** de la página */ahora* y del pie no está escrita a mano en ningún sitio: sale de preguntarle al `git` cuándo se tocó por última vez el fichero correspondiente. Es imposible que quede desactualizada porque nadie la actualiza.
+* Cada artículo genera su propia **imagen de Open Graph**, así que cuando se comparte un enlace, la previsualización es la correcta.
+* Hay un **CV imprimible** en `/cv` que es la misma información que la home, pero con estilos de `print`. Un `Ctrl+P` y ya tienes un PDF.
+* Barra de progreso de lectura, índice de contenidos, búsqueda en el listado de artículos, botón de compartir, animaciones de aparición al hacer *scroll*. Ninguna de estas cosas es imprescindible; todas juntas son lo que hace que una web se note cuidada.
+
+## Lo que pasa antes de publicar
+
+Cada *push* y cada *pull request* dispara una acción de GitHub que hace cuatro cosas en orden: comprobación de tipos, *lint*, tests con Vitest y *build* completa. Si cualquiera falla, no se fusiona.
+
+Suena excesivo para una web personal. Lo es, hasta que dejas que unos bots hagan cambios solos — y esa es exactamente la historia del próximo artículo.
+
+## Qué viene ahora
+
+La web ya no es el proyecto. La web es **el banco de pruebas** del proyecto, que es otra cosa: ver hasta dónde puede llegar un sistema en el que la IA propone el trabajo, lo hace, y yo solo decido qué entra.
+
+En el próximo artículo explico cómo funciona ese sistema. En el último, qué ha producido realmente en cinco meses, con los números en la mano y sin endulzarlos.

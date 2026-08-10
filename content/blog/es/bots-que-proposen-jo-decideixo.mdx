@@ -1,0 +1,63 @@
+---
+title: "Bots que proponen, yo decido"
+date: "2026-08-09"
+description: "Cómo tres acciones de GitHub encuentran trabajo, lo hacen, y por qué el freno es la parte importante"
+tags: ["automatitzacio", "github-actions", "ia", "claude"]
+published: true
+---
+
+En el primer artículo de esta web escribí que estaba diseñando "un sistema automatizado de mejoras y gestión de Issues en GitHub". Eso existe, lleva cinco meses funcionando, y este artículo explica cómo.
+
+Aviso de entrada: la parte interesante no es que la IA escriba código. Eso ya lo sabemos todos. La parte interesante es **dónde le puse el freno**.
+
+## Tres bots, un lunes por la mañana
+
+Todo pasa mientras desayuno, encadenado con una hora de diferencia:
+
+| Hora (UTC) | Quién | Qué hace |
+|---|---|---|
+| 07:00 | Improvement Proposer | Lee el código y propone hasta **3 mejoras** |
+| 08:00 | Code Quality Scanner | Busca problemas y abre hasta **5 issues** |
+| 09:00 | Auto Fixer | Coge trabajo aprobado y abre un **pull request** |
+
+Los dos primeros solo tienen permiso para **abrir issues**. No pueden tocar el código ni aunque quieran: en el fichero del *workflow*, el permiso de contenidos es de solo lectura. Esto no es una cuestión de confianza, es una cuestión de diseño — un bot que no puede escribir no puede romper nada.
+
+El **Improvement Proposer** mira el proyecto y sugiere cosas que podrían ir bien: accesibilidad, rendimiento, SEO, funcionalidades que faltan. Etiqueta los issues con `enhancement` y `automated`.
+
+El **Code Quality Scanner** hace el trabajo contrario: busca lo que ya está y está mal. Etiquetas `bug` y `automated`.
+
+Ambos tienen algo que resultó más importante de lo que esperaba: **comprueban los issues que ya existen** — abiertos y cerrados — y comparan las palabras del título para no volver a proponer lo mismo. Sin esto, cada lunes recibía las mismas cinco ideas. Un bot con memoria de pez es peor que ningún bot, porque el ruido semanal hace que dejes de leerlo.
+
+## La etiqueta que lo cambia todo
+
+Aquí es donde el sistema se gana el sueldo. El **Auto Fixer** no toca ningún issue a menos que tenga **tres etiquetas**: `bug` o `enhancement`, más `automated`, **más `approved`**.
+
+Y la etiqueta `approved` solo la pongo yo, a mano.
+
+Significa que cada lunes a las nueve el *fixer* se despierta, mira si hay trabajo que yo haya bendecido explícitamente, y si no lo hay, se vuelve a dormir. El sistema no decide qué es importante. Propone, y espera.
+
+Encima, cuando corre solo, **solo procesa un issue por ejecución**. Podría hacer cinco. No hace cinco porque después yo tengo que revisar cinco *pull requests*, y un humano revisando cinco PRs de golpe no revisa: aprueba.
+
+## Qué hace exactamente cuando arranca
+
+Cuando hay un issue aprobado, el *fixer* lee el issue, lee los ficheros implicados, escribe el cambio, crea una rama (`fix/...` o `feat/...`), hace el *commit* y abre un *pull request* que referencia el issue original.
+
+Y entonces se detiene. No fusiona. **Nunca fusiona.**
+
+Los dos bots de detección usan **Claude Sonnet**, que es rápido y barato para leer mucho código. El que escribe los cambios usa **Claude Opus**, porque escribir código correcto vale la pena pagarlo. Encontrar problemas es fácil; arreglarlos sin romper nada, no.
+
+## La última puerta
+
+Cada PR que abre el bot pasa por la misma CI que los míos: comprobación de tipos, *lint*, tests y *build*. Si el bot ha escrito algo que no compila, lo sabemos antes de que yo lo lea.
+
+Así que la cadena completa, de principio a fin, es esta:
+
+**El bot propone → yo apruebo → el bot lo escribe → la CI lo verifica → yo lo fusiono.**
+
+Hay exactamente dos puntos donde hay un humano, y ambos son decisiones, no trabajo. Esa es toda la idea. No quería un sistema que trabajase por mí mientras duermo; quería un sistema que **me trajese el trabajo ya pensado** para que yo solo tuviese que decir que sí o que no.
+
+## Lo que no explica nadie
+
+Un sistema así parece mucho más impresionante en un diagrama que en la práctica. Los bots proponen cosas obvias, cosas innecesarias y, de vez en cuando, alguna cosa que no se me había ocurrido y que es buena de verdad. La proporción entre estas tres categorías es la métrica que realmente importa.
+
+Tengo cinco meses de datos sobre exactamente esto, y los explico en el próximo artículo. La conclusión corta: **la mayoría de sus ideas las rechazo**, y es precisamente por eso que el sistema funciona.

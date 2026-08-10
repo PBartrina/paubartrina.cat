@@ -404,18 +404,20 @@
     "heading": "Qué hago ahora",
     "lastUpdated": "Última actualización: {date}",
     "location": "Vivo en <strong>Sant Pere de Vilamajor</strong>, en la parte baja del <strong>Montseny</strong>.",
-    "occupation": "Soy <code>programador web front-end</code> y actualmente busco trabajo.",
-    "prioritiesHeading": "Mis prioridades y el estado de proyectos",
+    "occupation": "Soy <code>programador web front-end</code> y actualmente trabajo en una empresa de producto del sector salud.",
+    "prioritiesHeading": "Mis prioridades y el estado de los proyectos",
     "priorities": [
-      "Por caprichos personales y decisiones \"estratégicas\" la empresa donde trabajaba se ha disuelto y me quedo en paro, eso sí, solo tengo agradecimientos hacia la empresa donde he estado estos casi 8 años.",
-      "Tocará arrancar con fuerza la web con <strong>Nuxt</strong> que tenía en stand-by.",
-      "Al <strong>Sven</strong> le hemos hecho una limpieza dental y le han sacado una muela (juicio no ha tenido nunca).",
-      "Hemos tenido un poco de drama con unas filtraciones este mes de lluvias, pero ya está todo controlado."
+      "Desde la última vez que actualicé esta página he pasado por <strong>tres trabajos</strong>. El primero, una empresa de producto puntera del sector mecánico, me despidió en periodo de prueba a los cuatro meses y sin ningún tipo de explicación. El segundo, una gran consultora, con un cliente caótico y un sueldo por debajo de lo que tocaba. El tercero es donde estoy ahora: una empresa de producto del <strong>sector salud</strong>, y aquí me quedo.",
+      "Esta web ya no la mantengo solo. Tres acciones de GitHub proponen mejoras y detectan errores cada lunes, y yo decido qué entra. En cinco meses: <strong>169 propuestas, 55 aprobadas y 53 pull requests fusionados</strong>. Acabo de publicar una serie de tres artículos explicando cómo funciona todo.",
+      "Un SSD que reventó me obligó a replantear el servidor de casa: he abandonado Proxmox y ahora tengo <strong>Home Assistant</strong> instalado directamente sobre el hardware. Estoy aprendiendo mucho por ese camino, a menudo a la fuerza.",
+      "<strong>Sven</strong> sigue haciendo de las suyas, que es exactamente lo que le pedimos."
     ],
     "excitementHeading": "Qué me entusiasma",
     "excitement": [
-      "¡Ya estoy en la recta final del libro que empecé! Me está gustando y seguramente continuaré con la saga del <strong>Archivo de las Tormentas</strong>.",
-      "Los bonsáis están empezando a brotar con fuerza, ahora viene una época bonita de <strong>poda, trasplantes y formación</strong>."
+      "Dentro de un par de días voy a ver el <strong>eclipse total de sol</strong> en directo. Hace semanas que no pienso en mucho más.",
+      "Un amigo australiano viene a vernos, y ya estamos empezando a planificar un viaje para el año que viene.",
+      "Sigo con la saga del <strong>Archivo de las Tormentas</strong>.",
+      "Los bonsáis ya han pasado la época de poda y trasplantes; ahora toca la parte menos lucida y más importante: <strong>riego, sombra y paciencia</strong> hasta que pase el calor."
     ],
     "nowPageDescription": "Esta es una <link>página /ahora</link>, inspirada en el movimiento de Derek Sivers.",
     "footer": "Esta es mi página \"ahora\" inspirada en el movimiento <link>now page</link>."
@@ -445,6 +447,7 @@
   },
   "cv": {
     "title": "CV — Pau Bartrina",
+    "summaryHeading": "Resumen",
     "description": "CV imprimible de Pau Bartrina, Senior Frontend Engineer.",
     "printButton": "Imprimir / Guardar como PDF",
     "backHome": "Volver al inicio"

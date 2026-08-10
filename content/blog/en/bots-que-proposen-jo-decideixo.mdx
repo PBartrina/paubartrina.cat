@@ -1,0 +1,63 @@
+---
+title: "Bots that propose, I decide"
+date: "2026-08-09"
+description: "How three GitHub Actions find work, do it, and why the brake is the important part"
+tags: ["automatitzacio", "github-actions", "ia", "claude"]
+published: true
+---
+
+In the first article on this website I wrote that I was designing "an automated system for improvements and GitHub Issue management." This exists, it's been running for five months, and this article explains how.
+
+Fair warning upfront: the interesting part isn't that the AI writes code. We all know that already. The interesting part is **where I put the brake**.
+
+## Three bots, a Monday morning
+
+It all happens while I'm having breakfast, chained one hour apart:
+
+| Time (UTC) | Who | What it does |
+|---|---|---|
+| 07:00 | Improvement Proposer | Reads the code and proposes up to **3 improvements** |
+| 08:00 | Code Quality Scanner | Looks for problems and opens up to **5 issues** |
+| 09:00 | Auto Fixer | Picks up approved work and opens a **pull request** |
+
+The first two only have permission to **open issues**. They can't touch the code even if they wanted to: in the *workflow* file, the contents permission is read-only. This isn't a matter of trust, it's a matter of design — a bot that can't write can't break anything.
+
+The **Improvement Proposer** looks at the project and suggests things that could be good for it: accessibility, performance, SEO, missing features. It labels the issues with `enhancement` and `automated`.
+
+The **Code Quality Scanner** does the opposite job: it looks for what's already there and is wrong. Labels: `bug` and `automated`.
+
+Both of them have something that turned out to be more important than I expected: **they check the issues that already exist** — open and closed — and compare the title words to avoid proposing the same thing again. Without this, every Monday I'd get the same five ideas. A bot with the memory of a goldfish is worse than no bot at all, because the weekly noise makes you stop reading it.
+
+## The label that changes everything
+
+This is where the system earns its keep. The **Auto Fixer** doesn't touch any issue unless it has **three labels**: `bug` or `enhancement`, plus `automated`, **plus `approved`**.
+
+And the `approved` label is only added by me, by hand.
+
+This means that every Monday at nine the *fixer* wakes up, checks if there's any work I've explicitly blessed, and if there isn't, it goes back to sleep. The system doesn't decide what's important. It proposes, and waits.
+
+On top of that, when it runs on its own, **it only processes one issue per execution**. It could do five. It doesn't do five because then I'd have to review five *pull requests*, and a human reviewing five PRs at once doesn't review: they approve.
+
+## What it actually does when it starts up
+
+When there's an approved issue, the *fixer* reads the issue, reads the relevant files, writes the change, creates a branch (`fix/...` or `feat/...`), makes the *commit*, and opens a *pull request* that references the original issue.
+
+And then it stops. It doesn't merge. **It never merges.**
+
+The two detection bots use **Claude Sonnet**, which is fast and cheap for reading a lot of code. The one that writes the changes uses **Claude Opus**, because writing correct code is worth paying for. Finding problems is easy; fixing them without breaking anything is not.
+
+## The final gate
+
+Every PR the bot opens goes through the same CI as mine: type checking, *lint*, tests, and *build*. If the bot has written something that doesn't compile, we know before I even read it.
+
+So the complete chain, from start to finish, is this:
+
+**The bot proposes → I approve → the bot writes it → CI verifies it → I merge it.**
+
+There are exactly two points where there's a human, and both are decisions, not work. That's the whole idea. I didn't want a system that worked for me while I sleep; I wanted a system that **brought me the work already thought through** so I'd only have to say yes or no.
+
+## What nobody talks about
+
+A system like this looks much more impressive in a diagram than in practice. The bots propose obvious things, unnecessary things, and, every now and then, something I hadn't thought of that's genuinely good. The ratio between these three categories is the metric that truly matters.
+
+I have five months of data on exactly this, and I'll cover it in the next article. The short conclusion: **I reject most of their ideas**, and that's precisely why the system works.
