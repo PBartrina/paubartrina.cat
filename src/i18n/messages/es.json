@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "title": "Pau Bartrina | Senior Frontend Engineer",
+    "title": "Pau Bartrina | Ingeniero de Software Sénior",
     "titleTemplate": "%s | Pau Bartrina",
-    "description": "Senior Frontend Engineer con +15 años de experiencia en Angular, TypeScript, NgRx y Nx. Especializado en arquitectura modular, testing y liderazgo técnico.",
+    "description": "Ingeniero de Software Sénior con +15 años de experiencia en Angular, TypeScript, NgRx y Nx. Especializado en arquitectura modular, testing y liderazgo técnico.",
     "ogLocale": "es_ES"
   },
   "nav": {
@@ -19,7 +19,7 @@
   },
   "hero": {
     "greeting": "Bienvenidos",
-    "title": "Senior Frontend Engineer con +15 años de experiencia",
+    "title": "Ingeniero de Software Sénior con +15 años de experiencia",
     "subtitle": "en el ecosistema Angular, arquitectura modular y liderazgo técnico",
     "techBadges": [
       "Angular",
@@ -32,7 +32,7 @@
   },
   "about": {
     "heading": "Sobre Mí",
-    "bio": "Ingeniero Frontend Sénior y Líder Técnico con más de 15 años de experiencia, especializado en el ecosistema Angular (NgRx, Nx, TypeScript). Experto en modernización de bases de código y en la implementación de culturas de testing con Vitest y Playwright. Líder colaborativo dedicado a conectar diseño, producto e ingeniería para ofrecer experiencias de usuario impecables.",
+    "bio": "Ingeniero de Software Sénior y Líder Técnico con más de 15 años de experiencia, especializado en el ecosistema Angular (NgRx, Nx, TypeScript). Experto en modernización de bases de código y en la implementación de culturas de testing con Vitest y Playwright. Líder colaborativo dedicado a conectar diseño, producto e ingeniería para ofrecer experiencias de usuario impecables.",
     "languagesLabel": "Idiomas",
     "languages": [
       {
@@ -404,7 +404,7 @@
     "heading": "Qué hago ahora",
     "lastUpdated": "Última actualización: {date}",
     "location": "Vivo en <strong>Sant Pere de Vilamajor</strong>, en la parte baja del <strong>Montseny</strong>.",
-    "occupation": "Soy <code>programador web front-end</code> y actualmente trabajo en una empresa de producto del sector salud.",
+    "occupation": "Soy <code>ingeniero de software</code> y actualmente trabajo en una empresa de producto del sector salud.",
     "prioritiesHeading": "Mis prioridades y el estado de los proyectos",
     "priorities": [
       "Desde la última vez que actualicé esta página he pasado por <strong>tres trabajos</strong>. El primero, una empresa de producto puntera del sector mecánico, me despidió en periodo de prueba a los cuatro meses y sin ningún tipo de explicación. El segundo, una gran consultora, con un cliente caótico y un sueldo por debajo de lo que tocaba. El tercero es donde estoy ahora: una empresa de producto del <strong>sector salud</strong>, y aquí me quedo.",
@@ -447,8 +447,9 @@
   },
   "cv": {
     "title": "CV — Pau Bartrina",
+    "role": "Ingeniero de Software Sénior",
     "summaryHeading": "Resumen",
-    "description": "CV imprimible de Pau Bartrina, Senior Frontend Engineer.",
+    "description": "CV imprimible de Pau Bartrina, Ingeniero de Software Sénior.",
     "printButton": "Imprimir / Guardar como PDF",
     "backHome": "Volver al inicio"
   },

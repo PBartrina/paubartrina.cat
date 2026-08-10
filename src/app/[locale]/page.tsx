@@ -30,7 +30,7 @@ export default async function Home({ params }: PageProps) {
     "@context": "https://schema.org",
     "@type": "Person",
     name: "Pau Bartrina",
-    jobTitle: "Front-end Web Developer",
+    jobTitle: "Senior Software Engineer",
     url: `https://paubartrina.cat/${locale}`,
     sameAs: [
       "https://bsky.app/profile/paubartrina.cat",

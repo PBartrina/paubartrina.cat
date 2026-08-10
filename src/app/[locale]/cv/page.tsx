@@ -80,7 +80,7 @@ export default async function CVPage({ params }: PageProps) {
           Pau Bartrina
         </h1>
         <p className="mt-1 font-mono text-lg text-text-accent">
-          Senior Frontend Engineer
+          {t("role")}
         </p>
         <div className="mt-3 flex flex-wrap gap-x-6 gap-y-1 font-mono text-sm text-text-secondary">
           <a href="https://paubartrina.cat" className="hover:underline print:no-underline">

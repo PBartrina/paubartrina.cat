@@ -63,7 +63,7 @@ export async function generateMetadata({
           url: ogImageUrl,
           width: 1200,
           height: 630,
-          alt: "Pau Bartrina – Senior Frontend Engineer",
+          alt: "Pau Bartrina – Senior Software Engineer",
         },
       ],
     },

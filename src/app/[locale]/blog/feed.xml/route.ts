@@ -44,7 +44,7 @@ export async function GET(
   <channel>
     <title>Pau Bartrina – Blog</title>
     <link>${base}/${locale}/blog</link>
-    <description>Blog de Pau Bartrina - Senior Frontend Engineer</description>
+    <description>Blog de Pau Bartrina - Senior Software Engineer</description>
     <language>${locale}</language>
     <atom:link href="${base}/${locale}/blog/feed.xml" rel="self" type="application/rss+xml"/>
     ${items}
