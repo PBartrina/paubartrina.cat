@@ -404,18 +404,20 @@
     "heading": "What I'm doing now",
     "lastUpdated": "Last updated: {date}",
     "location": "I live in <strong>Sant Pere de Vilamajor</strong>, at the foot of <strong>Montseny</strong>.",
-    "occupation": "I'm a <code>front-end web developer</code> and currently looking for work.",
+    "occupation": "I'm a <code>front-end web developer</code> and I currently work at a product company in the health sector.",
     "prioritiesHeading": "My priorities and project status",
     "priorities": [
-      "Due to personal whims and \"strategic\" decisions, the company I was working at has dissolved and I'm now unemployed — that said, I only have gratitude towards the company where I spent nearly 8 years.",
-      "Time to get going with the website built with <strong>Nuxt</strong> that I had on stand-by.",
-      "<strong>Sven</strong> had a dental cleaning and they pulled one of his teeth (he was never the wise type).",
-      "We had a bit of drama with some water leaks this rainy month, but everything is under control now."
+      "Since I last updated this page I've been through <strong>three jobs</strong>. The first, a leading product company in the mechanical sector, let me go during my probation period after four months, with no explanation whatsoever. The second, a huge consultancy, with a chaotic client and a salary below what the work was worth. The third is where I am now: a product company in the <strong>health sector</strong>, and this is where I'm staying.",
+      "I no longer maintain this site on my own. Three GitHub Actions propose improvements and detect bugs every Monday, and I decide what gets in. Five months in: <strong>169 proposals, 55 approved and 53 merged pull requests</strong>. I've just published a three-part series explaining how it all works.",
+      "A blown SSD forced me to rethink the home server: I've ditched Proxmox and now run <strong>Home Assistant</strong> bare metal. I'm learning a lot down that path, often the hard way.",
+      "<strong>Sven</strong> is still up to his usual tricks, which is exactly what we ask of him."
     ],
     "excitementHeading": "What excites me",
     "excitement": [
-      "I'm on the home stretch of the book I started! I'm really enjoying it and will probably continue with the <strong>Stormlight Archive</strong> saga.",
-      "The bonsai trees are starting to sprout vigorously — now comes a beautiful season of <strong>pruning, repotting, and training</strong>."
+      "In a couple of days I'm going to see the <strong>total solar eclipse</strong> live. I haven't thought about much else for weeks.",
+      "An Australian friend is coming to visit, and we're already starting to plan a trip for next year.",
+      "I'm continuing with the <strong>Stormlight Archive</strong> saga.",
+      "The bonsai trees are past pruning and repotting season; now comes the least glamorous and most important part: <strong>watering, shade and patience</strong> until the heat passes."
     ],
     "nowPageDescription": "This is a <link>/now page</link>, inspired by Derek Sivers' movement.",
     "footer": "This is my \"now\" page inspired by the <link>now page</link> movement."
@@ -445,6 +447,7 @@
   },
   "cv": {
     "title": "CV — Pau Bartrina",
+    "summaryHeading": "Summary",
     "description": "Printable CV for Pau Bartrina, Senior Frontend Engineer.",
     "printButton": "Print / Save as PDF",
     "backHome": "Back to home"

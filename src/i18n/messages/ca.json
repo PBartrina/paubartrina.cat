@@ -404,18 +404,20 @@
     "heading": "Què faig ara",
     "lastUpdated": "Última actualització: {date}",
     "location": "Visc a <strong>Sant Pere de Vilamajor</strong>, a la part baixa del <strong>Montseny</strong>.",
-    "occupation": "Sóc <code>programador web front-end</code> i actualment cerco feina.",
-    "prioritiesHeading": "Les meves prioritats i el estat de projectes",
+    "occupation": "Sóc <code>programador web front-end</code> i actualment treballo en una empresa de producte del sector salut.",
+    "prioritiesHeading": "Les meves prioritats i l'estat dels projectes",
     "priorities": [
-      "Per capricis personals i decisions \"estratègiques\" l'empresa on treballava s'ha dissolt i em quedo a l'atur, això sí, només tinc agraïments cap a l'empresa on he estat aquests gairebé 8 anys.",
-      "Tocarà arrencar amb força la web amb <strong>Nuxt</strong> que tenia en stand-by.",
-      "A l''<strong>Sven</strong> li hem fet una neteja dental i li han tret un queixal (seny no n''ha tingut mai).",
-      "Hem tingut una mica de drama amb unes filtracions aquest mes de pluges, però ja està tot controlat."
+      "Des de l'última vegada que vaig actualitzar aquesta pàgina he passat per <strong>tres feines</strong>. La primera, una empresa de producte capdavantera del sector mecànic, em va acomiadar en període de prova als quatre mesos i sense cap mena d'explicació. La segona, una gran consultora, amb un client caòtic i un sou per sota del que tocava. La tercera és on sóc ara: una empresa de producte del <strong>sector salut</strong>, i aquí m'hi quedo.",
+      "Aquesta web ja no la mantinc sol. Tres accions de GitHub proposen millores i detecten errors cada dilluns, i jo decideixo què hi entra. En cinc mesos: <strong>169 propostes, 55 aprovades i 53 pull requests fusionats</strong>. Acabo de publicar una sèrie de tres articles explicant com funciona tot plegat.",
+      "Un SSD que va petar em va obligar a replantejar el servidor de casa: he abandonat Proxmox i ara tinc <strong>Home Assistant</strong> instal·lat directament sobre el maquinari. Estic aprenent molt per aquest camí, sovint a la força.",
+      "En <strong>Sven</strong> continua fent de les seves, que és exactament el que li demanem."
     ],
     "excitementHeading": "Què m'engresca",
     "excitement": [
-      "Ja estic a la recta final del llibre que vaig començar! M'està agradant i segurament continuaré amb la saga del <strong>Arxiu de les Tempestes</strong>.",
-      "Els bonsais estàn començant a brotar amb força, ara ve una època bonica de <strong>poda, transplantaments i formació</strong>."
+      "D'aquí a un parell de dies vaig a veure l''<strong>eclipsi total de sol</strong> en directe. Fa setmanes que no penso en gaire cosa més.",
+      "Un amic australià ens ve a veure, i ja estem començant a planificar un viatge per a l'any que ve.",
+      "Continuo amb la saga de l''<strong>Arxiu de les Tempestes</strong>.",
+      "Els bonsais ja han passat l'època de poda i transplantaments; ara toca la part menys lluïda i més important: <strong>reg, ombra i paciència</strong> fins que passi la calor."
     ],
     "nowPageDescription": "Aquesta és una <link>pàgina /ara</link>, inspirada en el moviment de Derek Sivers.",
     "footer": "Aquesta és la meva pàgina \"ara\" inspirada en el moviment <link>now page</link>."
@@ -445,6 +447,7 @@
   },
   "cv": {
     "title": "CV — Pau Bartrina",
+    "summaryHeading": "Resum",
     "description": "CV imprimible de Pau Bartrina, Senior Frontend Engineer.",
     "printButton": "Imprimir / Desar com a PDF",
     "backHome": "Tornar a l'inici"
