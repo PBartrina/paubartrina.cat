@@ -83,13 +83,28 @@ export default async function CVPage({ params }: PageProps) {
           {t("role")}
         </p>
         <div className="mt-3 flex flex-wrap gap-x-6 gap-y-1 font-mono text-sm text-text-secondary">
-          <a href="https://paubartrina.cat" className="hover:underline print:no-underline">
+          <a
+            href="https://paubartrina.cat"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:underline print:no-underline"
+          >
             paubartrina.cat
           </a>
-          <a href="https://linkedin.com/in/paubartrina" className="hover:underline print:no-underline">
+          <a
+            href="https://linkedin.com/in/paubartrina"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:underline print:no-underline"
+          >
             linkedin.com/in/paubartrina
           </a>
-          <a href="https://github.com/PBartrina" className="hover:underline print:no-underline">
+          <a
+            href="https://github.com/PBartrina"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:underline print:no-underline"
+          >
             github.com/PBartrina
           </a>
         </div>
@@ -110,10 +125,10 @@ export default async function CVPage({ params }: PageProps) {
         <h2 className="mb-4 font-display text-xl font-bold text-text-primary">
           {tExp("heading")}
         </h2>
-        <div className="space-y-4">
+        <div className="space-y-5">
           {jobs.map((job) => (
-            <div key={`${job.company}-${job.period}`} className="border-l-2 border-border-color pl-4">
-              <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <div key={job.company}>
+              <div className="flex flex-wrap items-baseline justify-between gap-x-4">
                 <h3 className="font-mono text-base font-bold text-text-primary">
                   {job.role}
                 </h3>
@@ -124,7 +139,7 @@ export default async function CVPage({ params }: PageProps) {
               <p className="font-mono text-sm text-text-secondary">
                 {job.company} · {job.location}
               </p>
-              <p className="mt-1 font-mono text-xs leading-relaxed text-text-secondary">
+              <p className="mt-1 font-mono text-sm leading-relaxed text-text-secondary">
                 {job.description}
               </p>
             </div>
@@ -140,10 +155,10 @@ export default async function CVPage({ params }: PageProps) {
         <div className="grid gap-4 md:grid-cols-2">
           {categories.map((cat) => (
             <div key={cat.title}>
-              <h3 className="font-mono text-sm font-bold text-text-accent">
+              <h3 className="font-mono text-sm font-bold text-text-primary">
                 {cat.title}
               </h3>
-              <p className="font-mono text-xs text-text-secondary">
+              <p className="font-mono text-sm text-text-secondary">
                 {cat.items.join(" · ")}
               </p>
             </div>
@@ -158,18 +173,18 @@ export default async function CVPage({ params }: PageProps) {
         </h2>
         <div className="space-y-3">
           {entries.map((edu) => (
-            <div key={edu.year} className="flex flex-wrap items-baseline justify-between gap-2">
-              <div>
+            <div key={edu.year}>
+              <div className="flex flex-wrap items-baseline justify-between gap-x-4">
                 <h3 className="font-mono text-sm font-bold text-text-primary">
                   {edu.title}
                 </h3>
-                <p className="font-mono text-xs text-text-secondary">
-                  {edu.institution}
-                </p>
+                <span className="font-mono text-xs text-text-accent">
+                  {edu.year}
+                </span>
               </div>
-              <span className="font-mono text-xs text-text-accent">
-                {edu.year}
-              </span>
+              <p className="font-mono text-sm text-text-secondary">
+                {edu.institution}
+              </p>
             </div>
           ))}
         </div>
@@ -180,12 +195,11 @@ export default async function CVPage({ params }: PageProps) {
         <h2 className="mb-3 font-display text-xl font-bold text-text-primary">
           {tAbout("languagesLabel")}
         </h2>
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap gap-x-6 gap-y-1 font-mono text-sm text-text-secondary">
           {languages.map((lang) => (
-            <div key={lang.label} className="font-mono text-sm">
-              <span className="text-text-primary">{lang.label}</span>
-              <span className="ml-1 text-text-secondary">({lang.level})</span>
-            </div>
+            <span key={lang.label}>
+              {lang.label}: {lang.level}
+            </span>
           ))}
         </div>
       </section>
