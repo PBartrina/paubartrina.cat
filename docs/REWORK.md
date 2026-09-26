@@ -54,10 +54,15 @@ One PR, no design work. Makes everything after it safe.
 Establish the baseline *before* changing anything visual, or the cost of the
 redesign can't be measured.
 
-- **Lighthouse CI** — `treosh/lighthouse-ci-action` in `ci.yml` against the PR's
-  Vercel preview URL. `lighthouserc.json`: performance ≥ 90, accessibility ≥ 95.
-  `budget.json`: `script` ≤ 150 kB, `total` ≤ 600 kB. **The budget file is the
-  bundle-size gate** — no `size-limit`, it would duplicate this.
+- **Lighthouse CI** — `@lhci/cli` as a step in `ci.yml`, run against `next start`
+  on the runner (the Vercel preview sits behind Deployment Protection, and a
+  local server needs no bypass secret and shares the build with Playwright).
+  `lighthouserc.json`: performance ≥ 90, accessibility ≥ 90, plus
+  `resource-summary:script:size` ≤ 190 kB and `:total:size` ≤ 400 kB as
+  assertions — **those two lines are the bundle-size gate**. No `size-limit`,
+  and no `budget.json` (LHCI 0.15 refuses budgets alongside assertions).
+  Thresholds start at the measured baseline (a11y 91, script 178 kB) so the
+  gate catches regressions from day one; M4 tightens them.
 - **Playwright** — `@playwright/test`, one spec per flow: locale switch, theme
   toggle, blog nav, contact form (mock Resend). Runs against `next start` in
   CI, deterministic.

@@ -19,6 +19,7 @@ pnpm dev          # Start dev server on port 3000
 pnpm build        # Production build
 pnpm lint         # ESLint
 pnpm new-post     # Create a new blog post (interactive CLI)
+pnpm lhci         # Lighthouse CI against a local production build
 ```
 
 ## Project Structure

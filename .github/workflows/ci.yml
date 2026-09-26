@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, staging]
   pull_request:
-    branches: [main]
+    branches: [main, staging]
 
 jobs:
   build:
@@ -59,3 +59,6 @@ jobs:
 
       - name: Build
         run: pnpm build
+
+      - name: Lighthouse
+        run: pnpm lhci
