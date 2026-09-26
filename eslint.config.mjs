@@ -15,6 +15,9 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Local dev helpers (gitignored, not part of the project)
     "dev-server.js",
+    // Playwright output
+    "playwright-report/**",
+    "test-results/**",
   ]),
 ]);
 
