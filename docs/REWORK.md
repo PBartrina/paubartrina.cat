@@ -8,6 +8,10 @@ not dates.
 Tracking: one GitHub milestone per phase, one issue per PR, all labelled
 `rework`. Board: GitHub Projects (see repo → Projects).
 
+> **Closing issues:** PRs merge into `staging`, and GitHub only auto-closes
+> `Closes #N` on merges to the default branch. Close the issue by hand after
+> each staging merge; the board moves it to Done on close.
+
 **The one structural rule:** every milestone leaves the live site complete.
 Nothing is half-built on `main`; the redesign is visible on `staging` until
 each page is ready.
