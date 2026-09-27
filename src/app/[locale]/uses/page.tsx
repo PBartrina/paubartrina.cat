@@ -68,7 +68,7 @@ export default async function UsesPage({ params }: PageProps) {
         href="https://uses.tech"
         target="_blank"
         rel="noopener noreferrer"
-        className="text-text-accent hover:underline"
+        className="text-text-accent underline hover:no-underline"
       >
         {chunks}
       </a>
