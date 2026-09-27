@@ -47,6 +47,7 @@ Open [http://localhost:3000](http://localhost:3000).
 | `pnpm start` | Start production server |
 | `pnpm lint` | Run ESLint on `src/` |
 | `pnpm test` | Run all Vitest unit tests |
+| `pnpm e2e` | Run the Playwright e2e suite against a production build |
 | `pnpm new-post` | Create a new blog post |
 
 > **Note:** Always use `pnpm lint`, not `pnpm dlx eslint`. The project uses ESLint 9; `pnpm dlx` downloads the latest version which may be incompatible.
@@ -183,6 +184,27 @@ pnpm test --watch  # watch mode during development
 | `src/app/api/contact/__tests__/route.test.ts` | API validation, honeypot, rate limiting, Resend integration |
 
 Component tests run in a `happy-dom` environment (declared via `@vitest-environment happy-dom` docblock). Utility and API tests run in Node.
+
+### End-to-end (Playwright)
+
+The e2e suite in `e2e/` runs against `next start` on a production build, so build first:
+
+```bash
+pnpm build
+pnpm e2e                          # headless, chromium
+pnpm exec playwright test --ui    # interactive
+```
+
+`playwright.config.ts` starts two servers: the site on port 3100 and `e2e/mock-resend.mjs` on 3101. The Resend SDK honours `RESEND_BASE_URL`, so the real `/api/contact` route runs end to end and the mock records what would have been sent. No real API key or `.env.local` is needed.
+
+| Spec | Flow |
+|------|------|
+| `e2e/locale-switch.spec.ts` | CA → EN → ES keeps the route, `html[lang]` and nav labels follow, `/` honours `Accept-Language` |
+| `e2e/theme-toggle.spec.ts` | `data-theme` flips, persists in `localStorage`, survives reload, stored theme beats system preference |
+| `e2e/blog-navigation.spec.ts` | Listing → post → previous post → back, tag filter via URL, translation banner link, 404 slug |
+| `e2e/contact-form.spec.ts` | Valid submission reaches the Resend mock with the right payload, server validation errors, Resend failure |
+
+Assertions marked `test.fixme` document known bugs with an issue number; remove the marker when the fix lands.
 
 ---
 
