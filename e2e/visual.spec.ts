@@ -43,6 +43,10 @@ for (const theme of THEMES) {
           fullPage: true,
           animations: "disabled",
           mask: masks(page),
+          // Per-pixel YIQ tolerance. Default 0.2 let the M2 palette swap pass as
+          // "unchanged" on text-heavy pages; 0.1 registers accent-level changes
+          // while still ignoring anti-aliasing noise.
+          threshold: 0.1,
           maxDiffPixelRatio: 0.01,
         });
       });

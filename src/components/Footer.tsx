@@ -25,7 +25,7 @@ export default async function Footer() {
             </h3>
             <Link
               href="/contacte"
-              className="inline-block rounded-md border border-text-on-dark px-4 py-2 font-mono text-sm transition-colors hover:border-text-accent hover:text-text-accent"
+              className="inline-block rounded-md border border-text-on-dark px-4 py-2 font-mono text-sm transition-colors hover:border-text-accent-on-dark hover:text-text-accent-on-dark"
             >
               {t("sendMessage")}
             </Link>
@@ -42,7 +42,7 @@ export default async function Footer() {
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-md border border-text-on-dark px-4 py-2 font-mono text-sm transition-colors hover:border-text-accent hover:text-text-accent"
+                  className="rounded-md border border-text-on-dark px-4 py-2 font-mono text-sm transition-colors hover:border-text-accent-on-dark hover:text-text-accent-on-dark"
                 >
                   {link.label}
                 </a>
@@ -50,7 +50,7 @@ export default async function Footer() {
               <a
                 href={`/${locale}/blog/feed.xml`}
                 aria-label={t("rssLabel")}
-                className="rounded-md border border-text-on-dark px-4 py-2 font-mono text-sm transition-colors hover:border-text-accent hover:text-text-accent"
+                className="rounded-md border border-text-on-dark px-4 py-2 font-mono text-sm transition-colors hover:border-text-accent-on-dark hover:text-text-accent-on-dark"
               >
                 <span aria-hidden="true">📡</span>
               </a>
@@ -70,7 +70,7 @@ export default async function Footer() {
           )}
           <Link
             href="/cv"
-            className="text-xs text-text-secondary opacity-60 hover:opacity-100 hover:text-text-accent transition-opacity"
+            className="text-xs text-text-secondary opacity-60 hover:opacity-100 hover:text-text-accent-on-dark transition-opacity"
           >
             {t("cvLink")}
           </Link>

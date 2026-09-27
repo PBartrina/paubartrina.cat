@@ -96,7 +96,7 @@ export default function Navbar() {
           </span>
           <div>
             <span className="text-text-on-dark">Pau</span>
-            <span className="text-text-accent">Bartrina</span>
+            <span className="text-text-accent-on-dark">Bartrina</span>
           </div>
         </Link>
 
@@ -106,7 +106,7 @@ export default function Navbar() {
             <Link
               key={link.href}
               href={link.href}
-              className="transition-colors hover:text-text-accent"
+              className="transition-colors hover:text-text-accent-on-dark"
             >
               {t(link.labelKey)}
             </Link>
@@ -152,7 +152,7 @@ export default function Navbar() {
             <Link
               key={link.href}
               href={link.href}
-              className="block py-2 font-mono text-sm transition-colors hover:text-text-accent"
+              className="block py-2 font-mono text-sm transition-colors hover:text-text-accent-on-dark"
               onClick={closeMenu}
             >
               {t(link.labelKey)}

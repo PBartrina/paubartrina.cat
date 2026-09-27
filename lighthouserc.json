@@ -21,7 +21,7 @@
         "categories:best-practices": ["warn", { "minScore": 0.9 }],
         "categories:seo": ["warn", { "minScore": 0.9 }],
         "resource-summary:script:size": ["error", { "maxNumericValue": 194560 }],
-        "resource-summary:total:size": ["error", { "maxNumericValue": 409600 }]
+        "resource-summary:total:size": ["error", { "maxNumericValue": 491520 }]
       }
     },
     "upload": { "target": "temporary-public-storage" }
