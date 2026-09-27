@@ -2,10 +2,15 @@
 
 import { useTheme } from "@/lib/theme";
 import { useTranslations } from "next-intl";
+import { useSyncExternalStore } from "react";
 
 export default function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
   const t = useTranslations("theme");
+  // false during SSR and hydration, true after mount — so the label matches the
+  // server markup first, then re-renders with the stored theme.
+  const mounted = useSyncExternalStore(() => () => {}, () => true, () => false);
+  const label = mounted && theme === "dark" ? t("light") : t("dark");
 
   function handleClick(e: React.MouseEvent<HTMLButtonElement>) {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -34,12 +39,11 @@ export default function ThemeToggle() {
 
   return (
     <button
-      suppressHydrationWarning
       onClick={handleClick}
       className="fixed bottom-6 right-6 z-50 rounded-md border border-border-color bg-bg-dark px-4 py-2 font-mono text-sm text-text-on-dark transition-colors hover:bg-bg-dark-secondary"
       aria-label={t("toggleLabel")}
     >
-      [{theme === "dark" ? t("light") : t("dark")}]
+      [{label}]
     </button>
   );
 }

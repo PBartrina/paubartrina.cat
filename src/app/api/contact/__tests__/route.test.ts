@@ -49,6 +49,17 @@ describe("POST /api/contact", () => {
     expect(json.success).toBe(true);
   });
 
+  it("returns 500 when Resend resolves with an error instead of throwing", async () => {
+    mockSend.mockResolvedValueOnce({
+      data: null,
+      error: { name: "validation_error", message: "Invalid to address" },
+    });
+    const { POST } = await import("../route");
+    const res = await POST(makeRequest(validBody));
+    expect(res.status).toBe(500);
+    expect(await res.json()).toEqual({ error: "errorSendFailed" });
+  });
+
   it("silently returns 200 when the honeypot field is filled", async () => {
     const { POST } = await import("../route");
     const res = await POST(makeRequest({ ...validBody, website: "http://spam.com" }));

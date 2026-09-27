@@ -110,7 +110,7 @@ export async function POST(req: NextRequest) {
   const resend = new Resend(apiKey);
 
   try {
-    await resend.emails.send({
+    const { error } = await resend.emails.send({
       from: "Web de Pau Bartrina <noreply@paubartrina.cat>",
       to: contactEmail,
       replyTo: `"${sanitizeHeaderValue(name.trim()).replace(/"/g, '\\"')}" <${email.trim()}>`,
@@ -122,6 +122,12 @@ export async function POST(req: NextRequest) {
         <p>${escapeHtml(message.trim()).replace(/\n/g, "<br>")}</p>
       `,
     });
+
+    // The SDK resolves { data: null, error } on API errors instead of throwing.
+    if (error) {
+      console.error("Resend rejected the email:", error);
+      return NextResponse.json({ error: "errorSendFailed" }, { status: 500 });
+    }
 
     return NextResponse.json({ success: true });
   } catch (err) {
