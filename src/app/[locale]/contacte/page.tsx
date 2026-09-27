@@ -54,7 +54,7 @@ export default async function ContactePage({ params }: PageProps) {
       <div className="mx-auto max-w-2xl px-6">
         <div className="relative rounded-lg border border-card-border bg-card-bg p-8 md:p-12">
           {/* Decorative bracket */}
-          <span className="absolute right-6 top-6 select-none font-mono text-5xl text-text-secondary opacity-20">
+          <span aria-hidden="true" className="absolute right-6 top-6 select-none font-mono text-5xl text-text-secondary opacity-20">
             @
           </span>
 

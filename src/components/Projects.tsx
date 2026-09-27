@@ -34,7 +34,7 @@ export default async function Projects() {
                   {t("featured")}
                 </span>
               )}
-              <span className="absolute right-4 top-4 font-mono text-2xl text-text-secondary opacity-20">
+              <span aria-hidden="true" className="absolute right-4 top-4 font-mono text-2xl text-text-secondary opacity-20">
                 {"</>"}              </span>
               <h3 className="mb-2 font-display text-xl font-bold text-text-primary">
                 {project.title}

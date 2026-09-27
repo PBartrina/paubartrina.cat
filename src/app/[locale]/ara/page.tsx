@@ -123,7 +123,7 @@ export default async function AraPage({ params }: PageProps) {
                 href="https://nownownow.com/about"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-text-accent hover:underline"
+                className="text-text-accent underline hover:no-underline"
               >
                 {chunks}
               </a>
