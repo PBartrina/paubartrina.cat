@@ -33,7 +33,7 @@ export default async function AtAGlance({ latestPost, locale }: AtAGlanceProps) 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
           {/* Bio card */}
           <div className={`${cardBase} md:col-span-2 lg:col-span-2`}>
-            <span className="absolute right-4 top-4 font-mono text-2xl text-text-secondary opacity-20">
+            <span aria-hidden="true" className="absolute right-4 top-4 font-mono text-2xl text-text-secondary opacity-20">
               {"//"}
             </span>
             <p className="font-mono text-sm leading-relaxed text-text-secondary md:text-base">
@@ -43,7 +43,7 @@ export default async function AtAGlance({ latestPost, locale }: AtAGlanceProps) 
 
           {/* Core Stack card */}
           <div className={`${cardBase} md:col-span-2 lg:col-span-2`}>
-            <span className="absolute right-4 top-4 font-mono text-2xl text-text-secondary opacity-20">
+            <span aria-hidden="true" className="absolute right-4 top-4 font-mono text-2xl text-text-secondary opacity-20">
               {"{ }"}
             </span>
             <p className="mb-4 font-mono text-xs uppercase tracking-widest text-text-accent">
@@ -70,7 +70,7 @@ export default async function AtAGlance({ latestPost, locale }: AtAGlanceProps) 
           <div
             className={`${cardBase} border-l-4 border-l-text-accent lg:col-span-1`}
           >
-            <span className="absolute right-4 top-4 font-mono text-2xl text-text-secondary opacity-20">
+            <span aria-hidden="true" className="absolute right-4 top-4 font-mono text-2xl text-text-secondary opacity-20">
               {"++"}
             </span>
             <p className="font-display text-4xl font-bold text-text-accent md:text-5xl">
@@ -83,7 +83,7 @@ export default async function AtAGlance({ latestPost, locale }: AtAGlanceProps) 
 
           {/* Languages card */}
           <div className={`${cardBase} lg:col-span-1`}>
-            <span className="absolute right-4 top-4 font-mono text-lg text-text-secondary opacity-20">
+            <span aria-hidden="true" className="absolute right-4 top-4 font-mono text-lg text-text-secondary opacity-20">
               i18n
             </span>
             <p className="mb-3 font-mono text-xs uppercase tracking-widest text-text-accent">
@@ -101,7 +101,7 @@ export default async function AtAGlance({ latestPost, locale }: AtAGlanceProps) 
 
           {/* Latest blog post card */}
           <div className={`${cardBase} md:col-span-2 lg:col-span-2`}>
-            <span className="absolute right-4 top-4 font-mono text-2xl text-text-secondary opacity-20">
+            <span aria-hidden="true" className="absolute right-4 top-4 font-mono text-2xl text-text-secondary opacity-20">
               {">_"}
             </span>
             <p className="mb-3 font-mono text-xs uppercase tracking-widest text-text-accent">
