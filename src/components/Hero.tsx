@@ -1,4 +1,5 @@
 import { getTranslations } from "next-intl/server";
+import GenerativeMark from "@/components/GenerativeMark";
 
 export default async function Hero() {
   const t = await getTranslations("hero");
@@ -6,20 +7,9 @@ export default async function Hero() {
 
   return (
     <section className="relative flex min-h-[40vh] items-center justify-center overflow-hidden bg-bg-primary py-16 md:py-24">
-      {/* Decorative code brackets */}
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-10">
-        <svg
-          viewBox="0 0 400 400"
-          className="h-[300px] w-[300px] text-text-secondary"
-          fill="currentColor"
-        >
-          <text x="80" y="180" fontSize="200" fontFamily="monospace">
-            &lt;
-          </text>
-          <text x="200" y="350" fontSize="200" fontFamily="monospace">
-            /&gt;
-          </text>
-        </svg>
+      {/* Generative field — seeded per deploy, see src/lib/mark.ts */}
+      <div className="pointer-events-none absolute inset-0 text-text-accent opacity-[0.14]">
+        <GenerativeMark cols={28} rows={10} animate className="h-full w-full" />
       </div>
 
       <div className="relative z-10 text-center">

@@ -19,7 +19,7 @@ const navLinks = [
 const FOCUSABLE_SELECTORS =
   'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
-export default function Navbar() {
+export default function Navbar({ mark }: { mark?: React.ReactNode }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const t = useTranslations("nav");
 
@@ -91,9 +91,7 @@ export default function Navbar() {
           href="/"
           className="flex items-center gap-1.5 font-display text-xl font-bold"
         >
-          <span className="font-mono text-lg text-text-on-dark">
-            &lt;/&gt;
-          </span>
+          {mark}
           <div>
             <span className="text-text-on-dark">Pau</span>
             <span className="text-text-accent-on-dark">Bartrina</span>
