@@ -3,13 +3,10 @@
 
 /* ─── Palette ────────────────────────────────────────────────────── */
 /* Warm paper / near-black ink with a single accent whose hue shifts between
-   themes (rose in light, peach in dark). --text-accent-on-dark exists because
+   themes (burgundy in light, salmon-pink in dark). --text-accent-on-dark exists because
    no one colour can pass 4.5:1 on both paper and ink; use it for accents that
    sit on --bg-dark (nav, footer, code blocks). Contrast is asserted by
-   src/app/__tests__/tokens-contrast.test.ts.
-
-   ponytail: palettes b and c are review candidates for #254 (?palette=b|c);
-   delete the [data-palette] blocks once one is chosen. */
+   src/app/__tests__/tokens-contrast.test.ts. */
 
 :root {
   --bg-primary:         #f7f3ee;
@@ -19,7 +16,7 @@
   --text-primary:       #1c1a1f;
   --text-secondary:     #625c68;
   --text-accent:        #b02d5c;
-  --text-accent-on-dark:#f4a48f;
+  --text-accent-on-dark: #f58fa9;
   --text-on-dark:       #f7f3ee;
   --border-color:       #e3dcd3;
   --card-bg:            #ffffff;
@@ -33,72 +30,12 @@
   --bg-dark-secondary:  #1c1a1f;
   --text-primary:       #efe9e2;
   --text-secondary:     #a9a0aa;
-  --text-accent:        #f4a48f;
-  --text-accent-on-dark:#f4a48f;
+  --text-accent:        #f58fa9;
+  --text-accent-on-dark: #f58fa9;
   --text-on-dark:       #efe9e2;
   --border-color:       #2f2b33;
   --card-bg:            #1c1a1f;
   --card-border:        #2f2b33;
-}
-
-[data-palette="b"] {
-  --bg-primary:         #faf6f8;
-  --bg-secondary:       #ffffff;
-  --bg-dark:            #2d1445;
-  --bg-dark-secondary:  #3d1c5c;
-  --text-primary:       #221033;
-  --text-secondary:     #66527a;
-  --text-accent:        #a1366a;
-  --text-accent-on-dark:#c9a6ff;
-  --text-on-dark:       #faf6f8;
-  --border-color:       #e6d9e2;
-  --card-bg:            #ffffff;
-  --card-border:        #efe4ec;
-}
-
-[data-palette="b"][data-theme="dark"] {
-  --bg-primary:         #17101f;
-  --bg-secondary:       #201629;
-  --bg-dark:            #0f0a15;
-  --bg-dark-secondary:  #201629;
-  --text-primary:       #f3ecf4;
-  --text-secondary:     #b3a3bd;
-  --text-accent:        #c9a6ff;
-  --text-accent-on-dark:#c9a6ff;
-  --text-on-dark:       #f3ecf4;
-  --border-color:       #352745;
-  --card-bg:            #201629;
-  --card-border:        #352745;
-}
-
-[data-palette="c"] {
-  --bg-primary:         #f5efe6;
-  --bg-secondary:       #fffaf3;
-  --bg-dark:            #17181c;
-  --bg-dark-secondary:  #24262c;
-  --text-primary:       #17181c;
-  --text-secondary:     #5b5753;
-  --text-accent:        #bf2e17;
-  --text-accent-on-dark:#f2b544;
-  --text-on-dark:       #f5efe6;
-  --border-color:       #e0d7ca;
-  --card-bg:            #fffaf3;
-  --card-border:        #e8dfd2;
-}
-
-[data-palette="c"][data-theme="dark"] {
-  --bg-primary:         #101114;
-  --bg-secondary:       #17181c;
-  --bg-dark:            #0a0b0d;
-  --bg-dark-secondary:  #17181c;
-  --text-primary:       #ece6dc;
-  --text-secondary:     #a39d95;
-  --text-accent:        #f2b544;
-  --text-accent-on-dark:#f2b544;
-  --text-on-dark:       #ece6dc;
-  --border-color:       #2a2c32;
-  --card-bg:            #17181c;
-  --card-border:        #2a2c32;
 }
 
 @theme inline {

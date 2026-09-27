@@ -99,10 +99,6 @@ const themeInitScript = `
     } else {
       document.documentElement.setAttribute('data-theme', 'light');
     }
-    // ponytail: palette picker for the #254 review, delete once one is chosen
-    var p = new URLSearchParams(location.search).get('palette') || localStorage.getItem('palette');
-    if (p === 'a') { localStorage.removeItem('palette'); }
-    else if (p) { localStorage.setItem('palette', p); document.documentElement.setAttribute('data-palette', p); }
   } catch(e) {}
 `;
 

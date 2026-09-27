@@ -47,11 +47,6 @@ const PAIRS: [string, string][] = [
 const THEMES = [
   ["light", ":root"],
   ["dark", '[data-theme="dark"]'],
-  // ponytail: review candidates for #254, drop with the CSS blocks
-  ["light b", '[data-palette="b"]'],
-  ["dark b", '[data-palette="b"][data-theme="dark"]'],
-  ["light c", '[data-palette="c"]'],
-  ["dark c", '[data-palette="c"][data-theme="dark"]'],
 ] as const;
 
 describe("colour tokens meet WCAG AA (4.5:1)", () => {
