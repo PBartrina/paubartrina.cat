@@ -70,6 +70,11 @@ redesign can't be measured.
   `visual.spec.ts` over routes × 3 locales × 2 themes. Snapshots committed.
   No Percy/Chromatic. **Capture the baseline of the current site in this PR**
   so milestone 2's first visual PR shows the full before/after.
+  Snapshots are **Linux renders generated only in CI**: run the *Visual
+  snapshots* workflow on the branch, then
+  `gh run download -n visual-snapshots -D e2e/visual.spec.ts-snapshots` and
+  commit. That is also the refresh procedure for every intentional design
+  change in M2/M3 — never `--update-snapshots` locally.
 
 **Done when:** a PR that adds 100 kB of JS or drops perf below 90 fails CI.
 
