@@ -88,6 +88,29 @@ h1, h2, h3, h4 {
   font-family: var(--font-mono);
 }
 
+/* ─── Decorative glyphs ─────────────────────────────────────────── */
+/* Ornaments live in data-glyph and render as pseudo-element content so they
+   are not text nodes: axe skips them for colour contrast, screen readers
+   never see them. */
+.glyph::before {
+  content: attr(data-glyph);
+}
+
+/* ─── Generative mark draw-in ───────────────────────────────────── */
+.mark-draw path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  /* cubic-bezier, not var(--expo-out): a browser without linear() would drop the
+     whole declaration and leave the path at dashoffset 1 — invisible. */
+  animation: mark-draw 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes mark-draw {
+  to { stroke-dashoffset: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mark-draw path { animation: none; stroke-dashoffset: 0; }
+}
+
 /* ─── Prose (blog posts) ─────────────────────────────────────────── */
 .prose {
   --tw-prose-body:     var(--text-primary);

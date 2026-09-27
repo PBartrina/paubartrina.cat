@@ -5,6 +5,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { ThemeProvider } from "@/lib/theme";
 import Navbar from "@/components/Navbar";
+import GenerativeMark from "@/components/GenerativeMark";
 import Footer from "@/components/Footer";
 import ThemeToggle from "@/components/ThemeToggle";
 import ScrollToTop from "@/components/ScrollToTop";
@@ -141,7 +142,9 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
             >
               {t("skipToContent")}
             </a>
-            <Navbar />
+            <Navbar
+              mark={<GenerativeMark className="h-7 w-7 text-text-accent-on-dark" />}
+            />
             <main id="main-content" className="flex-1">
               <PageTransition>{children}</PageTransition>
             </main>

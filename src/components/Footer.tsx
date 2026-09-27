@@ -1,4 +1,5 @@
 import { getTranslations, getLocale } from "next-intl/server";
+import GenerativeMark from "@/components/GenerativeMark";
 import { Link } from "@/i18n/navigation";
 import { getLastCommitDate, formatCommitDate } from "@/lib/git";
 
@@ -59,6 +60,7 @@ export default async function Footer() {
         </div>
 
         <div className="mt-8 border-t border-bg-dark-secondary pt-6 flex flex-col items-center gap-2 font-mono text-sm text-text-on-dark">
+          <GenerativeMark className="h-8 w-8 text-text-accent-on-dark" />
           <div>
             &copy; {new Date().getFullYear()} Pau Bartrina.{" "}
             {t("copyright")}
