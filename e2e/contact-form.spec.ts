@@ -88,8 +88,6 @@ test.describe("contact form", () => {
   test("a Resend failure surfaces as a retryable error", async ({
     page,
   }, testInfo) => {
-    test.fixme(true, "Route ignores { error } from resend.emails.send — see #269");
-
     const name = uniqueName(testInfo);
     await page.request.post(`${MOCK_RESEND_URL}/__mock/fail`, {
       data: { subjectIncludes: name },

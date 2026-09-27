@@ -31,8 +31,6 @@ test.describe("theme toggle", () => {
   });
 
   test("the toggle label reflects the stored theme after reload", async ({ page }) => {
-    test.fixme(true, "Server text survives hydration, label reads [dark] — see #270");
-
     await page.goto("/ca");
     await page.evaluate(() => localStorage.setItem("theme", "dark"));
     await page.reload();
