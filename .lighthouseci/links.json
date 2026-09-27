@@ -1,0 +1,9 @@
+{
+  "http://localhost:3000/ca": "https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/reports/1790460925627-40030.report.html",
+  "http://localhost:3000/ca/ara": "https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/reports/1790460926630-43098.report.html",
+  "http://localhost:3000/ca/blog": "https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/reports/1790460927762-6118.report.html",
+  "http://localhost:3000/ca/blog/cinc-mesos-de-bots-els-numeros": "https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/reports/1790460928728-3491.report.html",
+  "http://localhost:3000/ca/uses": "https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/reports/1790460929729-88931.report.html",
+  "http://localhost:3000/ca/cv": "https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/reports/1790460930528-38320.report.html",
+  "http://localhost:3000/ca/contacte": "https://storage.googleapis.com/lighthouse-infrastructure.appspot.com/reports/1790460931428-10825.report.html"
+}
