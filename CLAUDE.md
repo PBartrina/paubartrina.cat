@@ -20,6 +20,7 @@ pnpm build        # Production build
 pnpm lint         # ESLint
 pnpm new-post     # Create a new blog post (interactive CLI)
 pnpm lhci         # Lighthouse CI against a local production build
+pnpm e2e          # Playwright (needs pnpm build first); visual snapshots are CI-only, see .github/workflows/visual-snapshots.yml
 ```
 
 ## Project Structure

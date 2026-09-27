@@ -78,7 +78,10 @@ export default async function AraPage({ params }: PageProps) {
         {t("heading")}
       </h1>
       {lastUpdated && (
-        <p className="mb-8 font-mono text-sm text-text-secondary">
+        <p
+          data-testid="last-updated"
+          className="mb-8 font-mono text-sm text-text-secondary"
+        >
           {t("lastUpdated", { date: lastUpdated })}
         </p>
       )}
