@@ -1,0 +1,30 @@
+name: Visual snapshots
+
+# Regenerates the visual-regression baseline on a Linux runner and uploads it.
+# Run it on the branch whose design changed, then locally:
+#   gh run download -n visual-snapshots -D e2e/visual.spec.ts-snapshots
+#   git add e2e/visual.spec.ts-snapshots && git commit
+on:
+  workflow_dispatch:
+
+jobs:
+  snapshots:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm e2e visual --update-snapshots
+      - uses: actions/upload-artifact@v4
+        with:
+          name: visual-snapshots
+          path: e2e/visual.spec.ts-snapshots
+          if-no-files-found: error
+          retention-days: 7
