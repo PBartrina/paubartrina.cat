@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { JetBrains_Mono, Raleway } from "next/font/google";
+import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { ThemeProvider } from "@/lib/theme";
@@ -19,10 +19,15 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
 });
 
-const raleway = Raleway({
-  variable: "--font-raleway",
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
   subsets: ["latin"],
-  weight: ["400", "600", "700", "800"],
+  axes: ["opsz"],
+});
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
 });
 
 interface LayoutProps {
@@ -94,6 +99,10 @@ const themeInitScript = `
     } else {
       document.documentElement.setAttribute('data-theme', 'light');
     }
+    // ponytail: palette picker for the #254 review, delete once one is chosen
+    var p = new URLSearchParams(location.search).get('palette') || localStorage.getItem('palette');
+    if (p === 'a') { localStorage.removeItem('palette'); }
+    else if (p) { localStorage.setItem('palette', p); document.documentElement.setAttribute('data-palette', p); }
   } catch(e) {}
 `;
 
@@ -126,7 +135,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
         />
       </head>
       <body
-        className={`${jetbrainsMono.variable} ${raleway.variable} flex min-h-screen flex-col antialiased`}
+        className={`${jetbrainsMono.variable} ${fraunces.variable} ${inter.variable} flex min-h-screen flex-col antialiased`}
       >
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider>
