@@ -16,13 +16,6 @@ interface Job {
   location?: string;
 }
 
-interface Testimonial {
-  quote: string;
-  author: string;
-  company?: string;
-  relationship?: string;
-}
-
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
@@ -43,8 +36,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 /**
- * /about absorbs the CV: bio, a compact timeline (period · role · company,
- * descriptions stay in the JSON for the printable /cv) and two testimonials.
+ * /about absorbs the CV: bio and a compact timeline (period · role · company;
+ * descriptions stay in the JSON for the printable /cv).
  */
 export default async function AboutPage({ params }: PageProps) {
   const { locale } = await params;
@@ -52,9 +45,7 @@ export default async function AboutPage({ params }: PageProps) {
 
   const t = await getTranslations({ locale, namespace: "about" });
   const tExp = await getTranslations({ locale, namespace: "experience" });
-  const tTest = await getTranslations({ locale, namespace: "testimonials" });
   const jobs = tExp.raw("jobs") as Job[];
-  const testimonials = (tTest.raw("items") as Testimonial[]).slice(0, 2);
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
@@ -81,24 +72,6 @@ export default async function AboutPage({ params }: PageProps) {
             {t("cvLink")}
           </Link>
         </p>
-      </section>
-
-      <section className="mt-12 border-t border-border-color pt-8">
-        <h2 className="mb-6 font-display text-2xl font-bold text-text-primary">{tTest("heading")}</h2>
-        <div className="grid gap-8 sm:grid-cols-2">
-          {testimonials.map((item) => (
-            <figure key={item.author}>
-              <blockquote className="font-display text-lg leading-snug text-text-primary">
-                “{item.quote}”
-              </blockquote>
-              <figcaption className="mt-3 font-mono text-xs text-text-secondary">
-                {item.author}
-                {item.company && `, ${item.company}`}
-                {item.relationship && ` · ${item.relationship}`}
-              </figcaption>
-            </figure>
-          ))}
-        </div>
       </section>
     </div>
   );
