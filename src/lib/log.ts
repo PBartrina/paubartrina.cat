@@ -44,6 +44,11 @@ export function readLogNotes(): LogNotes {
  * entries rather than failing the build; the essays still render.
  */
 export async function fetchMergedPRs(): Promise<MergedPR[]> {
+  // CI builds point this at e2e/fixtures/merged-prs.json so visual snapshots and
+  // Lighthouse are deterministic; the live feed changes with every merge.
+  if (process.env.LOG_PRS_FIXTURE) {
+    return JSON.parse(fs.readFileSync(path.join(process.cwd(), process.env.LOG_PRS_FIXTURE), "utf-8")) as MergedPR[];
+  }
   const headers: Record<string, string> = {
     Accept: "application/vnd.github+json",
     "X-GitHub-Api-Version": "2022-11-28",
@@ -52,10 +57,17 @@ export async function fetchMergedPRs(): Promise<MergedPR[]> {
 
   const out: MergedPR[] = [];
   for (let page = 1; page <= 3; page++) {
-    const res = await fetch(
-      `https://api.github.com/repos/${REPO}/pulls?state=closed&sort=updated&direction=desc&per_page=100&page=${page}`,
-      { headers, cache: "force-cache" }
-    );
+    let res: Response;
+    try {
+      res = await fetch(
+        `https://api.github.com/repos/${REPO}/pulls?state=closed&sort=updated&direction=desc&per_page=100&page=${page}`,
+        { headers, cache: "force-cache" }
+      );
+    } catch (err) {
+      // A thrown fetch (network) during prerender would fail the whole build.
+      console.warn(`[log] GitHub API unreachable on page ${page}; PR entries omitted`, err);
+      break;
+    }
     if (!res.ok) {
       console.warn(`[log] GitHub API ${res.status} on page ${page}; PR entries omitted`);
       break;

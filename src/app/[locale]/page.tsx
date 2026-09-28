@@ -1,14 +1,9 @@
-import { Suspense } from "react";
-import { setRequestLocale } from "next-intl/server";
+import { getTranslations, setRequestLocale } from "next-intl/server";
 import Hero from "@/components/Hero";
-import AtAGlance from "@/components/AtAGlance";
-import Skills from "@/components/Skills";
-import Projects from "@/components/Projects";
-import Experience from "@/components/Experience";
-import Education from "@/components/Education";
-import Testimonials from "@/components/Testimonials";
+import LogEntry, { entryKey } from "@/components/LogEntry";
 import RevealOnScroll from "@/components/RevealOnScroll";
-import { getAllPosts } from "@/lib/blog";
+import { Link } from "@/i18n/navigation";
+import { getLogEntries } from "@/lib/log";
 import { safeJsonLd } from "@/lib/utils";
 import { locales } from "@/i18n/config";
 
@@ -20,11 +15,15 @@ export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
+const LATEST = 5;
+
 export default async function Home({ params }: PageProps) {
   const { locale } = await params;
   setRequestLocale(locale);
 
-  const latestPost = getAllPosts(locale)[0] ?? null;
+  const t = await getTranslations({ locale, namespace: "home" });
+  const tLog = await getTranslations({ locale, namespace: "log" });
+  const latest = (await getLogEntries(locale)).slice(0, LATEST);
 
   const personJsonLd = {
     "@context": "https://schema.org",
@@ -46,30 +45,29 @@ export default async function Home({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: safeJsonLd(personJsonLd) }}
       />
       <Hero />
-      <AtAGlance latestPost={latestPost} locale={locale} />
       <RevealOnScroll>
-        <Skills />
+        <section className="mx-auto max-w-3xl px-6 py-16">
+          <div className="mb-6 flex items-baseline justify-between gap-4">
+            <h2 className="font-display text-2xl font-bold text-text-primary">
+              {t("latestHeading")}
+            </h2>
+            <Link href="/log" className="font-mono text-sm text-text-accent underline hover:no-underline">
+              {t("allLog")}
+            </Link>
+          </div>
+          <ol className="divide-y divide-border-color border-y border-border-color">
+            {latest.map((entry) => (
+              <LogEntry
+                key={entryKey(entry)}
+                entry={entry}
+                locale={locale}
+                essayLabel={tLog("essay")}
+                headingLevel="h3"
+              />
+            ))}
+          </ol>
+        </section>
       </RevealOnScroll>
-      <Suspense fallback={<div className="py-20" />}>
-        <RevealOnScroll delay={50}>
-          <Projects />
-        </RevealOnScroll>
-      </Suspense>
-      <Suspense fallback={<div className="py-20" />}>
-        <RevealOnScroll delay={100}>
-          <Testimonials />
-        </RevealOnScroll>
-      </Suspense>
-      <Suspense fallback={<div className="py-20" />}>
-        <RevealOnScroll delay={150}>
-          <Experience />
-        </RevealOnScroll>
-      </Suspense>
-      <Suspense fallback={<div className="py-20" />}>
-        <RevealOnScroll delay={200}>
-          <Education />
-        </RevealOnScroll>
-      </Suspense>
     </>
   );
 }

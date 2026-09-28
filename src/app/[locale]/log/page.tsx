@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { Link } from "@/i18n/navigation";
+import LogEntry, { entryKey } from "@/components/LogEntry";
 import { locales } from "@/i18n/config";
-import { getLogEntries, type LogEntry } from "@/lib/log";
+import { getLogEntries } from "@/lib/log";
 
 const BASE_URL = "https://paubartrina.cat";
 
@@ -29,57 +29,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-function formatDate(iso: string, locale: string) {
-  return new Intl.DateTimeFormat(locale, { day: "numeric", month: "short", year: "numeric" }).format(
-    new Date(iso)
-  );
-}
-
-function Entry({ entry, locale, essayLabel }: { entry: LogEntry; locale: string; essayLabel: string }) {
-  const date = (
-    <time dateTime={entry.date} className="font-mono text-xs text-text-secondary">
-      {formatDate(entry.date, locale)}
-    </time>
-  );
-
-  if (entry.kind === "essay") {
-    return (
-      <li className="grid gap-1 py-5 sm:grid-cols-[7rem_1fr] sm:gap-6">
-        {date}
-        <div>
-          <span className="mb-1 inline-block rounded-full border border-text-accent px-2 py-0.5 font-mono text-[0.65rem] uppercase tracking-wide text-text-accent">
-            {essayLabel}
-          </span>
-          <h2 className="font-display text-2xl font-bold text-text-primary">
-            <Link href={entry.href} className="hover:underline">
-              {entry.title}
-            </Link>
-          </h2>
-          {entry.description && <p className="mt-1 text-text-secondary">{entry.description}</p>}
-        </div>
-      </li>
-    );
-  }
-
-  return (
-    <li className="grid gap-1 py-3 sm:grid-cols-[7rem_1fr] sm:gap-6">
-      {date}
-      <div>
-        <a
-          href={entry.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="font-mono text-sm text-text-primary hover:underline"
-        >
-          {entry.title}
-          <span className="ml-2 text-text-secondary">#{entry.number}</span>
-        </a>
-        {entry.note && <p className="mt-1 text-sm italic text-text-secondary">{entry.note}</p>}
-      </div>
-    </li>
-  );
-}
-
 export default async function LogPage({ params }: PageProps) {
   const { locale } = await params;
   setRequestLocale(locale);
@@ -103,12 +52,7 @@ export default async function LogPage({ params }: PageProps) {
       ) : (
         <ol className="divide-y divide-border-color border-y border-border-color">
           {entries.map((entry) => (
-            <Entry
-              key={entry.kind === "pr" ? `pr-${entry.number}` : `essay-${entry.href}`}
-              entry={entry}
-              locale={locale}
-              essayLabel={t("essay")}
-            />
+            <LogEntry key={entryKey(entry)} entry={entry} locale={locale} essayLabel={t("essay")} />
           ))}
         </ol>
       )}
