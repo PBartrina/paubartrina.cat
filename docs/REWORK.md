@@ -75,6 +75,10 @@ redesign can't be measured.
   `gh run download -n visual-snapshots -D e2e/visual.spec.ts-snapshots` and
   commit. That is also the refresh procedure for every intentional design
   change in M2/M3 — never `--update-snapshots` locally.
+  Gotcha: `workflow_dispatch` runs the *branch's* copy of the workflow file, so
+  a workflow change merged to `main` only reaches a feature branch after
+  merging `main` in. CI builds set `LOG_PRS_FIXTURE` so `/log` and home are
+  deterministic; production uses the live GitHub feed.
 
 **Done when:** a PR that adds 100 kB of JS or drops perf below 90 fails CI.
 
