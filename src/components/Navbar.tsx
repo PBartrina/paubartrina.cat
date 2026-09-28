@@ -7,6 +7,7 @@ import LanguageSwitcher from "./LanguageSwitcher";
 
 const navLinks = [
   { href: "/", labelKey: "home" },
+  { href: "/about", labelKey: "about" },
   { href: "/ara", labelKey: "now" },
   { href: "/uses", labelKey: "uses" },
   { href: "/blog", labelKey: "blog" },

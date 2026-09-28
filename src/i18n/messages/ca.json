@@ -48,6 +48,8 @@
     ]
   },
   "about": {
+    "description": "Qui sóc, on he treballat i què en diuen els que hi han treballat amb mi.",
+    "cvLink": "Veure el CV complet / imprimir →",
     "heading": "Sobre Mi",
     "bio": "Enginyer de Software Sènior i Líder Tècnic amb més de 15 anys d'experiència, especialitzat en l'ecosistema Angular (NgRx, Nx, TypeScript). Expert en modernització de codis base i en la implementació de cultures de testing amb Vitest i Playwright. Líder col·laboratiu dedicat a connectar disseny, producte i enginyeria per oferir experiències d'usuari impecables.",
     "languagesLabel": "Idiomes",

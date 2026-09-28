@@ -11,7 +11,8 @@
         "http://localhost:3000/ca/uses",
         "http://localhost:3000/ca/cv",
         "http://localhost:3000/ca/contacte",
-        "http://localhost:3000/ca/log"
+        "http://localhost:3000/ca/log",
+        "http://localhost:3000/ca/about"
       ],
       "numberOfRuns": 2
     },

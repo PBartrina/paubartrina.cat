@@ -48,6 +48,8 @@
     ]
   },
   "about": {
+    "description": "Who I am, where I've worked, and what the people I worked with say.",
+    "cvLink": "Full CV / print →",
     "heading": "About Me",
     "bio": "Senior Software Engineer and Tech Lead with over 15 years of experience, specializing in the Angular ecosystem (NgRx, Nx, TypeScript). Expert in codebase modernization and implementing testing cultures with Vitest and Playwright. A collaborative leader dedicated to connecting design, product, and engineering to deliver flawless user experiences.",
     "languagesLabel": "Languages",

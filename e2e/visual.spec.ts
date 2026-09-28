@@ -17,6 +17,7 @@ const ROUTES = [
   ["uses", "/uses"],
   ["cv", "/cv"],
   ["log", "/log"],
+  ["about", "/about"],
   ["contacte", "/contacte"],
 ] as const;
 const LOCALES = ["ca", "es", "en"] as const;
