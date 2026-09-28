@@ -5,6 +5,15 @@
     "description": "Ingeniero de Software Sénior con +15 años de experiencia en Angular, TypeScript, NgRx y Nx. Especializado en arquitectura modular, testing y liderazgo técnico.",
     "ogLocale": "es_ES"
   },
+  "log": {
+    "title": "Registro",
+    "description": "Todo lo que cambia en esta web: cada pull request fusionado y los ensayos, en un solo hilo.",
+    "heading": "Registro",
+    "intro": "Cada pull request fusionado y cada ensayo, en orden. La web escribe su propio diario.",
+    "essay": "ensayo",
+    "entryCount": "{count} entradas",
+    "emptyState": "Todavía no hay entradas."
+  },
   "nav": {
     "home": "Inicio",
     "about": "Sobre Mí",
@@ -13,6 +22,7 @@
     "now": "Ahora",
     "uses": "Herramientas",
     "blog": "Blog",
+    "log": "Registro",
     "contact": "Contacto",
     "toggleMenu": "Abrir menú",
     "skipToContent": "Saltar al contenido"

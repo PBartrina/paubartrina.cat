@@ -13,6 +13,7 @@ const navLinks = [
   { href: "/ara", labelKey: "now" },
   { href: "/uses", labelKey: "uses" },
   { href: "/blog", labelKey: "blog" },
+  { href: "/log", labelKey: "log" },
   { href: "/contacte", labelKey: "contact" },
 ] as const;
 

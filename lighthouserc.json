@@ -10,7 +10,8 @@
         "http://localhost:3000/ca/blog/cinc-mesos-de-bots-els-numeros",
         "http://localhost:3000/ca/uses",
         "http://localhost:3000/ca/cv",
-        "http://localhost:3000/ca/contacte"
+        "http://localhost:3000/ca/contacte",
+        "http://localhost:3000/ca/log"
       ],
       "numberOfRuns": 2
     },

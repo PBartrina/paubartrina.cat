@@ -29,6 +29,7 @@ pnpm e2e          # Playwright (needs pnpm build first); visual snapshots are CI
 - `src/components/` - React components (Navbar, Footer, Hero, Services, ThemeToggle, BlogCard)
 - `src/lib/` - Utilities (blog.ts for MDX reading, theme.tsx for dark/light toggle)
 - `content/blog/` - MDX blog posts with frontmatter (title, date, description, tags, published)
+- `content/log-notes.json` - optional one-liners for `/log` entries, keyed by PR number (`{"225": "…"}`); PRs themselves come from the GitHub API at build (`GITHUB_TOKEN` env avoids rate limits)
 - `scripts/` - CLI tools (new-post.ts)
 
 ## Conventions

@@ -6,7 +6,7 @@ const BASE_URL = "https://paubartrina.cat";
 
 type Locale = (typeof locales)[number];
 
-const staticRoutes = ["", "/blog", "/contacte", "/uses", "/ara"] as const;
+const staticRoutes = ["", "/blog", "/log", "/contacte", "/uses", "/ara"] as const;
 
 function alternates(path: string): Record<string, string> {
   return Object.fromEntries(locales.map((locale) => [locale, `${BASE_URL}/${locale}${path}`]));
