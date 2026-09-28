@@ -15,10 +15,12 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "cv" });
+  // /cv is the printable twin of /about: point search engines there instead of
+  // noindex, which alongside a cross-page canonical would send mixed signals.
   return {
     title: t("title"),
     description: t("description"),
-    robots: { index: false },
+    alternates: { canonical: `https://paubartrina.cat/${locale}/about` },
   };
 }
 
