@@ -27,7 +27,14 @@
     "toggleMenu": "Toggle menu",
     "skipToContent": "Skip to content"
   },
+  "home": {
+    "latestHeading": "Latest from the log",
+    "allLog": "Full log →"
+  },
   "hero": {
+    "headline": "I'm a software engineer with more hobbies and curiosities than programming languages.",
+    "line2": "You only get one personal life, but I'm lucky enough to live many other beings' lives.",
+    "line3": "Looking for mental stability through the instability around me.",
     "greeting": "Welcome",
     "title": "Senior Software Engineer with 15+ years of experience",
     "subtitle": "in the Angular ecosystem, modular architecture, and technical leadership",

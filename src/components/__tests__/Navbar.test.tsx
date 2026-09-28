@@ -43,9 +43,9 @@ describe("Navbar", () => {
     expect(screen.getByRole("link", { name: caMessages.nav.uses })).toBeInTheDocument();
   });
 
-  it("renders the projects navigation link", () => {
+  it("renders the log navigation link", () => {
     renderNavbar();
-    expect(screen.getByRole("link", { name: caMessages.nav.projects })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: caMessages.nav.log })).toBeInTheDocument();
   });
 
   describe("hamburger button accessibility", () => {
@@ -93,13 +93,13 @@ describe("Navbar", () => {
       expect(document.getElementById("mobile-menu")).toBeInTheDocument();
     });
 
-    it("mobile menu contains projects link", () => {
+    it("mobile menu contains log link", () => {
       renderNavbar();
       const hamburger = screen.getByRole("button", { name: caMessages.nav.toggleMenu });
       fireEvent.click(hamburger);
       const mobileMenu = document.getElementById("mobile-menu");
       expect(mobileMenu).toBeInTheDocument();
-      const projectsLinks = screen.getAllByRole("link", { name: caMessages.nav.projects });
+      const projectsLinks = screen.getAllByRole("link", { name: caMessages.nav.log });
       expect(projectsLinks.length).toBeGreaterThan(0);
     });
 

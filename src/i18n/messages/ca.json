@@ -27,7 +27,14 @@
     "toggleMenu": "Obrir menú",
     "skipToContent": "Salta al contingut"
   },
+  "home": {
+    "latestHeading": "Últim del registre",
+    "allLog": "Tot el registre →"
+  },
   "hero": {
+    "headline": "Sóc un enginyer de software amb més hobbies i inquietuds que llenguatges de programació.",
+    "line2": "La vida personal és una, però tinc la sort de viure moltes vides d'altres éssers.",
+    "line3": "Buscant l'estabilitat mental a través de la inestabilitat que m'envolta.",
     "greeting": "Benvinguts",
     "title": "Enginyer de Software Sènior amb +15 anys d'experiència",
     "subtitle": "en l'ecosistema Angular, arquitectura modular i lideratge tècnic",
