@@ -58,7 +58,7 @@ redesign can't be measured.
   on the runner (the Vercel preview sits behind Deployment Protection, and a
   local server needs no bypass secret and shares the build with Playwright).
   `lighthouserc.json`: performance ≥ 90, accessibility ≥ 90, plus
-  `resource-summary:script:size` ≤ 190 kB and `:total:size` ≤ 480 kB as
+  `resource-summary:script:size` ≤ 180 kB (tightened from 190 in #266; ~140 kB is the React + Next framework floor) and `:total:size` ≤ 480 kB as
   assertions — **those two lines are the bundle-size gate**. No `size-limit`,
   and no `budget.json` (LHCI 0.15 refuses budgets alongside assertions).
   Thresholds start at the measured baseline (a11y 91, script 178 kB) so the
