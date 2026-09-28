@@ -52,10 +52,17 @@ export async function fetchMergedPRs(): Promise<MergedPR[]> {
 
   const out: MergedPR[] = [];
   for (let page = 1; page <= 3; page++) {
-    const res = await fetch(
-      `https://api.github.com/repos/${REPO}/pulls?state=closed&sort=updated&direction=desc&per_page=100&page=${page}`,
-      { headers, cache: "force-cache" }
-    );
+    let res: Response;
+    try {
+      res = await fetch(
+        `https://api.github.com/repos/${REPO}/pulls?state=closed&sort=updated&direction=desc&per_page=100&page=${page}`,
+        { headers, cache: "force-cache" }
+      );
+    } catch (err) {
+      // A thrown fetch (network) during prerender would fail the whole build.
+      console.warn(`[log] GitHub API unreachable on page ${page}; PR entries omitted`, err);
+      break;
+    }
     if (!res.ok) {
       console.warn(`[log] GitHub API ${res.status} on page ${page}; PR entries omitted`);
       break;
