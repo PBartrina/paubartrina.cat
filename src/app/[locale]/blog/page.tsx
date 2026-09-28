@@ -89,7 +89,7 @@ export default async function BlogPage({ params, searchParams }: PageProps) {
       />
       <div className="mx-auto max-w-3xl px-6 py-12">
         <div className="mb-8 flex flex-wrap items-baseline gap-4">
-          <h1 className="font-mono text-4xl font-bold text-text-primary">
+          <h1 className="font-display text-4xl font-bold text-text-primary md:text-5xl">
             {t("heading")}
           </h1>
           {posts.length > 0 && (

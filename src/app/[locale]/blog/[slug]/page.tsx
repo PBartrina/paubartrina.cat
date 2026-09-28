@@ -145,7 +145,7 @@ export default async function BlogPostPage({ params }: PageProps) {
             )}
 
             <header className="mb-8">
-              <h1 className="mb-4 font-mono text-3xl font-bold text-text-primary md:text-4xl">
+              <h1 className="mb-4 font-display text-4xl font-bold leading-tight text-text-primary md:text-5xl">
                 {post.title}
               </h1>
               <div className="flex flex-wrap items-center gap-3 font-mono text-sm text-text-secondary">
