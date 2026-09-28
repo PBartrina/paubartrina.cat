@@ -1,3 +1,4 @@
+import { localeOgImage } from "@/lib/og";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
@@ -31,7 +32,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       canonical: canonicalUrl,
       languages: Object.fromEntries(locales.map((l) => [l, `${BASE_URL}/${l}/about`])),
     },
-    openGraph: { title: t("heading"), description: t("description"), url: canonicalUrl, type: "profile" },
+    openGraph: {
+      ...localeOgImage(locale), title: t("heading"), description: t("description"), url: canonicalUrl, type: "profile" },
   };
 }
 

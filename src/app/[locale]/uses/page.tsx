@@ -1,3 +1,4 @@
+import { localeOgImage } from "@/lib/og";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -17,7 +18,6 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "uses" });
 
-  const ogImageUrl = "https://paubartrina.cat/og-default.png";
   const canonicalUrl = `https://paubartrina.cat/${locale}/uses`;
 
   return {
@@ -30,24 +30,16 @@ export async function generateMetadata({
       ),
     },
     openGraph: {
+      ...localeOgImage(locale),
       title: t("title"),
       description: t("description"),
       url: canonicalUrl,
       type: "website",
-      images: [
-        {
-          url: ogImageUrl,
-          width: 1200,
-          height: 630,
-          alt: "Pau Bartrina – Senior Software Engineer",
-        },
-      ],
     },
     twitter: {
       card: "summary_large_image",
       title: t("title"),
       description: t("description"),
-      images: [ogImageUrl],
     },
   };
 }

@@ -1,3 +1,4 @@
+import { localeOgImage } from "@/lib/og";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import LogEntry, { entryKey } from "@/components/LogEntry";
@@ -25,7 +26,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       canonical: canonicalUrl,
       languages: Object.fromEntries(locales.map((l) => [l, `${BASE_URL}/${l}/log`])),
     },
-    openGraph: { title: t("title"), description: t("description"), url: canonicalUrl, type: "website" },
+    openGraph: {
+      ...localeOgImage(locale), title: t("title"), description: t("description"), url: canonicalUrl, type: "website" },
   };
 }
 
