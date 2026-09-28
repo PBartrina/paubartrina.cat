@@ -61,12 +61,12 @@ export default function ContactForm() {
 
   if (state === "success") {
     return (
-      <div className="flex flex-col items-center gap-4 py-8 text-center">
-        <span className="text-4xl text-green-500">&#10003;</span>
-        <p className="font-mono text-lg font-bold text-green-500">
+      <div className="flex flex-col items-start gap-3 py-4">
+        <span aria-hidden="true" className="text-3xl text-text-accent">&#10003;</span>
+        <p className="font-display text-2xl font-bold text-text-primary">
           {t("successHeading")}
         </p>
-        <p className="font-mono text-sm text-text-secondary">
+        <p className="text-text-secondary">
           {t("successMessage")}
         </p>
         <button
@@ -166,7 +166,9 @@ export default function ContactForm() {
       </div>
 
       {state === "error" && (
-        <p className="font-mono text-sm text-red-500">{errorMsg}</p>
+        <p role="alert" className="font-mono text-sm font-semibold text-text-accent">
+          {errorMsg}
+        </p>
       )}
 
       <button
