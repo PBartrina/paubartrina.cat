@@ -5,6 +5,15 @@
     "description": "Senior Software Engineer with 15+ years of experience in Angular, TypeScript, NgRx, and Nx. Specializing in modular architecture, testing, and technical leadership.",
     "ogLocale": "en_US"
   },
+  "log": {
+    "title": "Log",
+    "description": "Everything that changes on this site: every merged pull request and the essays, in one stream.",
+    "heading": "Log",
+    "intro": "Every merged pull request and every essay, in order. The site writes its own diary.",
+    "essay": "essay",
+    "entryCount": "{count} entries",
+    "emptyState": "No entries yet."
+  },
   "nav": {
     "home": "Home",
     "about": "About Me",
@@ -13,6 +22,7 @@
     "now": "Now",
     "uses": "Uses",
     "blog": "Blog",
+    "log": "Log",
     "contact": "Contact",
     "toggleMenu": "Toggle menu",
     "skipToContent": "Skip to content"

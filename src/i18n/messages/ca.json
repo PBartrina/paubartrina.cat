@@ -5,6 +5,15 @@
     "description": "Enginyer de Software Sènior amb +15 anys d'experiència en Angular, TypeScript, NgRx i Nx. Especialitzat en arquitectura modular, testing i lideratge tècnic.",
     "ogLocale": "ca_ES"
   },
+  "log": {
+    "title": "Registre",
+    "description": "Tot el que canvia en aquesta web: cada pull request fusionat i els assajos, en un sol fil.",
+    "heading": "Registre",
+    "intro": "Cada pull request fusionat i cada assaig, en ordre. La web s'escriu el seu propi diari.",
+    "essay": "assaig",
+    "entryCount": "{count} entrades",
+    "emptyState": "Encara no hi ha entrades."
+  },
   "nav": {
     "home": "Home",
     "about": "Sobre Mi",
@@ -13,6 +22,7 @@
     "now": "Ara",
     "uses": "Eines",
     "blog": "Blog",
+    "log": "Registre",
     "contact": "Contacte",
     "toggleMenu": "Obrir menú",
     "skipToContent": "Salta al contingut"

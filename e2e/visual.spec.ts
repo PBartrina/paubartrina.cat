@@ -16,6 +16,7 @@ const ROUTES = [
   ["post", "/blog/cinc-mesos-de-bots-els-numeros"],
   ["uses", "/uses"],
   ["cv", "/cv"],
+  ["log", "/log"],
   ["contacte", "/contacte"],
 ] as const;
 const LOCALES = ["ca", "es", "en"] as const;
