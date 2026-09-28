@@ -1,3 +1,4 @@
+import { localeOgImage } from "@/lib/og";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { locales } from "@/i18n/config";
@@ -5,8 +6,6 @@ import ContactForm from "./ContactForm";
 import CopyEmail from "@/components/CopyEmail";
 
 const BASE_URL = "https://paubartrina.cat";
-const OG_IMAGE = `${BASE_URL}/og-default.png`;
-
 interface PageProps {
   params: Promise<{ locale: string }>;
 }
@@ -28,17 +27,16 @@ export async function generateMetadata({
       ),
     },
     openGraph: {
+      ...localeOgImage(locale),
       title: t("heading"),
       description: t("description"),
       url: canonicalUrl,
       type: "website",
-      images: [{ url: OG_IMAGE, width: 1200, height: 630, alt: "Pau Bartrina – Senior Software Engineer" }],
     },
     twitter: {
       card: "summary_large_image",
       title: t("heading"),
       description: t("description"),
-      images: [OG_IMAGE],
     },
   };
 }

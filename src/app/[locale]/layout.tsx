@@ -48,8 +48,6 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "metadata" });
 
-  const ogImageUrl = "https://paubartrina.cat/og-default.png";
-
   return {
     title: {
       default: t("title"),
@@ -64,20 +62,11 @@ export async function generateMetadata({
       siteName: "Pau Bartrina",
       locale: t("ogLocale"),
       type: "website",
-      images: [
-        {
-          url: ogImageUrl,
-          width: 1200,
-          height: 630,
-          alt: "Pau Bartrina – Senior Software Engineer",
-        },
-      ],
     },
     twitter: {
       card: "summary_large_image",
       title: t("title"),
       description: t("description"),
-      images: [ogImageUrl],
     },
     alternates: {
       canonical: `https://paubartrina.cat/${locale}`,
