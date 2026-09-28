@@ -1,4 +1,5 @@
 import { getTranslations, getLocale } from "next-intl/server";
+import GenerativeMark from "@/components/GenerativeMark";
 import { Link } from "@/i18n/navigation";
 import { getLastCommitDate, formatCommitDate } from "@/lib/git";
 
@@ -20,21 +21,21 @@ export default async function Footer() {
       <div className="mx-auto max-w-6xl px-6 py-12">
         <div className="flex flex-col justify-between gap-8 md:flex-row">
           <div>
-            <h3 className="mb-2 font-mono text-lg font-bold">
+            <h2 className="mb-2 font-mono text-lg font-bold">
               {t("contactHeading")}
-            </h3>
+            </h2>
             <Link
               href="/contacte"
-              className="inline-block rounded-md border border-text-on-dark px-4 py-2 font-mono text-sm transition-colors hover:border-text-accent hover:text-text-accent"
+              className="inline-block rounded-md border border-text-on-dark px-4 py-2 font-mono text-sm transition-colors hover:border-text-accent-on-dark hover:text-text-accent-on-dark"
             >
               {t("sendMessage")}
             </Link>
           </div>
 
           <div>
-            <h3 className="mb-2 font-mono text-lg font-bold">
+            <h2 className="mb-2 font-mono text-lg font-bold">
               {t("followHeading")}
-            </h3>
+            </h2>
             <div className="flex gap-3">
               {socialLinks.map((link) => (
                 <a
@@ -42,7 +43,7 @@ export default async function Footer() {
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-md border border-text-on-dark px-4 py-2 font-mono text-sm transition-colors hover:border-text-accent hover:text-text-accent"
+                  className="rounded-md border border-text-on-dark px-4 py-2 font-mono text-sm transition-colors hover:border-text-accent-on-dark hover:text-text-accent-on-dark"
                 >
                   {link.label}
                 </a>
@@ -50,7 +51,7 @@ export default async function Footer() {
               <a
                 href={`/${locale}/blog/feed.xml`}
                 aria-label={t("rssLabel")}
-                className="rounded-md border border-text-on-dark px-4 py-2 font-mono text-sm transition-colors hover:border-text-accent hover:text-text-accent"
+                className="rounded-md border border-text-on-dark px-4 py-2 font-mono text-sm transition-colors hover:border-text-accent-on-dark hover:text-text-accent-on-dark"
               >
                 <span aria-hidden="true">📡</span>
               </a>
@@ -58,19 +59,20 @@ export default async function Footer() {
           </div>
         </div>
 
-        <div className="mt-8 border-t border-bg-dark-secondary pt-6 flex flex-col items-center gap-2 font-mono text-sm text-text-secondary">
+        <div className="mt-8 border-t border-bg-dark-secondary pt-6 flex flex-col items-center gap-2 font-mono text-sm text-text-on-dark">
+          <GenerativeMark className="h-8 w-8 text-text-accent-on-dark" />
           <div>
             &copy; {new Date().getFullYear()} Pau Bartrina.{" "}
             {t("copyright")}
           </div>
           {lastUpdated && (
-            <p className="text-xs opacity-60">
+            <p className="text-xs opacity-80">
               {t("lastUpdated", { date: lastUpdated })}
             </p>
           )}
           <Link
             href="/cv"
-            className="text-xs text-text-secondary opacity-60 hover:opacity-100 hover:text-text-accent transition-opacity"
+            className="text-xs opacity-80 underline hover:opacity-100 hover:text-text-accent-on-dark transition-opacity"
           >
             {t("cvLink")}
           </Link>

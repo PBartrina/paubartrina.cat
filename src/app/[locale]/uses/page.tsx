@@ -1,3 +1,4 @@
+import { localeOgImage } from "@/lib/og";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { getTranslations, setRequestLocale } from "next-intl/server";
@@ -17,7 +18,6 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "uses" });
 
-  const ogImageUrl = "https://paubartrina.cat/og-default.png";
   const canonicalUrl = `https://paubartrina.cat/${locale}/uses`;
 
   return {
@@ -30,24 +30,16 @@ export async function generateMetadata({
       ),
     },
     openGraph: {
+      ...localeOgImage(locale),
       title: t("title"),
       description: t("description"),
       url: canonicalUrl,
       type: "website",
-      images: [
-        {
-          url: ogImageUrl,
-          width: 1200,
-          height: 630,
-          alt: "Pau Bartrina – Senior Software Engineer",
-        },
-      ],
     },
     twitter: {
       card: "summary_large_image",
       title: t("title"),
       description: t("description"),
-      images: [ogImageUrl],
     },
   };
 }
@@ -68,108 +60,55 @@ export default async function UsesPage({ params }: PageProps) {
         href="https://uses.tech"
         target="_blank"
         rel="noopener noreferrer"
-        className="text-text-accent hover:underline"
+        className="text-text-accent underline hover:no-underline"
       >
         {chunks}
       </a>
     ),
   };
   
-  const editorItems = t.raw("editor.items") as string[];
-  const terminalItems = t.raw("terminal.items") as string[];
-  const browserItems = t.raw("browser.items") as string[];
-  const hardwareItems = t.raw("hardware.items") as string[];
-  const desktopItems = t.raw("desktop.items") as string[];
+  // One glyph per section, decorative — rendered as ::before content via
+  // data-glyph so it is never a text node (see globals.css).
+  const sections = [
+    ["editor", "{ }"],
+    ["terminal", ">_"],
+    ["browser", "://"],
+    ["hardware", "[ ]"],
+    ["desktop", "::"],
+  ] as const;
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-12">
-      <h1 className="mb-2 font-mono text-4xl font-bold text-text-primary">
+      <h1 className="mb-2 font-display text-4xl font-bold text-text-primary md:text-5xl">
         {t("heading")}
       </h1>
-      <p className="mb-8 font-mono text-sm text-text-secondary">
+      <p className="mb-10 text-lg leading-relaxed text-text-secondary">
         {t("subtitle")}
       </p>
 
-      <div className="space-y-10 font-mono text-text-primary">
-        {/* Editor Section */}
-        <section>
-          <h2 className="mb-4 text-2xl font-bold flex items-center gap-2">
-            <span className="text-text-accent">{'{ }'}</span>
-            {t("editor.heading")}
-          </h2>
-          <div className="space-y-3 pl-4 text-sm leading-relaxed">
-            {editorItems.map((item, i) => (
-              <p key={i} className="text-text-secondary before:mr-2 before:text-text-accent before:content-['→']">
-                {item}
-              </p>
-            ))}
-          </div>
-        </section>
-
-        {/* Terminal Section */}
-        <section>
-          <h2 className="mb-4 text-2xl font-bold flex items-center gap-2">
-            <span className="text-text-accent">{'>'}</span>
-            {t("terminal.heading")}
-          </h2>
-          <div className="space-y-3 pl-4 text-sm leading-relaxed">
-            {terminalItems.map((item, i) => (
-              <p key={i} className="text-text-secondary before:mr-2 before:text-text-accent before:content-['→']">
-                {item}
-              </p>
-            ))}
-          </div>
-        </section>
-
-        {/* Browser Section */}
-        <section>
-          <h2 className="mb-4 text-2xl font-bold flex items-center gap-2">
-            <span className="text-text-accent">{'🌐'}</span>
-            {t("browser.heading")}
-          </h2>
-          <div className="space-y-3 pl-4 text-sm leading-relaxed">
-            {browserItems.map((item, i) => (
-              <p key={i} className="text-text-secondary before:mr-2 before:text-text-accent before:content-['→']">
-                {item}
-              </p>
-            ))}
-          </div>
-        </section>
-
-        {/* Hardware Section */}
-        <section>
-          <h2 className="mb-4 text-2xl font-bold flex items-center gap-2">
-            <span className="text-text-accent">{'⚙️'}</span>
-            {t("hardware.heading")}
-          </h2>
-          <div className="space-y-3 pl-4 text-sm leading-relaxed">
-            {hardwareItems.map((item, i) => (
-              <p key={i} className="text-text-secondary before:mr-2 before:text-text-accent before:content-['→']">
-                {item}
-              </p>
-            ))}
-          </div>
-        </section>
-
-        {/* Desktop Apps Section */}
-        <section>
-          <h2 className="mb-4 text-2xl font-bold flex items-center gap-2">
-            <span className="text-text-accent">{'💻'}</span>
-            {t("desktop.heading")}
-          </h2>
-          <div className="space-y-3 pl-4 text-sm leading-relaxed">
-            {desktopItems.map((item, i) => (
-              <p key={i} className="text-text-secondary before:mr-2 before:text-text-accent before:content-['→']">
-                {item}
-              </p>
-            ))}
-          </div>
-        </section>
-
-        <p className="mt-12 text-sm italic text-text-secondary">
-          {t.rich("footer", richComponents)}
-        </p>
+      <div className="divide-y divide-border-color border-y border-border-color text-text-primary">
+        {sections.map(([key, glyph]) => (
+          <section key={key} className="grid gap-3 py-8 sm:grid-cols-[12rem_1fr] sm:gap-8">
+            <h2 className="flex items-baseline gap-3 font-display text-2xl font-bold">
+              <span
+                aria-hidden="true"
+                data-glyph={glyph}
+                className="glyph font-mono text-sm text-text-accent"
+              />
+              {t(`${key}.heading`)}
+            </h2>
+            <ul className="space-y-2 font-mono text-sm leading-relaxed text-text-secondary">
+              {(t.raw(`${key}.items`) as string[]).map((item, i) => (
+                <li key={i}>{item}</li>
+              ))}
+            </ul>
+          </section>
+        ))}
       </div>
+
+      <p className="mt-10 text-sm italic text-text-secondary">
+        {t.rich("footer", richComponents)}
+      </p>
     </div>
   );
 }

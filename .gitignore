@@ -53,3 +53,8 @@ next-env.d.ts
 
 # Lighthouse CI local reports
 .lighthouseci/
+
+# Playwright
+/test-results/
+/playwright-report/
+/playwright/.cache/

@@ -1,40 +1,41 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-/* ─── Brand Color Palette ────────────────────────────────────────── */
-/* Extracted from paubartrina.cat logo:
-   Purple (#4A1870) — from "PAU" text & circle border
-   Rose   (#C4698A) — from "BARTRINA" text & circle icon
-   Blush  (#FFF0F4) — background of the logo
-*/
+/* ─── Palette ────────────────────────────────────────────────────── */
+/* Warm paper / near-black ink with a single accent whose hue shifts between
+   themes (burgundy in light, salmon-pink in dark). --text-accent-on-dark exists because
+   no one colour can pass 4.5:1 on both paper and ink; use it for accents that
+   sit on --bg-dark (nav, footer, code blocks). Contrast is asserted by
+   src/app/__tests__/tokens-contrast.test.ts. */
 
 :root {
-  /* Light theme */
-  --bg-primary:        #fff0f4;   /* logo background blush */
-  --bg-secondary:      #ffffff;
-  --bg-dark:           #4a1870;   /* deep purple — nav / footer */
-  --bg-dark-secondary: #6b2a9a;
-  --text-primary:      #2a0c42;   /* very dark purple — body text */
-  --text-secondary:    #7a4a8a;   /* medium purple-rose */
-  --text-accent:       #c4698a;   /* rose — links, highlights */
-  --text-on-dark:      #fff0f4;   /* blush — text on purple bg */
-  --border-color:      #e4c0d5;
-  --card-bg:           #ffffff;
-  --card-border:       #f0d0e0;
+  --bg-primary:         #f7f3ee;
+  --bg-secondary:       #ffffff;
+  --bg-dark:            #1c1a1f;
+  --bg-dark-secondary:  #2a272e;
+  --text-primary:       #1c1a1f;
+  --text-secondary:     #625c68;
+  --text-accent:        #b02d5c;
+  --text-accent-on-dark: #f58fa9;
+  --text-on-dark:       #f7f3ee;
+  --border-color:       #e3dcd3;
+  --card-bg:            #ffffff;
+  --card-border:        #ebe5dc;
 }
 
 [data-theme="dark"] {
-  --bg-primary:        #1e0832;   /* very dark purple */
-  --bg-secondary:      #2a0c42;
-  --bg-dark:           #140524;   /* darkest — nav / footer */
-  --bg-dark-secondary: #1e0832;
-  --text-primary:      #fff0f4;   /* light blush */
-  --text-secondary:    #d4a0c0;   /* medium rose-purple */
-  --text-accent:       #e090ac;   /* brighter rose for contrast */
-  --text-on-dark:      #fff0f4;
-  --border-color:      #6b2a9a;
-  --card-bg:           #2a0c42;
-  --card-border:       #4a1870;
+  --bg-primary:         #141216;
+  --bg-secondary:       #1c1a1f;
+  --bg-dark:            #0d0c0f;
+  --bg-dark-secondary:  #1c1a1f;
+  --text-primary:       #efe9e2;
+  --text-secondary:     #a9a0aa;
+  --text-accent:        #f58fa9;
+  --text-accent-on-dark: #f58fa9;
+  --text-on-dark:       #efe9e2;
+  --border-color:       #2f2b33;
+  --card-bg:            #1c1a1f;
+  --card-border:        #2f2b33;
 }
 
 @theme inline {
@@ -49,8 +50,10 @@
   --color-border-color:      var(--border-color);
   --color-card-bg:           var(--card-bg);
   --color-card-border:       var(--card-border);
+  --color-text-accent-on-dark: var(--text-accent-on-dark);
   --font-mono:    "JetBrains Mono", ui-monospace, monospace;
-  --font-display: var(--font-raleway), "Raleway", sans-serif;
+  --font-sans:    var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), Georgia, serif;
 }
 
 /* ─── Smooth scroll ──────────────────────────────────────── */
@@ -62,12 +65,15 @@ html {
 body {
   background: var(--bg-primary);
   color: var(--text-primary);
-  font-family: var(--font-mono);
+  /* next/font sets --font-inter / --font-fraunces on <body>; @theme inline only
+     feeds the utility classes and emits no :root variables, so plain rules
+     must reference the font variables directly. */
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 h1, h2, h3, h4 {
-  font-family: var(--font-display);
+  font-family: var(--font-fraunces), Georgia, serif;
 }
 
 /* ─── Typing cursor animation ────────────────────────────────────── */
@@ -80,6 +86,29 @@ h1, h2, h3, h4 {
   content: "_";
   animation: blink 1s step-end infinite;
   font-family: var(--font-mono);
+}
+
+/* ─── Decorative glyphs ─────────────────────────────────────────── */
+/* Ornaments live in data-glyph and render as pseudo-element content so they
+   are not text nodes: axe skips them for colour contrast, screen readers
+   never see them. */
+.glyph::before {
+  content: attr(data-glyph);
+}
+
+/* ─── Generative mark draw-in ───────────────────────────────────── */
+.mark-draw path {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  /* cubic-bezier, not var(--expo-out): a browser without linear() would drop the
+     whole declaration and leave the path at dashoffset 1 — invisible. */
+  animation: mark-draw 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes mark-draw {
+  to { stroke-dashoffset: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mark-draw path { animation: none; stroke-dashoffset: 0; }
 }
 
 /* ─── Prose (blog posts) ─────────────────────────────────────────── */
@@ -125,7 +154,7 @@ h1, h2, h3, h4 {
 .hljs-keyword,
 .hljs-selector-tag,
 .hljs-meta {
-  color: var(--text-accent);
+  color: var(--text-accent-on-dark);
   font-weight: 500;
 }
 

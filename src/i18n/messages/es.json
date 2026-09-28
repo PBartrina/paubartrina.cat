@@ -5,6 +5,15 @@
     "description": "Ingeniero de Software Sénior con +15 años de experiencia en Angular, TypeScript, NgRx y Nx. Especializado en arquitectura modular, testing y liderazgo técnico.",
     "ogLocale": "es_ES"
   },
+  "log": {
+    "title": "Registro",
+    "description": "Todo lo que cambia en esta web: cada pull request fusionado y los ensayos, en un solo hilo.",
+    "heading": "Registro",
+    "intro": "Cada pull request fusionado y cada ensayo, en orden. La web escribe su propio diario.",
+    "essay": "ensayo",
+    "entryCount": "{count} entradas",
+    "emptyState": "Todavía no hay entradas."
+  },
   "nav": {
     "home": "Inicio",
     "about": "Sobre Mí",
@@ -13,11 +22,19 @@
     "now": "Ahora",
     "uses": "Herramientas",
     "blog": "Blog",
+    "log": "Registro",
     "contact": "Contacto",
     "toggleMenu": "Abrir menú",
     "skipToContent": "Saltar al contenido"
   },
+  "home": {
+    "latestHeading": "Lo último del registro",
+    "allLog": "Todo el registro →"
+  },
   "hero": {
+    "headline": "Programo, pero me definen más los hobbies.",
+    "line2": "Una vida, vivida a través de muchas otras.",
+    "line3": "Buscando la calma en la inestabilidad.",
     "greeting": "Bienvenidos",
     "title": "Ingeniero de Software Sénior con +15 años de experiencia",
     "subtitle": "en el ecosistema Angular, arquitectura modular y liderazgo técnico",
@@ -31,6 +48,8 @@
     ]
   },
   "about": {
+    "description": "Quién soy, dónde he trabajado y qué dicen quienes han trabajado conmigo.",
+    "cvLink": "Ver el CV completo / imprimir →",
     "heading": "Sobre Mí",
     "bio": "Ingeniero de Software Sénior y Líder Técnico con más de 15 años de experiencia, especializado en el ecosistema Angular (NgRx, Nx, TypeScript). Experto en modernización de bases de código y en la implementación de culturas de testing con Vitest y Playwright. Líder colaborativo dedicado a conectar diseño, producto e ingeniería para ofrecer experiencias de usuario impecables.",
     "languagesLabel": "Idiomas",
@@ -421,29 +440,6 @@
     ],
     "nowPageDescription": "Esta es una <link>página /ahora</link>, inspirada en el movimiento de Derek Sivers.",
     "footer": "Esta es mi página \"ahora\" inspirada en el movimiento <link>now page</link>."
-  },
-  "testimonials": {
-    "heading": "Lo que dicen de mí",
-    "items": [
-      {
-        "quote": "Pau tiene una capacidad excepcional para tender puentes entre requisitos técnicos complejos y soluciones limpias y mantenibles. Su trabajo en nuestra arquitectura Angular elevó el listón para todo el equipo.",
-        "author": "Engineering Manager",
-        "company": "Byte Default",
-        "relationship": "Manager Directo"
-      },
-      {
-        "quote": "Trabajar con Pau fue una clase magistral de disciplina frontend. Introdujo prácticas rigurosas de testing en nuestro equipo y mejoró considerablemente la robustez del código base.",
-        "author": "Senior Developer",
-        "company": "Byte Default",
-        "relationship": "Compañero"
-      },
-      {
-        "quote": "La experiencia de Pau en Angular y su pasión por la experiencia del desarrollador marcaron una diferencia real. Entregó funcionalidades de alta calidad mientras mejoraba continuamente nuestras herramientas y procesos.",
-        "author": "Product Lead",
-        "company": "Ansys Iberia",
-        "relationship": "Colaborador"
-      }
-    ]
   },
   "cv": {
     "title": "CV — Pau Bartrina",

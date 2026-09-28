@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { JetBrains_Mono, Raleway } from "next/font/google";
+import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations, setRequestLocale } from "next-intl/server";
 import { ThemeProvider } from "@/lib/theme";
 import Navbar from "@/components/Navbar";
+import GenerativeMark from "@/components/GenerativeMark";
 import Footer from "@/components/Footer";
 import ThemeToggle from "@/components/ThemeToggle";
 import ScrollToTop from "@/components/ScrollToTop";
@@ -19,10 +20,15 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
 });
 
-const raleway = Raleway({
-  variable: "--font-raleway",
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
   subsets: ["latin"],
-  weight: ["400", "600", "700", "800"],
+  axes: ["opsz"],
+});
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
 });
 
 interface LayoutProps {
@@ -42,8 +48,6 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "metadata" });
 
-  const ogImageUrl = "https://paubartrina.cat/og-default.png";
-
   return {
     title: {
       default: t("title"),
@@ -58,20 +62,11 @@ export async function generateMetadata({
       siteName: "Pau Bartrina",
       locale: t("ogLocale"),
       type: "website",
-      images: [
-        {
-          url: ogImageUrl,
-          width: 1200,
-          height: 630,
-          alt: "Pau Bartrina – Senior Software Engineer",
-        },
-      ],
     },
     twitter: {
       card: "summary_large_image",
       title: t("title"),
       description: t("description"),
-      images: [ogImageUrl],
     },
     alternates: {
       canonical: `https://paubartrina.cat/${locale}`,
@@ -126,7 +121,7 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
         />
       </head>
       <body
-        className={`${jetbrainsMono.variable} ${raleway.variable} flex min-h-screen flex-col antialiased`}
+        className={`${jetbrainsMono.variable} ${fraunces.variable} ${inter.variable} flex min-h-screen flex-col antialiased`}
       >
         <NextIntlClientProvider messages={messages}>
           <ThemeProvider>
@@ -136,7 +131,9 @@ export default async function LocaleLayout({ children, params }: LayoutProps) {
             >
               {t("skipToContent")}
             </a>
-            <Navbar />
+            <Navbar
+              mark={<GenerativeMark className="h-7 w-7 text-text-accent-on-dark" />}
+            />
             <main id="main-content" className="flex-1">
               <PageTransition>{children}</PageTransition>
             </main>

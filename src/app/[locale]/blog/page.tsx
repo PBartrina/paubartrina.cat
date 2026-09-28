@@ -1,3 +1,4 @@
+import { localeOgImage } from "@/lib/og";
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { getAllPosts } from "@/lib/blog";
@@ -22,7 +23,6 @@ export async function generateMetadata({
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "blog" });
 
-  const ogImageUrl = `${BASE_URL}/og-default.png`;
   const canonicalUrl = `${BASE_URL}/${locale}/blog`;
 
   return {
@@ -35,24 +35,16 @@ export async function generateMetadata({
       ),
     },
     openGraph: {
+      ...localeOgImage(locale),
       title: t("heading"),
       description: t("description"),
       url: canonicalUrl,
       type: "website",
-      images: [
-        {
-          url: ogImageUrl,
-          width: 1200,
-          height: 630,
-          alt: "Pau Bartrina – Senior Software Engineer",
-        },
-      ],
     },
     twitter: {
       card: "summary_large_image",
       title: t("heading"),
       description: t("description"),
-      images: [ogImageUrl],
     },
   };
 }
@@ -89,7 +81,7 @@ export default async function BlogPage({ params, searchParams }: PageProps) {
       />
       <div className="mx-auto max-w-3xl px-6 py-12">
         <div className="mb-8 flex flex-wrap items-baseline gap-4">
-          <h1 className="font-mono text-4xl font-bold text-text-primary">
+          <h1 className="font-display text-4xl font-bold text-text-primary md:text-5xl">
             {t("heading")}
           </h1>
           {posts.length > 0 && (

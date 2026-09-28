@@ -5,6 +5,15 @@
     "description": "Senior Software Engineer with 15+ years of experience in Angular, TypeScript, NgRx, and Nx. Specializing in modular architecture, testing, and technical leadership.",
     "ogLocale": "en_US"
   },
+  "log": {
+    "title": "Log",
+    "description": "Everything that changes on this site: every merged pull request and the essays, in one stream.",
+    "heading": "Log",
+    "intro": "Every merged pull request and every essay, in order. The site writes its own diary.",
+    "essay": "essay",
+    "entryCount": "{count} entries",
+    "emptyState": "No entries yet."
+  },
   "nav": {
     "home": "Home",
     "about": "About Me",
@@ -13,11 +22,19 @@
     "now": "Now",
     "uses": "Uses",
     "blog": "Blog",
+    "log": "Log",
     "contact": "Contact",
     "toggleMenu": "Toggle menu",
     "skipToContent": "Skip to content"
   },
+  "home": {
+    "latestHeading": "Latest from the log",
+    "allLog": "Full log →"
+  },
   "hero": {
+    "headline": "I write code, but my hobbies define me more.",
+    "line2": "One life, lived through many others.",
+    "line3": "Looking for calm in the instability.",
     "greeting": "Welcome",
     "title": "Senior Software Engineer with 15+ years of experience",
     "subtitle": "in the Angular ecosystem, modular architecture, and technical leadership",
@@ -31,6 +48,8 @@
     ]
   },
   "about": {
+    "description": "Who I am, where I've worked, and what the people I worked with say.",
+    "cvLink": "Full CV / print →",
     "heading": "About Me",
     "bio": "Senior Software Engineer and Tech Lead with over 15 years of experience, specializing in the Angular ecosystem (NgRx, Nx, TypeScript). Expert in codebase modernization and implementing testing cultures with Vitest and Playwright. A collaborative leader dedicated to connecting design, product, and engineering to deliver flawless user experiences.",
     "languagesLabel": "Languages",
@@ -421,29 +440,6 @@
     ],
     "nowPageDescription": "This is a <link>/now page</link>, inspired by Derek Sivers' movement.",
     "footer": "This is my \"now\" page inspired by the <link>now page</link> movement."
-  },
-  "testimonials": {
-    "heading": "What People Say",
-    "items": [
-      {
-        "quote": "Pau has an exceptional ability to bridge the gap between complex technical requirements and clean, maintainable solutions. His work on our Angular architecture raised the bar for the entire team.",
-        "author": "Engineering Manager",
-        "company": "Byte Default",
-        "relationship": "Direct Manager"
-      },
-      {
-        "quote": "Working with Pau was a master class in front-end discipline. He brought rigorous testing practices to our team and made the codebase significantly more robust overnight.",
-        "author": "Senior Developer",
-        "company": "Byte Default",
-        "relationship": "Colleague"
-      },
-      {
-        "quote": "Pau's Angular expertise and his passion for developer experience made a real difference. He shipped high-quality features while constantly improving our tooling and processes.",
-        "author": "Product Lead",
-        "company": "Ansys Iberia",
-        "relationship": "Collaborator"
-      }
-    ]
   },
   "cv": {
     "title": "CV — Pau Bartrina",
