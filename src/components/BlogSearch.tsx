@@ -85,7 +85,7 @@ export default function BlogSearch({
           {noResultsLabel}
         </p>
       ) : (
-        <div className="space-y-6">
+        <div className="divide-y divide-border-color border-y border-border-color">
           {filtered.map((post) => (
             <BlogCard key={post.slug} post={post} />
           ))}
