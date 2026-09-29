@@ -103,7 +103,7 @@ export default async function CVPage({ params }: PageProps) {
           {t("summaryHeading")}
         </h2>
         <p className="font-mono text-sm leading-relaxed text-text-secondary">
-          {tAbout("bio")}
+          {t("summary")}
         </p>
       </section>
 
@@ -124,7 +124,7 @@ export default async function CVPage({ params }: PageProps) {
                 </span>
               </div>
               <p className="font-mono text-sm text-text-secondary">
-                {job.company} · {job.location}
+                {[job.company, job.location].filter(Boolean).join(" · ")}
               </p>
               <p className="mt-1 font-mono text-xs leading-relaxed text-text-secondary">
                 {job.description}

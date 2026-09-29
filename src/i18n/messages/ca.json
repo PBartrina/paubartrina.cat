@@ -51,7 +51,7 @@
     "description": "Qui sóc, on he treballat i què en diuen els que hi han treballat amb mi.",
     "cvLink": "Veure el CV complet / imprimir →",
     "heading": "Sobre Mi",
-    "bio": "Enginyer de Software Sènior i Líder Tècnic amb més de 15 anys d'experiència, especialitzat en l'ecosistema Angular (NgRx, Nx, TypeScript). Expert en modernització de codis base i en la implementació de cultures de testing amb Vitest i Playwright. Líder col·laboratiu dedicat a connectar disseny, producte i enginyeria per oferir experiències d'usuari impecables.",
+    "bio": "Enginyer de software amb més de quinze anys fent producte. Vaig créixer a la capa que la gent toca, amb Angular, i avui treballo a tota la pila, cada cop més al costat de la IA. Fora de la feina: bonsais, llibres, en Sven i una domòtica que sempre té alguna cosa pendent.",
     "languagesLabel": "Idiomes",
     "languages": [
       {
@@ -60,7 +60,7 @@
       },
       {
         "label": "Anglès",
-        "level": "C2 (FCE)"
+        "level": "Professional (certificat B2 First)"
       },
       {
         "label": "Francès",
@@ -78,12 +78,22 @@
       {
         "title": "Core Stack",
         "items": [
-          "Angular (v2-18+)",
           "TypeScript",
-          "NgRx",
-          "Nx (Monorepos)"
+          "Angular (v2–18+)",
+          "React / Next.js",
+          "Node.js",
+          "NgRx · Nx"
         ],
         "bracket": "{ }"
+      },
+      {
+        "title": "IA aplicada",
+        "items": [
+          "Desenvolupament amb agents (Claude Code)",
+          "Automatització amb LLMs",
+          "Revisió humana als pipelines"
+        ],
+        "bracket": "~>"
       },
       {
         "title": "Arquitectura",
@@ -140,11 +150,25 @@
     "heading": "Experiència",
     "jobs": [
       {
-        "period": "2025 – 2026",
+        "period": "juny 2026 – actualitat",
+        "role": "Senior Full-Stack Engineer",
+        "company": "Datavant",
+        "location": "Barcelona (híbrid)",
+        "description": "Desenvolupament de l'àrea de Data Discovery del portal Datavant Connect."
+      },
+      {
+        "period": "maig 2026",
+        "role": "Senior Software Engineer",
+        "company": "NTT Data",
+        "location": "",
+        "description": "Arrencada d'un nou equip de desenvolupament centrat en la IA."
+      },
+      {
+        "period": "nov. 2025 – febr. 2026",
         "role": "Senior R&D Engineer",
         "company": "Ansys Iberia",
         "location": "Madrid",
-        "description": "Lideratge del frontend per al llançament d'un nou producte estratègic. SME d'Angular, millorant les mètriques de rendiment en un 15%. Testing amb Vitest i Playwright."
+        "description": "Frontend d'un nou producte estratègic; referent d'Angular de l'equip."
       },
       {
         "period": "2017 – 2025",
@@ -181,12 +205,12 @@
     "entries": [
       {
         "year": "2008",
-        "title": "Enginyeria Multimèdia",
+        "title": "Estudis d'Enginyeria Multimèdia",
         "institution": "Universitat Ramon Llull"
       },
       {
         "year": "2005",
-        "title": "Enginyeria Superior Informàtica",
+        "title": "Estudis d'Enginyeria Superior Informàtica",
         "institution": "Universitat Politècnica de Catalunya"
       },
       {
@@ -447,7 +471,8 @@
     "summaryHeading": "Resum",
     "description": "CV imprimible de Pau Bartrina, Enginyer de Software Sènior.",
     "printButton": "Imprimir / Desar com a PDF",
-    "backHome": "Tornar a l'inici"
+    "backHome": "Tornar a l'inici",
+    "summary": "Enginyer de Software Sènior full-stack amb més de 15 anys d'experiència en empreses de producte i consultoria. Base sòlida en arquitectura frontend (Angular, NgRx, Nx) i cultures de testing (Vitest, Playwright); avui treballo a tota la pila i en equips de desenvolupament centrats en IA. Acostumat a liderar tècnicament i a connectar disseny, producte i enginyeria."
   },
   "codeBlock": {
     "copy": "Copia",
