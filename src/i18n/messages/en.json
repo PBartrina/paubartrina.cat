@@ -29,7 +29,14 @@
   },
   "home": {
     "latestHeading": "Latest from the log",
-    "allLog": "Full log →"
+    "allLog": "Full log →",
+    "markHeading": "The mark",
+    "markP1": "The pattern in the logo, background and footer isn't an image: it's Truchet tiles, squares with two arcs turned at random that join up into paths.",
+    "markP2": "The randomness comes from a seed: the commit the site was deployed from. Every deploy, a new pattern.",
+    "markSeed": "Seed",
+    "markRegenerate": "Regenerate",
+    "markReset": "Back to the deployed one",
+    "markMore": "How it works →"
   },
   "hero": {
     "headline": "I write code, but my hobbies define me more.",

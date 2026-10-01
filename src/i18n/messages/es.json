@@ -29,7 +29,14 @@
   },
   "home": {
     "latestHeading": "Lo último del registro",
-    "allLog": "Todo el registro →"
+    "allLog": "Todo el registro →",
+    "markHeading": "La marca",
+    "markP1": "El patrón del logo, del fondo y del pie no es una imagen: son baldosas de Truchet, cuadrados con dos arcos girados al azar que, al juntarse, dibujan caminos.",
+    "markP2": "El azar sale de una semilla: el commit desde el que se ha publicado la web. Cada publicación, un patrón nuevo.",
+    "markSeed": "Semilla",
+    "markRegenerate": "Regenerar",
+    "markReset": "Volver a la publicada",
+    "markMore": "Cómo funciona →"
   },
   "hero": {
     "headline": "Programo, pero me definen más los hobbies.",

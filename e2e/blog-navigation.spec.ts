@@ -1,19 +1,19 @@
 import { test, expect } from "@playwright/test";
 
 const NEWEST = {
-  slug: "cinc-mesos-de-bots-els-numeros",
-  title: "Cinc mesos de bots: els números",
+  slug: "la-marca",
+  title: "La marca canvia a cada desplegament",
 };
 const PREVIOUS = {
-  slug: "bots-que-proposen-jo-decideixo",
-  title: "Bots que proposen, jo decideixo",
+  slug: "cinc-mesos-de-bots-els-numeros",
+  title: "Cinc mesos de bots: els números",
 };
 
 test.describe("blog navigation", () => {
   test("listing → post → adjacent post → back to listing", async ({ page }) => {
     await page.goto("/ca/blog");
     await expect(page.getByRole("heading", { level: 1, name: "Blog" })).toBeVisible();
-    await expect(page.getByRole("article")).toHaveCount(4);
+    await expect(page.getByRole("article")).toHaveCount(5);
 
     await page.getByRole("link", { name: NEWEST.title }).click();
 
@@ -32,7 +32,7 @@ test.describe("blog navigation", () => {
     await page.getByRole("link", { name: "← Tornar al blog" }).click();
 
     await expect(page).toHaveURL("/ca/blog");
-    await expect(page.getByRole("article")).toHaveCount(4);
+    await expect(page.getByRole("article")).toHaveCount(5);
   });
 
   test("tag filter narrows the listing through the URL", async ({ page }) => {
@@ -42,12 +42,13 @@ test.describe("blog navigation", () => {
 
     await expect(page).toHaveURL("/ca/blog?tag=dades");
     await expect(page.getByRole("article")).toHaveCount(1);
-    await expect(page.getByRole("link", { name: NEWEST.title })).toBeVisible();
+    // The only post tagged "dades" is the five-month retrospective.
+    await expect(page.getByRole("link", { name: PREVIOUS.title })).toBeVisible();
 
     await page.getByRole("button", { name: "Tots", exact: true }).click();
 
     await expect(page).toHaveURL("/ca/blog");
-    await expect(page.getByRole("article")).toHaveCount(4);
+    await expect(page.getByRole("article")).toHaveCount(5);
   });
 
   test("translated posts link back to the Catalan original", async ({ page }) => {

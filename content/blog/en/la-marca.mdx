@@ -1,0 +1,27 @@
+---
+title: "The mark changes with every deploy"
+date: "2026-10-01"
+description: "Truchet tiles, a seed and a commit: where the pattern in the logo, background and footer comes from"
+tags: ["disseny", "web", "generatiu"]
+published: true
+---
+
+The pattern in the logo, behind the home page title and in the footer isn't an image. Code draws it every time the site is published, and every publish draws a different one.
+
+## Truchet tiles
+
+The idea is over three hundred years old. In 1704, Sébastien Truchet studied what happens when you fill a surface with a single tile rotated at random. The version I use is the simplest: a square with two quarter-circles in opposite corners. Each tile has only two possible orientations, but once you lay them side by side the arcs join up into paths, waves and shapes nobody drew.
+
+## Where the randomness comes from
+
+True randomness would mean every visitor sees a different pattern, and it changes on reload. I didn't want that: I wanted the mark to be stable, but alive.
+
+So the randomness comes from a **seed**. Any piece of text becomes a number (via an FNV-1a hash), and that number feeds a tiny pseudorandom generator, mulberry32. The same seed always gives exactly the same pattern.
+
+The seed is **the commit the site was deployed from**. While I don't publish anything, everyone sees the same mark. When I ship a change, a new one appears.
+
+## One function
+
+Everything comes from the same function, about forty lines with no library: the menu logo, the home page background, the footer, and the images that show up when you share a link. Each blog post also uses its own name as the seed, so every post has a pattern of its own that never changes.
+
+The home page has a button to regenerate it with a random seed. Try it: none of the ones you'll see were drawn by anyone.
