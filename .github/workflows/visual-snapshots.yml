@@ -23,6 +23,7 @@ jobs:
         env:
           # Same deterministic /log feed as ci.yml (see src/lib/log.ts)
           LOG_PRS_FIXTURE: e2e/fixtures/merged-prs.json
+          MARK_SEED: ci-fixed-seed
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm e2e visual --update-snapshots all
       - uses: actions/upload-artifact@v4
