@@ -53,7 +53,7 @@ export default function MarkPlayground({
           <span className="text-text-primary">{shown}</span>
         )}
       </p>
-      <div className="flex gap-3 font-mono text-sm">
+      <div className="flex flex-col items-start gap-2 font-mono text-sm">
         <button
           type="button"
           onClick={() => setSeed(randomSeed())}
@@ -61,15 +61,18 @@ export default function MarkPlayground({
         >
           {labels.regenerate}
         </button>
-        {!isDeployed && (
-          <button
-            type="button"
-            onClick={() => setSeed(initialSeed)}
-            className="rounded-md border border-border-color px-4 py-2 text-text-primary hover:border-text-accent"
-          >
-            {labels.reset}
-          </button>
-        )}
+        {/* Always rendered so its line is reserved: showing it must not move the layout. */}
+        <button
+          type="button"
+          onClick={() => setSeed(initialSeed)}
+          aria-hidden={isDeployed}
+          tabIndex={isDeployed ? -1 : undefined}
+          className={`text-xs text-text-secondary underline hover:text-text-accent hover:no-underline ${
+            isDeployed ? "invisible" : ""
+          }`}
+        >
+          {labels.reset}
+        </button>
       </div>
     </div>
   );
