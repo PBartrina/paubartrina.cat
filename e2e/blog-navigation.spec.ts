@@ -42,7 +42,8 @@ test.describe("blog navigation", () => {
 
     await expect(page).toHaveURL("/ca/blog?tag=dades");
     await expect(page.getByRole("article")).toHaveCount(1);
-    await expect(page.getByRole("link", { name: NEWEST.title })).toBeVisible();
+    // The only post tagged "dades" is the five-month retrospective.
+    await expect(page.getByRole("link", { name: PREVIOUS.title })).toBeVisible();
 
     await page.getByRole("button", { name: "Tots", exact: true }).click();
 
