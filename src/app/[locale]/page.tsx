@@ -1,5 +1,7 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import Hero from "@/components/Hero";
+import MarkPlayground from "@/components/MarkPlayground";
+import { BUILD_SEED, BUILD_SEED_HREF } from "@/lib/mark";
 import LogEntry, { entryKey } from "@/components/LogEntry";
 import RevealOnScroll from "@/components/RevealOnScroll";
 import { Link } from "@/i18n/navigation";
@@ -45,6 +47,23 @@ export default async function Home({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: safeJsonLd(personJsonLd) }}
       />
       <Hero />
+      <section className="border-b border-border-color">
+        <div className="mx-auto grid max-w-3xl gap-8 px-6 py-16 md:grid-cols-[auto_1fr] md:items-center md:gap-12">
+          <MarkPlayground
+            initialSeed={BUILD_SEED}
+            seedHref={BUILD_SEED_HREF}
+            labels={{ seed: t("markSeed"), regenerate: t("markRegenerate"), reset: t("markReset") }}
+          />
+          <div>
+            <h2 className="mb-4 font-display text-2xl font-bold text-text-primary">{t("markHeading")}</h2>
+            <p className="mb-3 leading-relaxed text-text-secondary">{t("markP1")}</p>
+            <p className="mb-4 leading-relaxed text-text-secondary">{t("markP2")}</p>
+            <Link href="/blog/la-marca" className="font-mono text-sm text-text-accent underline hover:no-underline">
+              {t("markMore")}
+            </Link>
+          </div>
+        </div>
+      </section>
       <RevealOnScroll>
         <section className="mx-auto max-w-3xl px-6 py-16">
           <div className="mb-6 flex items-baseline justify-between gap-4">

@@ -1,0 +1,27 @@
+---
+title: "La marca cambia en cada despliegue"
+date: "2026-10-01"
+description: "Baldosas de Truchet, una semilla y un commit: de dónde sale el patrón del logo, el fondo y el pie de página"
+tags: ["disseny", "web", "generatiu"]
+published: true
+---
+
+El patrón que ves en el logo, detrás del título de la portada y en el pie de página no es una imagen. Lo dibuja el código cada vez que se publica la web, y cada publicación dibuja uno distinto.
+
+## Baldosas de Truchet
+
+La idea tiene más de trescientos años. En 1704, Sébastien Truchet estudió qué pasa cuando llenas una superficie con una sola baldosa girada al azar. La versión que uso es la más sencilla: un cuadrado con dos cuartos de círculo en esquinas opuestas. Cada baldosa solo puede tener dos orientaciones, pero cuando las pones una al lado de otra, los arcos se unen y aparecen caminos, ondas y formas que nadie ha dibujado.
+
+## De dónde sale el azar
+
+Un azar de verdad haría que cada visita viera un patrón distinto, y que el patrón cambiara al recargar. No quería eso: quería que la marca fuera estable, pero viva.
+
+Por eso el azar sale de una **semilla**. Un texto cualquiera se convierte en un número (con un hash FNV-1a), y ese número alimenta un generador pseudoaleatorio muy pequeño, mulberry32. La misma semilla siempre da exactamente el mismo patrón.
+
+La semilla es **el commit desde el que se ha publicado la web**. Mientras no publico nada, la marca es la misma para todo el mundo. Cuando publico un cambio, aparece una nueva.
+
+## Una sola función
+
+Todo sale de la misma función, de unas cuarenta líneas y sin ninguna librería: el logo del menú, el fondo de la portada, el pie de página y también las imágenes que aparecen cuando compartes un enlace. Además, cada artículo del blog usa su propio nombre como semilla, así que cada uno tiene un patrón propio que no cambia nunca.
+
+En la portada hay un botón para regenerarlo con una semilla al azar. Pruébalo: ninguno de los que salgan lo ha dibujado nadie.

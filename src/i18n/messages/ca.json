@@ -29,7 +29,14 @@
   },
   "home": {
     "latestHeading": "Últim del registre",
-    "allLog": "Tot el registre →"
+    "allLog": "Tot el registre →",
+    "markHeading": "La marca",
+    "markP1": "El patró del logo, del fons i del peu no és una imatge: són rajoles de Truchet, quadrats amb dos arcs girats a l'atzar que, en ajuntar-se, dibuixen camins.",
+    "markP2": "L'atzar surt d'una llavor: el commit des del qual s'ha publicat la web. Cada publicació, un patró nou.",
+    "markSeed": "Llavor",
+    "markRegenerate": "Regenera",
+    "markReset": "Torna a la publicada",
+    "markMore": "Com funciona →"
   },
   "hero": {
     "headline": "Programo, però em defineixen més els hobbies.",

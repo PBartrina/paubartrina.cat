@@ -53,5 +53,13 @@ export function truchetPath(seed: string, cols: number, rows: number): string {
  * fixed per deploy: the commit on Vercel, the date locally. Swap this for a
  * date if the site ever moves to ISR.
  */
+// MARK_SEED pins it in CI so visual snapshots do not change with the date.
 export const BUILD_SEED =
-  process.env.VERCEL_GIT_COMMIT_SHA ?? new Date().toISOString().slice(0, 10);
+  process.env.MARK_SEED ??
+  process.env.VERCEL_GIT_COMMIT_SHA ??
+  new Date().toISOString().slice(0, 10);
+
+/** GitHub link for the build seed when it is a commit sha, else undefined. */
+export const BUILD_SEED_HREF = /^[0-9a-f]{40}$/.test(BUILD_SEED)
+  ? `https://github.com/PBartrina/paubartrina.cat/commit/${BUILD_SEED}`
+  : undefined;

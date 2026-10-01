@@ -62,6 +62,7 @@ jobs:
         env:
           # Deterministic /log for snapshots + Lighthouse (see src/lib/log.ts)
           LOG_PRS_FIXTURE: e2e/fixtures/merged-prs.json
+          MARK_SEED: ci-fixed-seed
 
       - name: Install Playwright browsers
         run: pnpm exec playwright install --with-deps chromium

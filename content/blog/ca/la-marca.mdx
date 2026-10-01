@@ -1,0 +1,27 @@
+---
+title: "La marca canvia a cada desplegament"
+date: "2026-10-01"
+description: "Rajoles de Truchet, una llavor i un commit: d'on surt el patró del logo, el fons i el peu de pàgina"
+tags: ["disseny", "web", "generatiu"]
+published: true
+---
+
+El patró que veus al logo, darrere del títol de la portada i al peu de pàgina no és una imatge. El dibuixa el codi cada vegada que es publica la web, i cada publicació en dibuixa un de diferent.
+
+## Rajoles de Truchet
+
+La idea té més de tres-cents anys. El 1704, Sébastien Truchet va estudiar què passa quan omples una superfície amb una sola rajola girada a l'atzar. La versió que faig servir és la més senzilla: un quadrat amb dos quarts de cercle a cantonades oposades. Cada rajola només pot tenir dues orientacions, però quan les poses una al costat de l'altra, els arcs s'uneixen i apareixen camins, ones i formes que ningú ha dibuixat.
+
+## D'on surt l'atzar
+
+Un atzar de debò faria que cada visita veiés un patró diferent, i que el patró canviés en recarregar. No volia això: volia que la marca fos estable, però viva.
+
+Per això l'atzar surt d'una **llavor**. Un text qualsevol es converteix en un número (amb un hash FNV-1a), i aquest número alimenta un generador pseudoaleatori molt petit, mulberry32. La mateixa llavor sempre dona exactament el mateix patró.
+
+La llavor és **el commit des del qual s'ha publicat la web**. Mentre no publico res, la marca és la mateixa per a tothom. Quan publico un canvi, n'apareix una de nova.
+
+## Una sola funció
+
+Tot surt de la mateixa funció, d'unes quaranta línies i sense cap llibreria: el logo del menú, el fons de la portada, el peu de pàgina i també les imatges que apareixen quan comparteixes un enllaç. Cada article del blog, a més, fa servir el seu propi nom com a llavor, així que cadascun té un patró propi que no canvia mai.
+
+A la portada hi ha un botó per regenerar-lo amb una llavor a l'atzar. Prova'l: cap dels que surtin l'ha dibuixat ningú.
