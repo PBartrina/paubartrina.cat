@@ -86,19 +86,29 @@
         "title": "Core Stack",
         "items": [
           "TypeScript",
-          "Angular (v2–18+)",
+          "Angular",
           "React / Next.js",
           "Node.js",
-          "NgRx · Nx"
+          "Python"
         ],
         "bracket": "{ }"
       },
       {
+        "title": "Cloud & Data",
+        "items": [
+          "AWS",
+          "Docker",
+          "Kubernetes",
+          "SQL / Postgres"
+        ],
+        "bracket": "< >"
+      },
+      {
         "title": "Applied AI",
         "items": [
-          "Agentic development (Claude Code)",
-          "LLM automation",
-          "Human review in pipelines"
+          "Agentic coding workflows",
+          "LLM integration",
+          "AI-assisted code review"
         ],
         "bracket": "~>"
       },
@@ -122,15 +132,6 @@
           "Pact"
         ],
         "bracket": "( )"
-      },
-      {
-        "title": "Mobile",
-        "items": [
-          "NativeScript",
-          "React Native",
-          "Ionic"
-        ],
-        "bracket": "< >"
       },
       {
         "title": "Performance & Tooling",
