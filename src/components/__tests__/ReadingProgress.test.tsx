@@ -5,6 +5,7 @@ import { render, screen, act } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import ReadingProgress from "@/components/ReadingProgress";
+import { SITE_NAV_ID } from "@/lib/site-nav";
 
 const messages = { blog: { readingProgress: "Reading progress" } };
 
@@ -133,12 +134,27 @@ describe("ReadingProgress", () => {
     expect(bar.style.backgroundColor).toBe("var(--text-accent)");
   });
 
-  it("has fixed positioning at top of viewport", () => {
+  it("is fixed at the viewport top when there is no site navbar", () => {
     renderWithIntl(<ReadingProgress />);
     const bar = screen.getByRole("progressbar");
     expect(bar.style.position).toBe("fixed");
     expect(bar.style.top).toBe("0px");
     expect(bar.style.left).toBe("0px");
     expect(bar.style.height).toBe("4px");
+  });
+
+  it("sits along the bottom edge of the site navbar", () => {
+    const nav = document.createElement("nav");
+    nav.id = SITE_NAV_ID;
+    vi.spyOn(nav, "getBoundingClientRect").mockReturnValue({
+      bottom: 60,
+    } as DOMRect);
+    document.body.appendChild(nav);
+    try {
+      renderWithIntl(<ReadingProgress />);
+      expect(screen.getByRole("progressbar").style.top).toBe("60px");
+    } finally {
+      nav.remove();
+    }
   });
 });

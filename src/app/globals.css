@@ -274,8 +274,8 @@ h1, h2, h3, h4 {
 /* backwards, not both: a forwards fill would keep transform: translateY(0) on
    the wrapper after the animation. Any transform other than none makes the
    wrapper the containing block for position: fixed descendants, so the blog
-   ReadingProgress bar scrolled away with the article instead of staying at the
-   top of the viewport. The end state equals the element's own styles anyway. */
+   ReadingProgress bar scrolled away with the article instead of staying fixed
+   under the navbar. The end state equals the element's own styles anyway. */
 .page-transition-wrapper {
   animation: page-enter 0.25s ease-out backwards;
 }
