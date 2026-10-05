@@ -1,8 +1,11 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
+import { createPortal } from "react-dom";
 import { SITE_NAV_ID } from "@/lib/site-nav";
+
+const noopSubscribe = () => () => {};
 
 export default function ReadingProgress() {
   const t = useTranslations("blog");
@@ -39,7 +42,14 @@ export default function ReadingProgress() {
     };
   }, []);
 
-  return (
+  // Rendered into <body>, not in place: page content sits inside
+  // .page-transition-wrapper, whose animation leaves a transform that would
+  // make position: fixed relative to the wrapper instead of the viewport.
+  // false during SSR and hydration, true after mount (document exists).
+  const mounted = useSyncExternalStore(noopSubscribe, () => true, () => false);
+  if (!mounted) return null;
+
+  return createPortal(
     <div
       role="progressbar"
       aria-valuenow={Math.round(progress)}
@@ -56,6 +66,7 @@ export default function ReadingProgress() {
         zIndex: 100,
         transition: "width 0.1s ease",
       }}
-    />
+    />,
+    document.body
   );
 }
