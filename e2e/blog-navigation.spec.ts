@@ -68,3 +68,36 @@ test.describe("blog navigation", () => {
     await expect(page.getByText("Article no trobat")).toBeVisible();
   });
 });
+
+test.describe("reading progress bar", () => {
+  // html has scroll-behavior: smooth; jump instantly so measurements are stable.
+  const scrollToFraction = (page: import("@playwright/test").Page, f: number) =>
+    page.evaluate((frac) => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      window.scrollTo({ top: max * frac, behavior: "instant" });
+    }, f);
+
+  test("stays pinned to the top of the viewport and tracks the scroll", async ({
+    page,
+  }) => {
+    await page.goto(`/ca/blog/${PREVIOUS.slug}`);
+    const bar = page.getByRole("progressbar", { name: "Progrés de lectura" });
+    const viewportWidth = page.viewportSize()!.width;
+
+    await scrollToFraction(page, 0.5);
+    await expect(bar).toHaveAttribute("aria-valuenow", /^(4[5-9]|5[0-5])$/);
+    // A transformed ancestor would make position: fixed relative to it and
+    // carry the bar off-screen with the article.
+    await expect.poll(async () => (await bar.boundingBox())?.y).toBe(0);
+    await expect
+      .poll(async () => (await bar.boundingBox())?.width ?? 0)
+      .toBeGreaterThan(viewportWidth * 0.4);
+
+    await scrollToFraction(page, 1);
+    await expect(bar).toHaveAttribute("aria-valuenow", "100");
+    await expect.poll(async () => (await bar.boundingBox())?.y).toBe(0);
+    await expect
+      .poll(async () => Math.round((await bar.boundingBox())?.width ?? 0))
+      .toBe(viewportWidth);
+  });
+});
