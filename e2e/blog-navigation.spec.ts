@@ -68,3 +68,42 @@ test.describe("blog navigation", () => {
     await expect(page.getByText("Article no trobat")).toBeVisible();
   });
 });
+
+test.describe("reading progress bar", () => {
+  // html has scroll-behavior: smooth; jump instantly so measurements are stable.
+  const scrollToFraction = (page: import("@playwright/test").Page, f: number) =>
+    page.evaluate((frac) => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      window.scrollTo({ top: max * frac, behavior: "instant" });
+    }, f);
+
+  test("stays fixed under the sticky navbar and tracks the scroll", async ({
+    page,
+  }) => {
+    await page.goto(`/ca/blog/${PREVIOUS.slug}`);
+    const bar = page.getByRole("progressbar", { name: "Progrés de lectura" });
+    const viewportWidth = page.viewportSize()!.width;
+    const navBottom = async () => {
+      const box = await page.locator("#site-nav").boundingBox();
+      return Math.round((box?.y ?? 0) + (box?.height ?? 0));
+    };
+    const barTop = async () => Math.round((await bar.boundingBox())?.y ?? -1);
+
+    await scrollToFraction(page, 0.5);
+    await expect(bar).toHaveAttribute("aria-valuenow", /^(4[5-9]|5[0-5])$/);
+    // Below the navbar, not over it. A transformed ancestor would instead make
+    // position: fixed relative to it and carry the bar away with the article.
+    expect(await navBottom()).toBeGreaterThan(0);
+    await expect.poll(barTop).toBe(await navBottom());
+    await expect
+      .poll(async () => (await bar.boundingBox())?.width ?? 0)
+      .toBeGreaterThan(viewportWidth * 0.4);
+
+    await scrollToFraction(page, 1);
+    await expect(bar).toHaveAttribute("aria-valuenow", "100");
+    await expect.poll(barTop).toBe(await navBottom());
+    await expect
+      .poll(async () => Math.round((await bar.boundingBox())?.width ?? 0))
+      .toBe(viewportWidth);
+  });
+});

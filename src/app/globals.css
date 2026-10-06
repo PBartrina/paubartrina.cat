@@ -271,6 +271,12 @@ h1, h2, h3, h4 {
   }
 }
 
+/* The `both` fill keeps transform: translateY(0) on the wrapper after the
+   animation, which makes it the containing block for position: fixed
+   descendants. Fixed UI rendered by a page must portal out of it (see
+   ReadingProgress). Changing the fill mode instead is not neutral: content
+   then repaints when the animation ends and Lighthouse starts counting it as
+   LCP, about a second later in its simulation, on every page. */
 .page-transition-wrapper {
   animation: page-enter 0.25s ease-out both;
 }

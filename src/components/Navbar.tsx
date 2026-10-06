@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import LanguageSwitcher from "./LanguageSwitcher";
+import { SITE_NAV_ID } from "@/lib/site-nav";
 
 const navLinks = [
   { href: "/", labelKey: "home" },
@@ -84,7 +85,10 @@ export default function Navbar({ mark }: { mark?: React.ReactNode }) {
   }, [menuOpen]);
 
   return (
-    <nav className="sticky top-0 z-50 bg-bg-dark text-text-on-dark">
+    <nav
+      id={SITE_NAV_ID}
+      className="sticky top-0 z-50 bg-bg-dark text-text-on-dark"
+    >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <Link
           href="/"
